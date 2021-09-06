@@ -2,6 +2,9 @@
   <div class="container">
     <ul>
       <div>
+        <b-list-group-item style="display:flex; background-color:black; color:white">
+            {{commitsInfo}} commits have been made in this repository
+        </b-list-group-item>
         <b-list-group class="list">
           <b-list-group-item
             v-for="doc in docs"
@@ -31,6 +34,7 @@ export default {
   data() {
     return {
       docs: null,
+      commitsInfo: null,
     };
   },
   async created() {
@@ -45,6 +49,7 @@ export default {
       await octokit.request(`GET ${repoContents.data.commit.tree.url}`)
     ).data.tree;
     this.docs.sort((a, b) => (a.type > b.type ? -1 : 1));
+    this.commitsInfo = this.docs.length;
   },
 };
 </script>

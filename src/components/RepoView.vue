@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="container">
     <ul>
       <div>
         <b-list-group class="list">
@@ -44,6 +44,7 @@ export default {
     this.docs = (
       await octokit.request(`GET ${repoContents.data.commit.tree.url}`)
     ).data.tree;
+    this.docs.sort((a, b) => (a.type > b.type ? -1 : 1));
   },
 };
 </script>
@@ -52,6 +53,7 @@ export default {
 .list{
   width: 50rem;
   height: 50rem;
+  overflow: auto;
 }
 .list-item{
   display:flex;
@@ -63,5 +65,12 @@ export default {
 }
 .list-item-doc-title {
   padding: 5px;
+}
+.container{
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>

@@ -5,9 +5,9 @@
     />
     <b-container class="py-3">
       <h5 class="font-weight-bold">
-        Name of the user
+        {{ user.name }}
       </h5>
-      <b-card-text> @username </b-card-text>
+      <b-card-text> @{{ user.login }} </b-card-text>
     </b-container>
   </b-card>
 </template>
@@ -24,7 +24,13 @@ export default {
     });
     //   return response;
     console.log(response.data);
+    this.$store.dispatch('updateUser', response.data);
   },
   methods: {},
+  computed: {
+    user() {
+      return this.$store.getters.getUser;
+    },
+  },
 };
 </script>

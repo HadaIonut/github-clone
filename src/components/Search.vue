@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-input-group class="input">
-      <b-form-input v-on:keypress="handleSend" v-on:input="handleInput" />
+      <b-form-input v-on:keypress="handleSend" v-on:input="handleInput" placeholder="Enter username"/>
       <b-input-group-append>
         <b-input-group-text>
           <b-icon icon="search" />

@@ -2,25 +2,26 @@
   <div class="container">
     <ul>
       <div>
-        <b-list-group-item style="display:flex; background-color:black; color:white">
-            {{commitsInfo}} commits have been made in this repository
+        <b-list-group-item
+          style="display:flex; background-color:black; color:white;"
+        >
+          {{ commitsInfo }} commits have been made in this repository
         </b-list-group-item>
         <b-list-group class="list">
           <b-list-group-item
             v-for="doc in docs"
             :key="doc.sha"
             class="list-item-container"
-            >
-              <div v-if="doc.type === 'tree'" class="list-item">
-                  <b-icon-folder-fill style="height:50%; width:25px;"></b-icon-folder-fill>
-                  <div class="list-item-doc-title">{{ doc.path }}</div>
-              </div>
-              <div v-if="doc.type === 'blob'" class="list-item">
-                  <b-icon-file-code style="height:50%; width:25px;"></b-icon-file-code>
-                  <div class="list-item-doc-title">{{ doc.path }}</div>
-              </div>
-            </b-list-group-item
           >
+            <div v-if="doc.type === 'tree'" class="list-item">
+              <b-icon-folder-fill class="list-icon"></b-icon-folder-fill>
+              <div class="list-item-doc-title">{{ doc.path }}</div>
+            </div>
+            <div v-if="doc.type === 'blob'" class="list-item">
+              <b-icon-file-code  class="list-icon"></b-icon-file-code>
+              <div class="list-item-doc-title">{{ doc.path }}</div>
+            </div>
+          </b-list-group-item>
         </b-list-group>
       </div>
     </ul>
@@ -55,27 +56,34 @@ export default {
 </script>
 
 <style>
-.list{
+.list {
   width: 50rem;
   height: 50rem;
   overflow: auto;
+  box-sizing: border-box;
+  border-radius: 10px;
 }
-.list-item{
-  display:flex;
+.list-item {
+  display: flex;
   align-items: center;
 }
-.list-item-container{
-  display:flex;
+.list-item-container {
+  display: flex;
   align-items: center;
 }
 .list-item-doc-title {
   padding: 5px;
 }
-.container{
+.container {
   width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.list-icon {
+  height: 50%;
+  width: 25px;
+  color: black;
 }
 </style>

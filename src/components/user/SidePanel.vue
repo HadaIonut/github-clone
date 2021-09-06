@@ -1,8 +1,6 @@
 <template>
   <b-card class="">
-    <b-card-img
-      src="https://images.unsplash.com/photo-1628494126315-a8736da8ec30?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=724&q=80"
-    />
+    <b-card-img v-bind:src="user.avatar_url" />
     <b-container class="py-3">
       <h5 class="font-weight-bold">
         {{ user.name }}

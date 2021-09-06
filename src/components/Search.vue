@@ -19,7 +19,7 @@ export default {
   name: 'Search',
   methods: {
     handleInput(e) {
-      console.log(e);
+      this.$store.dispatch('updateUser', e);
     },
     handleSend(e) {
       if (e.code === 'Enter') {
@@ -34,7 +34,5 @@ export default {
 <style scoped>
 .input {
   width: 40vw;
-  margin-left: 30vw;
-  margin-top: 35vh;
 }
 </style>

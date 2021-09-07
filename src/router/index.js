@@ -1,7 +1,6 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
-import SearchPage from '../views/SearchResults';
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '../views/Home.vue';
 
 Vue.use(VueRouter);
 
@@ -14,16 +13,7 @@ const routes = [
   {
     path: '/search',
     name: 'Search',
-    component: SearchPage
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    component: () => import(/* webpackChunkName: "user" */ '../views/Search.vue'),
   },
   {
     path: '/user/:username',
@@ -32,6 +22,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "user" */ '../views/User.vue'),
+  },
+  {
+    path: '/user/:username/repo/:reponame',
+    name: 'RepoView',
+    component: () => import(/* webpackChunkName: "repo" */ '../views/Repo.vue'),
   },
 ];
 

@@ -15,7 +15,7 @@
 <script>
 // import { Octokit } from '@octokit/core';
 export default {
-  name: 'SidePanel',
+  name: 'RepoPanel',
   props: ['username'],
   async created() {
     // const octokit = new Octokit();

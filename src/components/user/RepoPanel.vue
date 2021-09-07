@@ -18,12 +18,6 @@ export default {
   name: 'RepoPanel',
   props: ['username'],
   async created() {
-    // const octokit = new Octokit();
-    // const response = await octokit.request('Get /users/{owner}/repos', {
-    //   owner: this.username,
-    // });
-    // //   return response;
-    // console.log(response.data);
     this.$store.dispatch('fetchRepos', this.username);
   },
   methods: {},

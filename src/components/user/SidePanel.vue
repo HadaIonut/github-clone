@@ -11,18 +11,11 @@
 </template>
 
 <script>
-import { Octokit } from '@octokit/core';
 export default {
   name: 'SidePanel',
   props: ['username'],
   async created() {
-    const octokit = new Octokit();
-    const response = await octokit.request('Get /users/{owner}', {
-      owner: this.username,
-    });
-    //   return response;
-    console.log(response.data);
-    this.$store.dispatch('updateUser', response.data);
+    this.$store.dispatch('fetchUser', this.username);
   },
   methods: {},
   computed: {

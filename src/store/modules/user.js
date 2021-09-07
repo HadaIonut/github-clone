@@ -22,7 +22,7 @@ const actions = {
       commit("setUser", user.data);
     } catch (error) {
       makeErrorToast(
-        error?.message || `Unable to fetch ${username}'s github profile`
+        error.message || `Unable to fetch ${username}'s github profile`
       );
     }
   },

@@ -22,7 +22,7 @@ const actions = {
       commit("setRepos", repos.data);
     } catch (error) {
       makeErrorToast(
-        error?.message || `Unable to fetch ${username}'s repositories`
+        error.message || `Unable to fetch ${username}'s repositories`
       );
     }
   },

@@ -42,7 +42,7 @@ export default {
     async fetchUsers() {
 
       let response = await octokit.request('GET /search/users', {
-        q: this.$store.getters.getUser,
+        q: this.$route.query.query,
         per_page: '18',
       });
       this.users = response.data.items;

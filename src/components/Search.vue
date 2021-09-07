@@ -19,13 +19,17 @@ export default {
   name: 'Search',
   methods: {
     handleInput(e) {
-      this.$store.dispatch('updateUser', e);
+      this.userQuery = e;
     },
     handleSend(e) {
       if (e.code === 'Enter') {
-        router.push("/search")
-        console.log('enter is pressed');
+        router.push({path: "/search", query: {query: this.userQuery}})
       }
+    }
+  },
+  data() {
+    return {
+      userQuery: String
     }
   }
 };

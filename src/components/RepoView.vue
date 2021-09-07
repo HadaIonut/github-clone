@@ -18,7 +18,7 @@
               <div class="list-item-doc-title">{{ doc.path }}</div>
             </div>
             <div v-if="doc.type === 'blob'" class="list-item">
-              <b-icon-file-code  class="list-icon"></b-icon-file-code>
+              <b-icon-file-code class="list-icon"></b-icon-file-code>
               <div class="list-item-doc-title">{{ doc.path }}</div>
             </div>
           </b-list-group-item>
@@ -32,6 +32,10 @@
 import { Octokit } from '@octokit/core';
 export default {
   name: 'test',
+  props: {
+    reponame: String,
+    username: String,
+  },
   data() {
     return {
       docs: null,
@@ -39,12 +43,13 @@ export default {
     };
   },
   async created() {
+    console.log('caca');
     const octokit = new Octokit();
     const commits = await octokit.request(
-      'GET /repos/HadaIonut/CallbackDragons/commits'
+      `GET /repos/${this.username}/${this.reponame}/commits`
     );
     const repoContents = await octokit.request(
-      `GET /repos/HadaIonut/CallbackDragons/commits/${commits.data[0]['sha']}`
+      `GET /repos/${this.username}/${this.reponame}/commits/${commits.data[0]['sha']}`
     );
     this.docs = (
       await octokit.request(`GET ${repoContents.data.commit.tree.url}`)

@@ -1,8 +1,7 @@
-import Vue from 'vue'
-import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Vue from 'vue';
+import VueRouter from 'vue-router';
+import Home from '../views/Home.vue';
 import SearchPage from '../views/SearchResults';
-
 Vue.use(VueRouter);
 
 const routes = [
@@ -14,7 +13,7 @@ const routes = [
   {
     path: '/search',
     name: 'Search',
-    component: SearchPage
+    component: SearchPage,
   },
   {
     path: '/about',
@@ -32,6 +31,11 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "user" */ '../views/User.vue'),
+  },
+  {
+    path: '/user/:username/repo/:reponame',
+    name: 'RepoView',
+    component: () => import(/* webpackChunkName: "repo" */ '../views/Repo.vue'),
   },
 ];
 

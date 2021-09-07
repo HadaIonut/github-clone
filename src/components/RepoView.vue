@@ -1,6 +1,7 @@
 <template>
   <div class="container">
       <div class="list-container">
+        <h4 class="repo-title">{{reponame}}</h4>
         <b-list-group-item
           style="display:flex; background-color:#EEEEEE; color:black; font-weight: bold;"
         >
@@ -59,6 +60,9 @@ export default {
 </script>
 
 <style>
+.repo-title{
+  font-weight: bold;
+}
 .list {
   width: 100%;
   overflow: auto;

@@ -1,9 +1,8 @@
 <template>
   <div class="container">
-    <ul>
-      <div>
+      <div class="list-container">
         <b-list-group-item
-          style="display:flex; background-color:black; color:white;"
+          style="display:flex; background-color:#EEEEEE; color:black; font-weight: bold;"
         >
           {{ commitsInfo }} commits have been made in this repository
         </b-list-group-item>
@@ -24,7 +23,6 @@
           </b-list-group-item>
         </b-list-group>
       </div>
-    </ul>
   </div>
 </template>
 
@@ -62,15 +60,13 @@ export default {
 
 <style>
 .list {
-  width: 50rem;
-  height: 50rem;
+  width: 100%;
   overflow: auto;
-  box-sizing: border-box;
-  border-radius: 10px;
 }
 .list-item {
   display: flex;
   align-items: center;
+  font-weight: bold;
 }
 .list-item-container {
   display: flex;
@@ -80,7 +76,6 @@ export default {
   padding: 5px;
 }
 .container {
-  width: 100vw;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -90,5 +85,8 @@ export default {
   height: 50%;
   width: 25px;
   color: black;
+}
+.list-container {
+  width: 80%;
 }
 </style>

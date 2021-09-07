@@ -2,7 +2,6 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
-import SearchPage from '../views/SearchResults';
 Vue.use(VueRouter);
 
 const routes = [
@@ -28,12 +27,9 @@ const routes = [
     // this generates a separate chunk (about.[hash].js) for this route
     // which is lazy-loaded when the route is visited.
     component: () => import(/* webpackChunkName: "search" */ '../views/Search.vue')
-  }
-]
-
-    component: () =>
-      import(/* webpackChunkName: "about" */ '../views/About.vue'),
   },
+
+
   {
     path: '/user/:username',
     name: 'User',

@@ -49,7 +49,6 @@ export default {
   methods: {
     handleFilter(e) {
       this.$store.dispatch('updateKeyword', e);
-      console.log(e);
     },
   },
   computed: {

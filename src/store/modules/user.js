@@ -1,5 +1,7 @@
 import { Octokit } from "@octokit/core";
 
+import { makeErrorToast } from "../../utils/toast";
+
 const octokit = new Octokit();
 
 const state = {
@@ -12,11 +14,17 @@ const getters = {
 
 const actions = {
   async fetchUser({ commit }, username) {
-    const user = await octokit.request('GET /users/{username}', {
-      username
-    })
-  
-    commit("setUser", user.data)
+    try {
+      const user = await octokit.request("GET /users/{username}", {
+        username,
+      });
+
+      commit("setUser", user.data);
+    } catch (error) {
+      makeErrorToast(
+        error?.message || `Unable to fetch ${username}'s github profile`
+      );
+    }
   },
   updateUser({ commit }, user) {
     commit("setUser", user);

@@ -1,25 +1,30 @@
-import { Octokit } from "@octokit/core";
+import { Octokit } from '@octokit/core';
 
-import { makeErrorToast } from "../../utils/toast";
+import { makeErrorToast } from '../../utils/toast';
 
 const octokit = new Octokit();
 
 const state = {
   repos: [],
+  keyword: '',
 };
 
 const getters = {
   allRepos: (state) => state.repos,
+  filteredRepos: (state) =>
+    state.repos.filter((repo) =>
+      repo.name.toLowerCase().includes(state.keyword.toLowerCase())
+    ),
 };
 
 const actions = {
   async fetchRepos({ commit }, username) {
     try {
-      const repos = await octokit.request("GET /users/{username}/repos", {
+      const repos = await octokit.request('GET /users/{username}/repos', {
         username,
       });
 
-      commit("setRepos", repos.data);
+      commit('setRepos', repos.data);
     } catch (error) {
       makeErrorToast(
         error.message || `Unable to fetch ${username}'s repositories`
@@ -27,12 +32,16 @@ const actions = {
     }
   },
   updateRepos({ commit }, repos) {
-    commit("setRepos", repos);
+    commit('setRepos', repos);
+  },
+  updateKeyword({ commit }, keyword) {
+    commit('setKeyword', keyword);
   },
 };
 
 const mutations = {
   setRepos: (state, repos) => (state.repos = repos),
+  setKeyword: (state, keyword) => (state.keyword = keyword),
 };
 
 export default {

@@ -30,7 +30,7 @@
 <script>
 import { Octokit } from '@octokit/core';
 export default {
-  name: 'test',
+  name: 'RepoView',
   props: {
     reponame: String,
     username: String,
@@ -42,7 +42,6 @@ export default {
     };
   },
   async created() {
-    console.log('caca');
     const octokit = new Octokit();
     const commits = await octokit.request(
       `GET /repos/${this.username}/${this.reponame}/commits`
@@ -53,9 +52,14 @@ export default {
     this.docs = (
       await octokit.request(`GET ${repoContents.data.commit.tree.url}`)
     ).data.tree;
-    this.docs.sort((a, b) => (a.type > b.type ? -1 : 1));
+    this.sortDocuments(this.docs);
     this.commitsInfo = this.docs.length;
   },
+  methods: {
+    sortDocuments(docs) {
+      docs.sort((a,b) => (a.type > b.type ? -1 : 1));
+    }
+  }
 };
 </script>
 

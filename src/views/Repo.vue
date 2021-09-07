@@ -9,7 +9,7 @@
 <script>
 import RepoView from '../components/RepoView';
 export default {
-  name: 'Home',
+  name: 'RepoHome',
   components: {
     RepoView,
   },

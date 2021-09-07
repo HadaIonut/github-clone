@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
 import Home from '../views/Home.vue';
-import SearchPage from '../views/SearchResults';
 
 Vue.use(VueRouter);
 
@@ -14,7 +13,7 @@ const routes = [
   {
     path: '/search',
     name: 'Search',
-    component: SearchPage,
+    component: () => import(/* webpackChunkName: "user" */ '../views/Search.vue'),
   },
   {
     path: '/user/:username',

@@ -1,3 +1,7 @@
+import { Octokit } from "@octokit/core";
+
+const octokit = new Octokit();
+
 const state = {
   user: null,
 };
@@ -7,6 +11,13 @@ const getters = {
 };
 
 const actions = {
+  async fetchUser({ commit }, username) {
+    const user = await octokit.request('GET /users/{username}', {
+      username
+    })
+  
+    commit("setUser", user.data)
+  },
   updateUser({ commit }, user) {
     commit("setUser", user);
   },

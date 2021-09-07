@@ -5,11 +5,15 @@ import store from "./store";
 import { BIconFileCode, BIconFolderFill, BootstrapVue, IconsPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
-Vue.config.productionTip = false
+
 Vue.use(BootstrapVue)
 Vue.use(IconsPlugin)
+
+Vue.config.productionTip = false;
+
 Vue.component('BIconFolderFill', BIconFolderFill);
 Vue.component('BIconFileCode', BIconFileCode);
+
 new Vue({
   router,
   store,

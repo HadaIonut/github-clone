@@ -132,16 +132,11 @@ export default {
         this.$store.getters.getCurrentLocationAsString
       );
     },
-    openModal(downloadUrl) {
-      fetch(downloadUrl)
-        .then((response) => response.body)
-        .then((body) => body.getReader().read())
-        .then((read) => {
-          this.$store.dispatch(
-            'updateFileContent',
-            new TextDecoder('utf-8').decode(read.value)
-          );
-        });
+    async openModal(downloadUrl) {
+      const body = (await fetch(downloadUrl)).body;
+      const readable = await body.getReader().read();
+      const final = new TextDecoder('utf-8').decode(readable.value)
+      await this.$store.dispatch('updateFileContent', final);
 
       this.$bvModal.show('bv-modal-example');
     },

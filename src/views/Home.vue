@@ -1,7 +1,7 @@
 <template>
   <div class="home">
     <div class="search">
-      <p class="title-text">Who do you want to find?</p>
+      <p class="title-text text-center">Who do you want to find?</p>
       <Search />
     </div>
   </div>
@@ -21,10 +21,9 @@ export default {
 <style>
 .home {
   height: 100vh;
-  width: 100vw;
+  width: 100%;
   display: flex;
   align-items: center;
-  align-content: center;
   justify-content: center;
 }
 

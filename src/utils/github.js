@@ -8,6 +8,7 @@ const searchUsers = async (params) => {
     return (await octokit.request('GET /search/users', params)).data;
   } catch (error) {
     makeErrorToast(
+      params?.context,
       error.message || `Unable to search for users like '${params?.q}'`
     );
   }

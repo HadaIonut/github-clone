@@ -76,7 +76,7 @@ export default {
         async () =>
           value.trim()
             ? (this.searchResultGroups = chunk(
-                (await searchUsers({ q: value, per_page: 6 })).items,
+                (await searchUsers({ context: this, q: value, per_page: 6 })).items,
                 2
               ))
             : (this.searchResultGroups = []),

@@ -133,7 +133,16 @@ export default {
       );
     },
     openModal(downloadUrl) {
-      this.$store.dispatch('updateFileContent', downloadUrl);
+      fetch(downloadUrl)
+        .then((response) => response.body)
+        .then((body) => body.getReader().read())
+        .then((read) => {
+          this.$store.dispatch(
+            'updateFileContent',
+            new TextDecoder('utf-8').decode(read.value)
+          );
+        });
+
       this.$bvModal.show('bv-modal-example');
     },
   },

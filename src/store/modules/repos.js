@@ -16,12 +16,7 @@ const getters = {
     state.repos.filter((repo) =>
       repo.name.toLowerCase().includes(state.keyword.toLowerCase())
     ),
-  getFileContent: (state) =>
-    fetch(state.fileContent)
-      .then((response) => response.body)
-      .then((body) => body.getReader().read())
-      .then((read) => new TextDecoder('utf-8').decode(read.value))
-      .then((nume) => nume),
+  getFileContent: (state) => state.fileContent,
 };
 
 const actions = {

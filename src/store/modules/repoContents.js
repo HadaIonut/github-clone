@@ -1,6 +1,6 @@
-import { Octokit } from "@octokit/core";
+import {Octokit} from '@octokit/core';
 
-import { makeErrorToast } from "../../utils/toast";
+import {makeErrorToast} from '../../utils/toast';
 
 const octokit = new Octokit();
 
@@ -11,15 +11,17 @@ const state = {
 const actions = {
   async fetchRepoContents({commit}, {userName, repoName}) {
     try {
-      const commits = await octokit.request(
-        `GET /repos/${userName}/${repoName}/commits`
+      const docs = (await octokit.request(`GET /repos/${userName}/${repoName}/contents`)).data;
+      commit('setRepoContents', docs);
+    } catch (error) {
+      makeErrorToast(
+        error.message || `Unable to fetch ${repoName}'s contents`
       );
-      const repoContents = await octokit.request(
-        `GET /repos/${userName}/${repoName}/commits/${commits.data[0]['sha']}`
-      );
-      const docs = (
-        await octokit.request(`GET ${repoContents.data.commit.tree.url}`)
-      ).data.tree;
+    }
+  },
+  async fetchRepoContentsAtLocation({commit}, {userName, repoName, location}) {
+    try {
+      const docs = (await octokit.request(`GET /repos/${userName}/${repoName}/contents/${location}`)).data;
       commit('setRepoContents', docs);
     } catch (error) {
       makeErrorToast(
@@ -27,15 +29,15 @@ const actions = {
       );
     }
   }
-}
+};
 
 const getters = {
   allRepoContents: (state) => state.repoContents,
-}
+};
 
 const mutations = {
   setRepoContents: (state, repoContents) => state.repoContents = repoContents
-}
+};
 
 export default {
   state,

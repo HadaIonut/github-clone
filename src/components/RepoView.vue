@@ -13,11 +13,11 @@
             :key="doc.sha"
             class="list-item-container"
         >
-          <div v-if="doc.type === 'tree'" class="list-item">
+          <div @click="updateRepoContents(doc.path)" v-if="doc.type === 'dir'" class="list-item">
             <b-icon-folder-fill class="list-icon"></b-icon-folder-fill>
             <div class="list-item-doc-title">{{ doc.path }}</div>
           </div>
-          <div v-if="doc.type === 'blob'" class="list-item">
+          <div v-if="doc.type === 'file'" class="list-item">
             <b-icon-file-code class="list-icon"></b-icon-file-code>
             <div class="list-item-doc-title">{{ doc.path }}</div>
           </div>
@@ -36,19 +36,31 @@ export default {
   },
   data() {
     return {
-      docs: null,
       commitsInfo: null,
     };
   },
+  computed: {
+    docs() {
+      return this.$store.getters.allRepoContents;
+    }
+  },
   async created() {
     await this.$store.dispatch('fetchRepoContents', {userName: this.username, repoName: this.reponame});
-    this.docs = this.$store.getters.allRepoContents;
     this.sortDocuments(this.docs);
     this.commitsInfo = this.docs.length;
   },
   methods: {
     sortDocuments(docs) {
-      docs.sort((a, b) => (a.type > b.type ? -1 : 1));
+      docs.sort((a, b) => (a.type < b.type ? -1 : 1));
+    },
+    async updateRepoContents(path) {
+      console.log(path);
+      await this.$store.dispatch('fetchRepoContentsAtLocation', {
+        userName: this.username,
+        repoName: this.reponame,
+        location: path
+      });
+      this.sortDocuments(this.docs);
     }
   }
 };

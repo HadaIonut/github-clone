@@ -2,6 +2,13 @@
   <div class="container">
     <div class="list-container">
       <h4 class="repo-title">{{ reponame }}</h4>
+      <b-breadcrumb>
+        <b-breadcrumb-item @click="goToLocation('')">
+          <b-icon icon="house-fill" scale="1.25" shift-v="1.25" aria-hidden="true"/>
+          Home
+        </b-breadcrumb-item>
+        <b-breadcrumb-item v-for="(path, index) in paths" :key="index" @click="goToLocation(paths[index+1])">{{ path }}</b-breadcrumb-item>
+      </b-breadcrumb>
       <b-list-group-item
           style="display:flex; background-color:#EEEEEE; color:black; font-weight: bold;"
       >
@@ -22,11 +29,11 @@
         >
           <div @click="updateRepoContents(doc.path)" v-if="doc.type === 'dir'" class="list-item">
             <b-icon-folder-fill class="list-icon"></b-icon-folder-fill>
-            <div class="list-item-doc-title">{{ doc.path }}</div>
+            <div class="list-item-doc-title">{{ doc.name }}</div>
           </div>
           <div v-if="doc.type === 'file'" class="list-item">
             <b-icon-file-code class="list-icon"></b-icon-file-code>
-            <div class="list-item-doc-title">{{ doc.path }}</div>
+            <div class="list-item-doc-title">{{ doc.name }}</div>
           </div>
         </b-list-group-item>
       </b-list-group>
@@ -49,6 +56,9 @@ export default {
   computed: {
     docs() {
       return this.$store.getters.allRepoContents;
+    },
+    paths() {
+      return this.$store.getters.getCurrentLocationAsArray;
     }
   },
   async created() {
@@ -65,8 +75,8 @@ export default {
       await this.updateDisplayAndSort(path);
     },
     async goToParentDirectory() {
-      const curLocation = this.$store.getters.getCurrentLocationAsString
-      await this.$store.dispatch('setCurrentLocation', curLocation.substr(0, curLocation.lastIndexOf('/')))
+      const curState = this.$store.getters.getCurrentLocationAsString;
+      await this.$store.dispatch('setCurrentLocation', this.$store.getters.getPathFromLocation(curState.lastIndexOf('/')));
       await this.updateDisplayAndSort(this.$store.getters.getCurrentLocationAsString);
     },
     async updateDisplayAndSort(path) {
@@ -76,6 +86,11 @@ export default {
         location: path
       });
       this.sortDocuments(this.docs);
+    },
+    async goToLocation(path) {
+      const curState = this.$store.getters.getCurrentLocationAsString;
+      await this.$store.dispatch('setCurrentLocation', this.$store.getters.getPathFromLocation(curState.indexOf(path)));
+      await this.updateDisplayAndSort(this.$store.getters.getCurrentLocationAsString);
     }
   }
 };

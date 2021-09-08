@@ -38,7 +38,9 @@ const actions = {
 const getters = {
   allRepoContents: (state) => state.repoContents,
   getCurrentLocationAsString: (state) => state.currentLocation,
-  getCurrentLocationAsArray: (state) => state.currentLocation.split('/')
+  getCurrentLocationAsArray: (state) => state.currentLocation.split('/'),
+  getPathFromLocation: (state) => (location) =>
+      state.currentLocation.substr(0, location)
 };
 
 const mutations = {

@@ -1,5 +1,5 @@
 <template>
-  <b-container class="py-5">
+  <b-container class="py-5 containerul-nostru">
     <div class="list-container">
       <h4 class="repo-title">{{ reponame }}</h4>
       <b-breadcrumb class="bread">
@@ -177,7 +177,7 @@ export default {
   padding: 5px;
 }
 
-.container {
+.containerul-nostru {
   /* height: 100vh; */
   padding: 0;
   display: flex;

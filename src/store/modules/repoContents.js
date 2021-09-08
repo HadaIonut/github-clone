@@ -6,6 +6,7 @@ const octokit = new Octokit();
 
 const state = {
   repoContents: [],
+  currentLocation: ''
 };
 
 const actions = {
@@ -28,15 +29,21 @@ const actions = {
         error.message || `Unable to fetch ${repoName}'s contents`
       );
     }
+  },
+  setCurrentLocation({commit}, newLocation) {
+    commit('setCurrentLocation', newLocation)
   }
 };
 
 const getters = {
   allRepoContents: (state) => state.repoContents,
+  getCurrentLocationAsString: (state) => state.currentLocation,
+  getCurrentLocationAsArray: (state) => state.currentLocation.split('/')
 };
 
 const mutations = {
-  setRepoContents: (state, repoContents) => state.repoContents = repoContents
+  setRepoContents: (state, repoContents) => state.repoContents = repoContents,
+  setCurrentLocation: (state, newLocation) => state.currentLocation = newLocation
 };
 
 export default {

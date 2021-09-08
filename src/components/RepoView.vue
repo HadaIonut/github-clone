@@ -7,6 +7,13 @@
       >
         {{ commitsInfo }} commits have been made in this repository
       </b-list-group-item>
+      <b-list-group-item
+          style="display:flex; background-color:#EEEEEE; color:black; font-weight: bold;"
+          @click="goToParentDirectory"
+          v-if="this.$store.getters.getCurrentLocationAsString !== ''"
+      >
+        ..
+      </b-list-group-item>
       <b-list-group class="list">
         <b-list-group-item
             v-for="doc in docs"
@@ -54,7 +61,15 @@ export default {
       docs.sort((a, b) => (a.type < b.type ? -1 : 1));
     },
     async updateRepoContents(path) {
-      console.log(path);
+      await this.$store.dispatch('setCurrentLocation', path);
+      await this.updateDisplayAndSort(path);
+    },
+    async goToParentDirectory() {
+      const curLocation = this.$store.getters.getCurrentLocationAsString
+      await this.$store.dispatch('setCurrentLocation', curLocation.substr(0, curLocation.lastIndexOf('/')))
+      await this.updateDisplayAndSort(this.$store.getters.getCurrentLocationAsString);
+    },
+    async updateDisplayAndSort(path) {
       await this.$store.dispatch('fetchRepoContentsAtLocation', {
         userName: this.username,
         repoName: this.reponame,

@@ -18,7 +18,7 @@ const getters = {
 };
 
 const actions = {
-  async fetchRepos({ commit }, username) {
+  async fetchRepos({ commit }, {username, context}) {
     try {
       const repos = await octokit.request('GET /users/{username}/repos', {
         username,
@@ -27,6 +27,7 @@ const actions = {
       commit('setRepos', repos.data);
     } catch (error) {
       makeErrorToast(
+        context,
         error.message || `Unable to fetch ${username}'s repositories`
       );
     }

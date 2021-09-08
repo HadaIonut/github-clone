@@ -13,7 +13,7 @@ const getters = {
 };
 
 const actions = {
-  async fetchUser({ commit }, username) {
+  async fetchUser({ commit }, {username, context}) {
     try {
       const user = await octokit.request("GET /users/{username}", {
         username,
@@ -22,6 +22,7 @@ const actions = {
       commit("setUser", user.data);
     } catch (error) {
       makeErrorToast(
+        context,
         error.message || `Unable to fetch ${username}'s github profile`
       );
     }

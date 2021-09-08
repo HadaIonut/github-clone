@@ -29,7 +29,7 @@ export default {
   name: 'SidePanel',
   props: ['username'],
   async created() {
-    this.$store.dispatch('fetchUser', this.username);
+    await this.$store.dispatch('fetchUser', {username: this.username, context: this});
   },
   methods: {},
   computed: {

@@ -44,7 +44,7 @@ export default {
   name: 'RepoPanel',
   props: ['username'],
   async created() {
-    this.$store.dispatch('fetchRepos', this.username);
+    await this.$store.dispatch('fetchRepos', {username: this.username, context: this});
   },
   methods: {
     handleFilter(e) {

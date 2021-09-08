@@ -48,7 +48,11 @@
               <b-icon-folder-fill class="list-icon"></b-icon-folder-fill>
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>
-            <div v-if="doc.type === 'file'" class="list-item">
+            <div
+              v-if="doc.type === 'file'"
+              class="list-item"
+              @click="openModal(doc.download_url)"
+            >
               <b-icon-file-code class="list-icon"></b-icon-file-code>
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>
@@ -56,11 +60,14 @@
         </b-list-group>
       </b-container>
     </div>
+    <Modal />
   </b-container>
 </template>
 
 <script>
+import Modal from '../components/Modal.vue';
 export default {
+  components: { Modal },
   name: 'RepoView',
   props: {
     reponame: String,
@@ -83,6 +90,7 @@ export default {
     await this.$store.dispatch('fetchRepoContents', {
       userName: this.username,
       repoName: this.reponame,
+      context: this,
     });
     this.sortDocuments(this.docs);
     this.commitsInfo = this.docs.length;
@@ -110,6 +118,7 @@ export default {
         userName: this.username,
         repoName: this.reponame,
         location: path,
+        context: this,
       });
       this.sortDocuments(this.docs);
     },
@@ -122,6 +131,10 @@ export default {
       await this.updateDisplayAndSort(
         this.$store.getters.getCurrentLocationAsString
       );
+    },
+    openModal(downloadUrl) {
+      this.$store.dispatch('updateFileContent', downloadUrl);
+      this.$bvModal.show('bv-modal-example');
     },
   },
 };

@@ -7,6 +7,7 @@ const octokit = new Octokit();
 const state = {
   repos: [],
   keyword: '',
+  fileContent: '',
 };
 
 const getters = {
@@ -15,10 +16,16 @@ const getters = {
     state.repos.filter((repo) =>
       repo.name.toLowerCase().includes(state.keyword.toLowerCase())
     ),
+  getFileContent: (state) =>
+    fetch(state.fileContent)
+      .then((response) => response.body)
+      .then((body) => body.getReader().read())
+      .then((read) => new TextDecoder('utf-8').decode(read.value))
+      .then((nume) => nume),
 };
 
 const actions = {
-  async fetchRepos({ commit }, {username, context}) {
+  async fetchRepos({ commit }, { username, context }) {
     try {
       const repos = await octokit.request('GET /users/{username}/repos', {
         username,
@@ -38,11 +45,15 @@ const actions = {
   updateKeyword({ commit }, keyword) {
     commit('setKeyword', keyword);
   },
+  updateFileContent({ commit }, content) {
+    commit('setContent', content);
+  },
 };
 
 const mutations = {
   setRepos: (state, repos) => (state.repos = repos),
   setKeyword: (state, keyword) => (state.keyword = keyword),
+  setContent: (state, content) => (state.fileContent = content),
 };
 
 export default {

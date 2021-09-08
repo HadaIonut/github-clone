@@ -1,5 +1,5 @@
 <template>
-  <b-container class="px-1">
+  <b-container class="px-1 py-5">
     <b-row>
       <b-col cols="4 border-right">
         <SidePanel v-bind:username="$route.params.username" />

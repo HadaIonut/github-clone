@@ -1,5 +1,5 @@
 <template>
-  <b-container class="py-5 containerul-nostru">
+  <b-container class="py-5 container">
     <div class="list-container">
       <h4 class="repo-title">{{ reponame }}</h4>
       <b-breadcrumb class="bread">
@@ -21,14 +21,12 @@
       </b-breadcrumb>
       <b-container fluid class="p-0">
         <b-list-group-item
-          class="font-weight-bold bg-secondary text-white"
-          style="display:flex; border-radius:5px 5px 0 0"
+          class="font-weight-bold bg-secondary text-white d-flex rounded-top"
         >
           {{ commitsInfo }} commits have been made in this repository
         </b-list-group-item>
         <b-list-group-item
-          class=" clickable"
-          style="display:flex; font-weight: bold;"
+          class="clickable d-flex font-weight-bold"
           @click="goToParentDirectory"
           v-if="this.$store.getters.getCurrentLocationAsString !== ''"
         >
@@ -99,14 +97,14 @@ export default {
       docs.sort((a, b) => (a.type < b.type ? -1 : 1));
     },
     async updateRepoContents(path) {
-      await this.$store.dispatch('setCurrentLocation', path);
+      await this.$store.dispatch('updateCurrentLocation', path);
       await this.updateDisplayAndSort(path);
     },
     async goToParentDirectory() {
       setTimeout(async () => {
         const curState = this.$store.getters.getCurrentLocationAsString;
         await this.$store.dispatch(
-            'setCurrentLocation',
+            'updateCurrentLocation',
             this.$store.getters.getPathFromLocation(curState.lastIndexOf('/'))
         );
         await this.updateDisplayAndSort(
@@ -127,7 +125,7 @@ export default {
     async goToLocation(path) {
       const curState = this.$store.getters.getCurrentLocationAsString;
       await this.$store.dispatch(
-        'setCurrentLocation',
+        'updateCurrentLocation',
         this.$store.getters.getPathFromLocation(curState.indexOf(`/${path}`))
       );
       await this.updateDisplayAndSort(
@@ -153,7 +151,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .repo-title {
   font-weight: bold;
 }
@@ -183,8 +181,7 @@ export default {
   padding: 5px;
 }
 
-.containerul-nostru {
-  /* height: 100vh; */
+.container {
   padding: 0;
   display: flex;
   justify-content: center;

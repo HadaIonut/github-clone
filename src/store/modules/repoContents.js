@@ -43,7 +43,7 @@ const actions = {
       );
     }
   },
-  setCurrentLocation({ commit }, newLocation) {
+  updateCurrentLocation({ commit }, newLocation) {
     commit('setCurrentLocation', newLocation);
   },
   updateFileContent({ commit }, content) {

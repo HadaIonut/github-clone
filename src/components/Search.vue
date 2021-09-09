@@ -12,7 +12,7 @@
         </b-input-group-text>
       </b-input-group-append>
     </b-input-group>
-    <b-container fluid class="mt-3">
+    <b-container fluid class="mt-3" v-if="!loadingSearchResultGroups">
       <b-row v-for="(searchResultGroup, i) in searchResultGroups" :key="i">
         <b-col
           md="12"
@@ -50,36 +50,60 @@
         </b-col>
       </b-row>
     </b-container>
+    <b-container fluid class="mt-3" v-if="loadingSearchResultGroups">
+      <b-row v-for="(z, i) in Array(1).fill(0)" :key="i">
+        <b-col md="12" lg="6" v-for="(z1, i1) in Array(2).fill(0)" :key="i1">
+          <SearchResultsSkeletonCard />
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
 <script>
 import chunk from "lodash/chunk";
+
 import router from "../router";
 import { searchUsers } from "../utils/github";
+import SearchResultsSkeletonCard from "./search/SearchResultsSkeletonCard.vue";
 
 export default {
   name: "Search",
+  components: {
+    SearchResultsSkeletonCard,
+  },
   data() {
     return {
       userQuery: "",
       debounceTimeout: null,
       searchResultGroups: [],
+      loadingSearchResultGroups: false,
     };
   },
   methods: {
+    handleSearchResultGroupsChange(data) {
+      this.searchResultGroups = data;
+      this.loadingSearchResultGroups = false;
+    },
     handleInput(value) {
       this.userQuery = value;
+
+      value.trim()
+        ? (this.loadingSearchResultGroups = true)
+        : (this.loadingSearchResultGroups = false);
 
       clearTimeout(this.debounceTimeout);
       this.debounceTimeout = setTimeout(
         async () =>
           value.trim()
-            ? (this.searchResultGroups = chunk(
-                (await searchUsers({ context: this, q: value, per_page: 6 })).items,
-                2
-              ))
-            : (this.searchResultGroups = []),
+            ? this.handleSearchResultGroupsChange(
+                chunk(
+                  (await searchUsers({ context: this, q: value, per_page: 6 }))
+                    .items,
+                  2
+                )
+              )
+            : this.handleSearchResultGroupsChange([]),
         350
       );
     },

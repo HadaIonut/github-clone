@@ -5,8 +5,7 @@
         <SidePanel v-bind:username="$route.params.username" />
       </b-col>
       <b-col cols="8 "
-        ><RepoPanel v-bind:username="$route.params.username"
-      /></b-col>
+        ><RepoPanel v-bind:username="$route.params.username"/></b-col>
     </b-row>
   </b-container>
 </template>

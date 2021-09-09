@@ -51,7 +51,7 @@
             <div
               v-if="doc.type === 'file'"
               class="list-item"
-              @click="openModal(doc.download_url)"
+              @click="openModal(doc.download_url, doc.name)"
             >
               <b-icon-file-code class="list-icon"></b-icon-file-code>
               <div class="list-item-doc-title">{{ doc.name }}</div>
@@ -132,13 +132,14 @@ export default {
         this.$store.getters.getCurrentLocationAsString
       );
     },
-    async openModal(downloadUrl) {
+    async openModal(downloadUrl, name) {
       const body = (await fetch(downloadUrl)).body;
       const readable = await body.getReader().read();
-      const final = new TextDecoder('utf-8').decode(readable.value)
+      const final = new TextDecoder('utf-8').decode(readable.value);
       await this.$store.dispatch('updateFileContent', final);
+      await this.$store.dispatch('updateFileName', name);
 
-      this.$bvModal.show('bv-modal-example');
+      this.$bvModal.show('bv-modal');
     },
   },
 };

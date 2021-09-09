@@ -59,6 +59,7 @@
 import { Octokit } from "@octokit/core";
 import chunk from "lodash/chunk";
 import Spinner from '../components/Spinner'
+import {makeErrorToast} from '../utils/toast'
 const octokit = new Octokit({});
 
 
@@ -79,15 +80,23 @@ export default {
   },
   methods: {
     async fetchUsers() {
+      let params = {
+          q: this.$route.query.query,
+          per_page: 100,}
       this.loading = true;
-      let response = await octokit.request("GET /search/users", {
-        q: this.$route.query.query,
-        per_page: 150,
-      });
+      try{
+        let response = await octokit.request("GET /search/users", params);
       this.loading = false;
       this.users = response.data.items;
       this.rows = response.data.items.length;
       this.totalUserCount = response.data.total_count;
+      } catch(error){
+        makeErrorToast(
+          this,
+           error.message || `Unable to search for users like '${params?.q}'`
+        )
+
+      }
     },
   },
   computed: {

@@ -27,7 +27,7 @@
           {{ commitsInfo }} commits have been made in this repository
         </b-list-group-item>
         <b-list-group-item
-          class="bg-light"
+          class=" clickable"
           style="display:flex; font-weight: bold;"
           @click="goToParentDirectory"
           v-if="this.$store.getters.getCurrentLocationAsString !== ''"
@@ -38,10 +38,10 @@
           <b-list-group-item
             v-for="doc in docs"
             :key="doc.sha"
-            class="list-item-container"
+            class="list-item-container clickable"
+            @click="handleClick(doc)"
           >
             <div
-              @click="updateRepoContents(doc.path)"
               v-if="doc.type === 'dir'"
               class="list-item"
             >
@@ -51,7 +51,6 @@
             <div
               v-if="doc.type === 'file'"
               class="list-item"
-              @click="openModal(doc.download_url, doc.name)"
             >
               <b-icon-file-code class="list-icon"></b-icon-file-code>
               <div class="list-item-doc-title">{{ doc.name }}</div>
@@ -104,14 +103,17 @@ export default {
       await this.updateDisplayAndSort(path);
     },
     async goToParentDirectory() {
-      const curState = this.$store.getters.getCurrentLocationAsString;
-      await this.$store.dispatch(
-        'setCurrentLocation',
-        this.$store.getters.getPathFromLocation(curState.lastIndexOf('/'))
-      );
-      await this.updateDisplayAndSort(
-        this.$store.getters.getCurrentLocationAsString
-      );
+      setTimeout(async () => {
+        const curState = this.$store.getters.getCurrentLocationAsString;
+        await this.$store.dispatch(
+            'setCurrentLocation',
+            this.$store.getters.getPathFromLocation(curState.lastIndexOf('/'))
+        );
+        await this.updateDisplayAndSort(
+            this.$store.getters.getCurrentLocationAsString
+        );
+      }, 300)
+
     },
     async updateDisplayAndSort(path) {
       await this.$store.dispatch('fetchRepoContentsAtLocation', {
@@ -141,6 +143,12 @@ export default {
 
       this.$bvModal.show('bv-modal');
     },
+    handleClick(doc) {
+      setTimeout(() => {
+        if (doc.type === 'dir') this.updateRepoContents(doc.path)
+        if (doc.type === 'file') this.openModal(doc.download_url, doc.name)
+      }, 300)
+    }
   },
 };
 </script>
@@ -161,6 +169,8 @@ export default {
   display: flex;
   align-items: center;
   font-weight: bold;
+  width: 100%;
+  height: 100%;
 }
 
 .list-item-container {
@@ -190,8 +200,24 @@ export default {
 .list-container {
   width: 80%;
 }
+
 .bread {
   background-color: white;
   padding-left: 0;
+}
+
+/* Ripple effect */
+.clickable {
+  background-position: center;
+  transition: background 0.8s;
+  cursor: pointer;
+}
+.clickable:hover {
+  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+}
+.clickable:active {
+  background-color: #6eb9f7;
+  background-size: 100%;
+  transition: background 0s;
 }
 </style>

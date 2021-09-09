@@ -1,6 +1,7 @@
 <template>
   <b-card class="mb-3">
-    <b-card-img v-bind:src="user.avatar_url" />
+    <b-card-img v-bind:src="user.avatar_url" v-if="user" />
+    <b-skeleton-img v-if="!user"></b-skeleton-img>
     <b-container class="py-3">
       <h5 class="font-weight-bold">
         {{ user.name }}

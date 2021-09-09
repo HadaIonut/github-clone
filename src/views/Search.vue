@@ -19,15 +19,15 @@
         v-bind:key="index"
       >
         <b-col
-          md="2"
+          md="4"
           xs="12"
-          sm="12"
+          sm="6"
           lg="2"
           xl="2"
           v-for="item in row"
           v-bind:key="item.id"
         >
-          <router-link :to="{ path: `/user/${item.login}` }">
+          <router-link class='userLink' :to="{ path: `/user/${item.login}`  }">
             <b-card
               v-bind:title="item.login"
               v-bind:img-src="item.avatar_url"
@@ -114,15 +114,40 @@ export default {
 <style>
 .myCard .card-title {
   font-size: 16px;
+
 }
 .myPagination {
   margin-bottom: 2rem;
+}
+
+myPagination button{
+  transition: transform .2s; /* Animation */
+}
+
+.myPagination button:hover{
+ transform: scale(1.07);
 }
 
 @media (max-width: 800px) {
   .myPagination {
     position: relative;
   }
+}
+
+.myCard{
+  transition: transform .2s; /* Animation */
+  
+}
+
+.myCard:hover{
+    transform: scale(1.07);
+    z-index: 100;
+}
+
+.userLink:hover{
+    text-decoration: none;
+    outline: none;
+  
 }
 
 </style>

@@ -134,18 +134,19 @@ export default {
         this.$store.getters.getCurrentLocationAsString
       );
     },
-    async openModal(downloadUrl) {
+    async openModal(downloadUrl, name) {
       const body = (await fetch(downloadUrl)).body;
       const readable = await body.getReader().read();
-      const final = new TextDecoder('utf-8').decode(readable.value)
+      const final = new TextDecoder('utf-8').decode(readable.value);
       await this.$store.dispatch('updateFileContent', final);
+      await this.$store.dispatch('updateFileName', name);
 
-      this.$bvModal.show('bv-modal-example');
+      this.$bvModal.show('bv-modal');
     },
     handleClick(doc) {
       setTimeout(() => {
         if (doc.type === 'dir') this.updateRepoContents(doc.path)
-        if (doc.type === 'file') this.openModal(doc.download_url)
+        if (doc.type === 'file') this.openModal(doc.download_url, doc.name)
       }, 300)
     }
   },

@@ -1,6 +1,8 @@
 <template>
-  <b-modal size="xl" id="bv-modal-example" hide-footer class="vw-75">
-    <template #modal-title> Using <code>$bvModal</code> Methods</template>
+  <b-modal size="xl" id="bv-modal" hide-footer class="vw-75" scrollable>
+    <template #modal-title>
+      <h5 class="font-weight-bold">{{ name }}</h5>
+    </template>
     <div class="d-block" v-highlight style="width:100%">
       <pre class="language-javascript">
         <code>
@@ -20,6 +22,11 @@ export default {
     content() {
       return this.$store.getters.getFileContent;
     },
+    name() {
+      return this.$store.getters.getFileName;
+    },
   },
 };
 </script>
+
+<style scoped></style>

@@ -1,6 +1,6 @@
 <template>
   <div class="searchPage">
-    <Spinner  v-if="loading"/> 
+    <Spinner v-if="loading" />
     <h3 v-if="users" class="text-center mt-4">
       <b-badge>{{ totalUserCount }}</b-badge> results found for '{{
         this.$route.query.query
@@ -27,7 +27,7 @@
           v-for="item in row"
           v-bind:key="item.id"
         >
-          <router-link class='userLink' :to="{ path: `/user/${item.login}`  }">
+          <router-link class="userLink" :to="{ path: `/user/${item.login}` }">
             <b-card
               v-bind:title="item.login"
               v-bind:img-src="item.avatar_url"
@@ -56,12 +56,9 @@
 </template>
 
 <script>
-import { Octokit } from "@octokit/core";
 import chunk from "lodash/chunk";
-import Spinner from '../components/Spinner'
-import {makeErrorToast} from '../utils/toast'
-const octokit = new Octokit({});
-
+import Spinner from "../components/Spinner";
+import { searchUsers } from "../utils/github";
 
 export default {
   data() {
@@ -71,31 +68,54 @@ export default {
       error: null,
       perPage: 3,
       currentPage: 1,
+      lastpage: 0,
       rows: 0,
       totalUserCount: 0,
+      currentRequestPage: 1,
     };
   },
   created() {
     this.fetchUsers();
   },
+  watch: {
+    currentPage: "fetchMoreUsers",
+  },
   methods: {
     async fetchUsers() {
       let params = {
-          q: this.$route.query.query,
-          per_page: 100,}
-      this.loading = true;
-      try{
-        let response = await octokit.request("GET /search/users", params);
-      this.loading = false;
-      this.users = response.data.items;
-      this.rows = response.data.items.length;
-      this.totalUserCount = response.data.total_count;
-      } catch(error){
-        makeErrorToast(
-          this,
-           error.message || `Unable to search for users like '${params?.q}'`
-        )
+        q: this.$route.query.query,
+        per_page: 100,
+        context: this,
+      };
 
+      this.loading = true;
+      let res = await searchUsers(params);
+      this.loading = false;
+      this.users = res.items;
+      this.rows = res.items.length;
+      this.totalUserCount = res.total_count;
+      this.lastpage = Math.ceil(this.rows / 18);
+      this.currentRequestPage++;
+    },
+    async fetchMoreUsers() {
+      if (
+        this.totalUserCount > this.rows &&
+        this.currentPage == this.lastpage
+      ) {
+        let params = {
+          q: this.$route.query.query,
+          per_page: 100,
+          page: this.currentRequestPage,
+          context: this,
+        };
+
+        let res = await searchUsers(params);
+        this.loading=false;
+        this.users = this.users.concat(res.items);
+        this.rows = this.users.length;
+        this.totalUserCount = res.total_count;
+        this.lastpage = Math.ceil(this.rows / 18);
+        this.currentRequestPage++;
       }
     },
   },
@@ -105,8 +125,8 @@ export default {
     },
   },
   name: "Search",
-  components:{
-    Spinner
+  components: {
+    Spinner,
   },
 };
 </script>
@@ -114,18 +134,17 @@ export default {
 <style>
 .myCard .card-title {
   font-size: 16px;
-
 }
 .myPagination {
   margin-bottom: 2rem;
 }
 
-myPagination button{
-  transition: transform .2s; /* Animation */
+myPagination button {
+  transition: transform 0.2s; /* Animation */
 }
 
-.myPagination button:hover{
- transform: scale(1.07);
+.myPagination button:hover {
+  transform: scale(1.07);
 }
 
 @media (max-width: 800px) {
@@ -134,20 +153,17 @@ myPagination button{
   }
 }
 
-.myCard{
-  transition: transform .2s; /* Animation */
-  
+.myCard {
+  transition: transform 0.2s; /* Animation */
 }
 
-.myCard:hover{
-    transform: scale(1.07);
-    z-index: 100;
+.myCard:hover {
+  transform: scale(1.07);
+  z-index: 100;
 }
 
-.userLink:hover{
-    text-decoration: none;
-    outline: none;
-  
+.userLink:hover {
+  text-decoration: none;
+  outline: none;
 }
-
 </style>

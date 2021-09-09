@@ -1,10 +1,10 @@
 <template>
-  <b-container class="px-1 py-5">
-    <b-row>
-      <b-col cols="4 border-right">
+  <b-container fluid class="px-1 py-5 mx-3">
+    <b-row fluid>
+      <b-col lg="2" md="4" sm="2" xs="12">
         <SidePanel v-bind:username="$route.params.username" />
       </b-col>
-      <b-col cols="8 "
+      <b-col lg="10" md="8" sm="10" xs="12"
         ><RepoPanel v-bind:username="$route.params.username"
       /></b-col>
     </b-row>

@@ -1,5 +1,5 @@
 <template>
-  <b-card class="">
+  <b-card class="mb-3">
     <b-card-img v-bind:src="user.avatar_url" />
     <b-container class="py-3">
       <h5 class="font-weight-bold">
@@ -29,7 +29,10 @@ export default {
   name: 'SidePanel',
   props: ['username'],
   async created() {
-    await this.$store.dispatch('fetchUser', {username: this.username, context: this});
+    await this.$store.dispatch('fetchUser', {
+      username: this.username,
+      context: this,
+    });
   },
   methods: {},
   computed: {

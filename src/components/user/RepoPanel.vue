@@ -20,7 +20,7 @@
       <b-card
         v-for="(repo, index) in repos"
         :key="index"
-        class="col-lg-4  m-sm-2 px-0  mb-2 col-sm-6 col-xs-12"
+        class="col-lg-4  m-sm-2 px-0  mb-2  col-xs-12"
       >
         <router-link :to="{ path: `/user/${username}/repo/${repo.name}` }">
           <b-container class="py-3">

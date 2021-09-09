@@ -1,5 +1,5 @@
 <template>
-  <b-container fluid class="px-1 py-5 mx-3">
+  <b-container fluid class="px-1 py-5">
     <b-row fluid>
       <b-col lg="2" md="4" sm="2" xs="12">
         <SidePanel v-bind:username="$route.params.username" />

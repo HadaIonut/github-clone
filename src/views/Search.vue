@@ -56,11 +56,9 @@
 </template>
 
 <script>
-import { Octokit } from "@octokit/core";
 import chunk from "lodash/chunk";
 import Spinner from "../components/Spinner";
-import { makeErrorToast } from "../utils/toast";
-const octokit = new Octokit({});
+import { searchUsers } from "../utils/github";
 
 export default {
   data() {
@@ -87,26 +85,17 @@ export default {
       let params = {
         q: this.$route.query.query,
         per_page: 100,
+        context: this,
       };
 
       this.loading = true;
-      try {
-        let response = await octokit.request("GET /search/users", params);
-        this.loading = false;
-
-        this.users = response.data.items;
-
-        this.rows = response.data.items.length;
-        this.totalUserCount = response.data.total_count;
-        this.lastpage = Math.ceil(this.rows / 18);
-
-        this.currentRequestPage++;
-      } catch (error) {
-        makeErrorToast(
-          this,
-          error.message || `Unable to search for users like '${params?.q}'`
-        );
-      }
+      let res = await searchUsers(params);
+      this.loading = false;
+      this.users = res.items;
+      this.rows = res.items.length;
+      this.totalUserCount = res.total_count;
+      this.lastpage = Math.ceil(this.rows / 18);
+      this.currentRequestPage++;
     },
     async fetchMoreUsers() {
       if (
@@ -117,24 +106,16 @@ export default {
           q: this.$route.query.query,
           per_page: 100,
           page: this.currentRequestPage,
+          context: this,
         };
 
-        try {
-          let response = await octokit.request("GET /search/users", params);
-          this.loading = false;
-
-          this.users = this.users.concat(response.data.items);
-
-          this.rows = this.users.length;
-          this.totalUserCount = response.data.total_count;
-          this.lastpage = Math.ceil(this.rows / 18);
-          this.currentRequestPage++;
-        } catch (error) {
-          makeErrorToast(
-            this,
-            error.message || `Unable to search for users like '${params?.q}'`
-          );
-        }
+        let res = await searchUsers(params);
+        this.loading=false;
+        this.users = this.users.concat(res.items);
+        this.rows = this.users.length;
+        this.totalUserCount = res.total_count;
+        this.lastpage = Math.ceil(this.rows / 18);
+        this.currentRequestPage++;
       }
     },
   },

@@ -19,9 +19,9 @@
         v-bind:key="index"
       >
         <b-col
-          md="2"
+          md="4"
           xs="12"
-          sm="12"
+          sm="6"
           lg="2"
           xl="2"
           v-for="item in row"

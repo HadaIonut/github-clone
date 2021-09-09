@@ -6,19 +6,18 @@ const octokit = new Octokit();
 
 const state = {
   repos: [],
-  keyword: '',
 };
 
 const getters = {
   allRepos: (state) => state.repos,
-  filteredRepos: (state) =>
+  filteredRepos: (state) => (keyword) =>
     state.repos.filter((repo) =>
-      repo.name.toLowerCase().includes(state.keyword.toLowerCase())
+      repo.name.toLowerCase().includes(keyword.toLowerCase())
     ),
 };
 
 const actions = {
-  async fetchRepos({ commit }, {username, context}) {
+  async fetchRepos({ commit }, { username, context }) {
     try {
       const repos = await octokit.request('GET /users/{username}/repos', {
         username,
@@ -35,14 +34,10 @@ const actions = {
   updateRepos({ commit }, repos) {
     commit('setRepos', repos);
   },
-  updateKeyword({ commit }, keyword) {
-    commit('setKeyword', keyword);
-  },
 };
 
 const mutations = {
   setRepos: (state, repos) => (state.repos = repos),
-  setKeyword: (state, keyword) => (state.keyword = keyword),
 };
 
 export default {

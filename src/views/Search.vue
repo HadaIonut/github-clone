@@ -125,4 +125,12 @@ export default {
   }
 }
 
+.myCard{
+  transition: transform .2s; /* Animation */
+}
+
+.myCard:hover{
+    transform: scale(1.1);
+}
+
 </style>

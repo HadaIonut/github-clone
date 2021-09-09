@@ -1,6 +1,7 @@
 <template>
   <div class="searchPage">
-    <h3 class="text-center mt-4">
+    <Spinner  v-if="loading"/> 
+    <h3 v-if="users" class="text-center mt-4">
       <b-badge>{{ totalUserCount }}</b-badge> results found for '{{
         this.$route.query.query
       }}'.
@@ -57,8 +58,10 @@
 <script>
 import { Octokit } from "@octokit/core";
 import chunk from "lodash/chunk";
-
+import Spinner from '../components/Spinner'
+import {makeErrorToast} from '../utils/toast'
 const octokit = new Octokit({});
+
 
 export default {
   data() {
@@ -77,14 +80,23 @@ export default {
   },
   methods: {
     async fetchUsers() {
-      let response = await octokit.request("GET /search/users", {
-        q: this.$route.query.query,
-        per_page: 150,
-      });
+      let params = {
+          q: this.$route.query.query,
+          per_page: 100,}
+      this.loading = true;
+      try{
+        let response = await octokit.request("GET /search/users", params);
+      this.loading = false;
       this.users = response.data.items;
       this.rows = response.data.items.length;
       this.totalUserCount = response.data.total_count;
-      console.log(response);
+      } catch(error){
+        makeErrorToast(
+          this,
+           error.message || `Unable to search for users like '${params?.q}'`
+        )
+
+      }
     },
   },
   computed: {
@@ -93,6 +105,9 @@ export default {
     },
   },
   name: "Search",
+  components:{
+    Spinner
+  },
 };
 </script>
 
@@ -109,4 +124,5 @@ export default {
     position: relative;
   }
 }
+
 </style>

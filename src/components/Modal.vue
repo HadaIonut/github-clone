@@ -4,11 +4,7 @@
       <h5 class="font-weight-bold">{{ name }}</h5>
     </template>
     <div class="d-block" v-highlight style="width:100%">
-      <pre class="language-javascript">
-        <code>
-          {{ content }}
-        </code>
-      </pre>
+      <pre class="language-javascript"><code>{{content}}</code></pre>
     </div>
   </b-modal>
 </template>

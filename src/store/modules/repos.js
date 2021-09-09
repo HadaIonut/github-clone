@@ -6,19 +6,14 @@ const octokit = new Octokit();
 
 const state = {
   repos: [],
-  keyword: '',
-  fileName: '',
-  fileContent: '',
 };
 
 const getters = {
   allRepos: (state) => state.repos,
-  filteredRepos: (state) =>
+  filteredRepos: (state) => (keyword) =>
     state.repos.filter((repo) =>
-      repo.name.toLowerCase().includes(state.keyword.toLowerCase())
+      repo.name.toLowerCase().includes(keyword.toLowerCase())
     ),
-  getFileContent: (state) => state.fileContent,
-  getFileName: (state) => state.fileName,
 };
 
 const actions = {
@@ -39,22 +34,10 @@ const actions = {
   updateRepos({ commit }, repos) {
     commit('setRepos', repos);
   },
-  updateKeyword({ commit }, keyword) {
-    commit('setKeyword', keyword);
-  },
-  updateFileContent({ commit }, content) {
-    commit('setContent', content);
-  },
-  updateFileName({ commit }, name) {
-    commit('setFileName', name);
-  },
 };
 
 const mutations = {
   setRepos: (state, repos) => (state.repos = repos),
-  setKeyword: (state, keyword) => (state.keyword = keyword),
-  setContent: (state, content) => (state.fileContent = content),
-  setFileName: (state, name) => (state.fileName = name),
 };
 
 export default {

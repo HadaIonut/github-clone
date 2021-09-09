@@ -128,7 +128,7 @@ export default {
       const curState = this.$store.getters.getCurrentLocationAsString;
       await this.$store.dispatch(
         'setCurrentLocation',
-        this.$store.getters.getPathFromLocation(curState.indexOf(path))
+        this.$store.getters.getPathFromLocation(curState.indexOf(`/${path}`))
       );
       await this.updateDisplayAndSort(
         this.$store.getters.getCurrentLocationAsString

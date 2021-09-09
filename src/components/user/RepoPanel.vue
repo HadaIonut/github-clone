@@ -43,17 +43,22 @@
 export default {
   name: 'RepoPanel',
   props: ['username'],
+  data() {
+    return {
+      keyword: ''
+    }
+  },
   async created() {
     await this.$store.dispatch('fetchRepos', {username: this.username, context: this});
   },
   methods: {
     handleFilter(e) {
-      this.$store.dispatch('updateKeyword', e);
+      this.keyword = e;
     },
   },
   computed: {
     repos() {
-      return this.$store.getters.filteredRepos;
+      return this.$store.getters.filteredRepos(this.keyword);
     },
   },
 };

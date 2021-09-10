@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'RepoPanel',
   props: ['username'],
@@ -49,20 +50,28 @@ export default {
       keyword: '',
     };
   },
-  async created() {
-    await this.$store.dispatch('fetchRepos', {
-      username: this.username,
-      context: this,
-    });
-  },
+
   methods: {
+    ...mapActions(['fetchRepos']),
     handleFilter(e) {
       this.keyword = e;
     },
   },
+  async created() {
+    await this.fetchRepos({
+      username: this.username,
+      context: this,
+    });
+  },
+  // computed: {
+  //   repos() {
+  //     return this.$store.getters.filteredRepos(this.keyword);
+  //   },
+  // },
   computed: {
+    ...mapGetters(['filteredRepos']),
     repos() {
-      return this.$store.getters.filteredRepos(this.keyword);
+      return this.filteredRepos(this.keyword);
     },
   },
 };

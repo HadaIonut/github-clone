@@ -26,20 +26,21 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex';
 export default {
   name: 'SidePanel',
   props: ['username'],
   async created() {
-    await this.$store.dispatch('fetchUser', {
+    await this.fetchUser({
       username: this.username,
       context: this,
     });
   },
-  methods: {},
+  methods: {
+    ...mapActions(['fetchUser']),
+  },
   computed: {
-    user() {
-      return this.$store.getters.getUser;
-    },
+    ...mapGetters({ user: 'getUser' }),
   },
 };
 </script>

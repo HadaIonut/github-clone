@@ -11,9 +11,23 @@ const state = {
   fileContent: '',
   commits: [],
   branches: [],
+  collaboratos: [],
 };
 
 const actions = {
+  async fetchCollaborators({commit}, {userName, repoName, context}){
+    try {
+      const collaborators = (
+        await octokit.request(`GET /repos/${userName}/${repoName}/branches`)
+      ).data;
+      commit('setCollaborators', collaborators);
+    } catch (error) {
+      makeErrorToast(
+        context,
+        error.message || `Unable to fetch ${repoName}'collaborators`
+      );
+    }
+  },
   async fetchBranches({commit}, {userName, repoName, context}){
     try {
       const branches = (
@@ -93,6 +107,7 @@ const getters = {
   getFileName: (state) => state.fileName,
   getCommits: (state) => state.commits,
   getBranches: (state) => state.branches,
+  getCollaborators: (state) => state.collaborators,
 };
 
 const mutations = {
@@ -102,6 +117,7 @@ const mutations = {
   setFileName: (state, name) => (state.fileName = name),
   setCommits: (state, commits) => (state.commits = commits),
   setBranches: (state, branches) => (state.branches = branches),
+  setCollaborators: (state, collaborators) => (state.collaborators = collaborators),
   
 };
 

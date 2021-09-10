@@ -1,7 +1,8 @@
 <template>
-  <b-card class="mb-3">
-    <b-card-img v-bind:src="user.avatar_url" v-if="user" />
-    <b-skeleton-img v-if="!user"></b-skeleton-img>
+  <b-card class="mb-3" v-if="user">
+    <div v-if="!user"><UserSkeleton /></div>
+
+    <b-card-img v-bind:src="user.avatar_url" />
     <b-container class="py-3">
       <h5 class="font-weight-bold">
         {{ user.name }}
@@ -27,9 +28,12 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
+import UserSkeleton from './UserSkeleton.vue';
+
 export default {
   name: 'SidePanel',
   props: ['username'],
+  components: { UserSkeleton },
   async created() {
     await this.fetchUser({
       username: this.username,

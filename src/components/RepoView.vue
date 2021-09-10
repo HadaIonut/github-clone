@@ -82,6 +82,9 @@ export default {
     paths() {
       return this.$store.getters.getCurrentLocationAsArray;
     },
+    commits(){
+      return this.$store.getters.getCommits
+    }
   },
   async created() {
     await this.$store.dispatch('fetchRepoContents', {
@@ -90,7 +93,14 @@ export default {
       context: this,
     });
     this.sortDocuments(this.docs);
-    this.commitsInfo = this.docs.length;
+
+    await this.$store.dispatch('fetchCommits', {
+      userName: this.username,
+      repoName: this.reponame,
+      context: this,
+    });
+        this.commitsInfo = this.commits.length;
+    
   },
   methods: {
     sortDocuments(docs) {

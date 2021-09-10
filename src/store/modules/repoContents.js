@@ -9,9 +9,24 @@ const state = {
   currentLocation: '',
   fileName: '',
   fileContent: '',
+  commits: [],
 };
 
 const actions = {
+  async fetchCommits({commit}, {userName, repoName, context}){
+    try {
+      const commits = (
+        await octokit.request(`GET /repos/${userName}/${repoName}/commits`)
+      ).data;
+      commit('setCommits', commits);
+    } catch (error) {
+      makeErrorToast(
+        context,
+        error.message || `Unable to fetch ${repoName}'commits`
+      );
+    }
+
+  },
   async fetchRepoContents({ commit }, { userName, repoName, context }) {
     try {
       const docs = (
@@ -62,6 +77,7 @@ const getters = {
     state.currentLocation.substr(0, location),
   getFileContent: (state) => state.fileContent,
   getFileName: (state) => state.fileName,
+  getCommits: (state) => state.commits,
 };
 
 const mutations = {
@@ -69,6 +85,7 @@ const mutations = {
   setCurrentLocation: (state, newLocation) => (state.currentLocation = newLocation),
   setContent: (state, content) => (state.fileContent = content),
   setFileName: (state, name) => (state.fileName = name),
+  setCommits: (state, commits) => (state.commits = commits),
 };
 
 export default {

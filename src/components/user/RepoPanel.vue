@@ -2,7 +2,7 @@
   <div>
     <div>
       <b-row>
-        <b-col cols="6" class="mb-3">
+        <b-col lg="6" xs="12" class="mb-3">
           <b-input-group class="input">
             <b-form-input
               placeholder="Enter repo name"
@@ -18,11 +18,11 @@
       </b-row>
     </div>
     <div>
-      <b-row class="pl-3">
+      <b-row class="">
         <span
           v-for="(repo, index) in repos"
           :key="index"
-          class="col-4 mr-2 mb-2"
+          class="col-lg-4 col-md-6 col-xs-12  mb-2"
         >
           <router-link :to="{ path: `/user/${username}/repo/${repo.name}` }">
             <b-card class="clickable">
@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex';
 export default {
   name: 'RepoPanel',
   props: ['username'],
@@ -49,20 +50,28 @@ export default {
       keyword: '',
     };
   },
-  async created() {
-    await this.$store.dispatch('fetchRepos', {
-      username: this.username,
-      context: this,
-    });
-  },
+
   methods: {
+    ...mapActions(['fetchRepos']),
     handleFilter(e) {
       this.keyword = e;
     },
   },
+  async created() {
+    await this.fetchRepos({
+      username: this.username,
+      context: this,
+    });
+  },
+  // computed: {
+  //   repos() {
+  //     return this.$store.getters.filteredRepos(this.keyword);
+  //   },
+  // },
   computed: {
+    ...mapGetters(['filteredRepos']),
     repos() {
-      return this.$store.getters.filteredRepos(this.keyword);
+      return this.filteredRepos(this.keyword);
     },
   },
 };

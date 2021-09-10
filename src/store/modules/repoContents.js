@@ -9,9 +9,52 @@ const state = {
   currentLocation: '',
   fileName: '',
   fileContent: '',
+  commits: [],
+  branches: [],
+  collaboratos: [],
 };
 
 const actions = {
+  async fetchCollaborators({commit}, {userName, repoName, context}){
+    try {
+      const collaborators = (
+        await octokit.request(`GET /repos/${userName}/${repoName}/branches`)
+      ).data;
+      commit('setCollaborators', collaborators);
+    } catch (error) {
+      makeErrorToast(
+        context,
+        error.message || `Unable to fetch ${repoName}'collaborators`
+      );
+    }
+  },
+  async fetchBranches({commit}, {userName, repoName, context}){
+    try {
+      const branches = (
+        await octokit.request(`GET /repos/${userName}/${repoName}/branches`)
+      ).data;
+      commit('setBranches', branches);
+    } catch (error) {
+      makeErrorToast(
+        context,
+        error.message || `Unable to fetch ${repoName}'branches`
+      );
+    }
+  },
+  async fetchCommits({commit}, {userName, repoName, context}){
+    try {
+      const commits = (
+        await octokit.request(`GET /repos/${userName}/${repoName}/commits`)
+      ).data;
+      commit('setCommits', commits);
+    } catch (error) {
+      makeErrorToast(
+        context,
+        error.message || `Unable to fetch ${repoName}'commits`
+      );
+    }
+
+  },
   async fetchRepoContents({ commit }, { userName, repoName, context }) {
     try {
       const docs = (
@@ -62,6 +105,9 @@ const getters = {
     state.currentLocation.substr(0, location),
   getFileContent: (state) => state.fileContent,
   getFileName: (state) => state.fileName,
+  getCommits: (state) => state.commits,
+  getBranches: (state) => state.branches,
+  getCollaborators: (state) => state.collaborators,
 };
 
 const mutations = {
@@ -69,6 +115,10 @@ const mutations = {
   setCurrentLocation: (state, newLocation) => (state.currentLocation = newLocation),
   setContent: (state, content) => (state.fileContent = content),
   setFileName: (state, name) => (state.fileName = name),
+  setCommits: (state, commits) => (state.commits = commits),
+  setBranches: (state, branches) => (state.branches = branches),
+  setCollaborators: (state, collaborators) => (state.collaborators = collaborators),
+  
 };
 
 export default {

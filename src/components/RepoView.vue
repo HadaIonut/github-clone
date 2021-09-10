@@ -79,14 +79,17 @@ export default {
     };
   },
   computed: {
+
     ...mapGetters({
       docs: 'allRepoContents',
       paths: 'getCurrentLocationAsArray',
       currentLocationString: 'getCurrentLocationAsString',
-      getPathFromLocation: 'getPathFromLocation'
+      getPathFromLocation: 'getPathFromLocation',
+      commits: 'getCommits',
     }),
     pathFromLocation() {
       return this.getPathFromLocation(this.targetLocation)
+
     }
   },
   async created() {
@@ -96,7 +99,14 @@ export default {
       context: this,
     });
     this.sortDocuments(this.docs);
-    this.commitsInfo = this.docs.length;
+
+    await this.$store.dispatch('fetchCommits', {
+      userName: this.username,
+      repoName: this.reponame,
+      context: this,
+    });
+        this.commitsInfo = this.commits.length;
+    
   },
   methods: {
     ...mapActions(['fetchRepoContents', 'updateCurrentLocation', 'fetchRepoContentsAtLocation', 'updateFileContent', 'updateFileName']),

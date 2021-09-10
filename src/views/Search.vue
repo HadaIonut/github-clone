@@ -1,15 +1,15 @@
 <template>
   <div class="searchPage">
     <Spinner v-if="loading" />
-    <h3 v-if="users" class="text-center mt-4">
+    <h4 v-if="users" class="text-center mt-3">
       <b-badge class="myBadge">{{ totalUserCount }}</b-badge> results found for
       '{{ this.$route.query.query }}'.
       <span v-if="totalUserCount > 99">
         Here are the first <b-badge class="myBadge"> {{ rows }}</b-badge>
       </span>
-    </h3>
+    </h4>
 
-    <b-container class="mt-4 my-container">
+    <b-container class="mt-3 my-container">
       <b-row
         v-for="(row, index) in groupedUsers.slice(
           (currentPage - 1) * perPage,
@@ -137,13 +137,12 @@ export default {
   font-weight: bold;
 }
 
-.myCard:hover .card-body .card-title{
+.myCard:hover .card-body .card-title {
   color: #47a7f5;
 }
 
-
 .myPagination {
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .myPagination button {

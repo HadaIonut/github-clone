@@ -12,8 +12,8 @@
         </b-input-group-text>
       </b-input-group-append>
     </b-input-group>
-    <b-container fluid class="mt-3" v-if="!loadingSearchResultGroups">
-      <b-row v-for="(searchResultGroup, i) in searchResultGroups" :key="i">
+    <b-container fluid class="mt-3 search-results" v-if="!loadingSearchResultGroups">
+      <b-row v-for="(searchResultGroup, i) in searchResultGroups" :key="i" class="search">
         <b-col
           md="12"
           lg="6"
@@ -119,6 +119,11 @@ export default {
 <style scoped>
 .input {
   width: 40vw;
+}
+
+.search {
+  flex-grow: 1;
+  transition: flex-grow 5s linear;
 }
 
 @media (max-width: 768px) {

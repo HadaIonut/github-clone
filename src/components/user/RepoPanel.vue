@@ -5,12 +5,12 @@
         <b-col cols="6" class="mb-3">
           <b-input-group class="input">
             <b-form-input
-                placeholder="Enter repo name"
-                v-on:input="handleFilter"
+              placeholder="Enter repo name"
+              v-on:input="handleFilter"
             />
             <b-input-group-append>
               <b-input-group-text>
-                <b-icon icon="search"/>
+                <b-icon icon="search" />
               </b-input-group-text>
             </b-input-group-append>
           </b-input-group>
@@ -20,9 +20,10 @@
     <div>
       <b-row class="pl-3">
         <span
-            v-for="(repo, index) in repos"
-            :key="index"
-            class="col-4 mr-2 mb-2">
+          v-for="(repo, index) in repos"
+          :key="index"
+          class="col-4 mr-2 mb-2"
+        >
           <router-link :to="{ path: `/user/${username}/repo/${repo.name}` }">
             <b-card class="clickable">
               <b-container class="py-3">
@@ -45,11 +46,14 @@ export default {
   props: ['username'],
   data() {
     return {
-      keyword: ''
-    }
+      keyword: '',
+    };
   },
   async created() {
-    await this.$store.dispatch('fetchRepos', {username: this.username, context: this});
+    await this.$store.dispatch('fetchRepos', {
+      username: this.username,
+      context: this,
+    });
   },
   methods: {
     handleFilter(e) {
@@ -74,7 +78,7 @@ export default {
   width: 100%;
 }
 .clickable:hover {
-  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
-
+  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%)
+    center/15000%;
 }
 </style>

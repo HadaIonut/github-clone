@@ -1,7 +1,7 @@
 <template>
   <div>
     <b-card>
-      <b-skeleton type="avatar"></b-skeleton>
+      <b-skeleton type="avatar" class="mb-3"></b-skeleton>
 
       <b-skeleton animation="throb" width="85%"></b-skeleton>
       <b-skeleton animation="throb" width="55%"></b-skeleton>

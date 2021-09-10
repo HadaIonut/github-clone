@@ -19,6 +19,7 @@
           >{{ path }}</b-breadcrumb-item
         >
       </b-breadcrumb>
+      <LanguagesBar v-bind:username="username" v-bind:reponame="reponame" />
       <b-container fluid class="p-0">
         <b-list-group-item
           class="font-weight-bold bg-secondary text-white d-flex rounded-top"
@@ -39,17 +40,11 @@
             class="list-item-container clickable"
             @click="handleClick(doc)"
           >
-            <div
-              v-if="doc.type === 'dir'"
-              class="list-item"
-            >
+            <div v-if="doc.type === 'dir'" class="list-item">
               <b-icon-folder-fill class="list-icon"></b-icon-folder-fill>
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>
-            <div
-              v-if="doc.type === 'file'"
-              class="list-item"
-            >
+            <div v-if="doc.type === 'file'" class="list-item">
               <b-icon-file-code class="list-icon"></b-icon-file-code>
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>
@@ -63,8 +58,10 @@
 
 <script>
 import Modal from '../components/Modal.vue';
+import LanguagesBar from './repos/LanguagesBar.vue';
+
 export default {
-  components: { Modal },
+  components: { Modal, LanguagesBar },
   name: 'RepoView',
   props: {
     reponame: String,
@@ -104,14 +101,13 @@ export default {
       setTimeout(async () => {
         const curState = this.$store.getters.getCurrentLocationAsString;
         await this.$store.dispatch(
-            'updateCurrentLocation',
-            this.$store.getters.getPathFromLocation(curState.lastIndexOf('/'))
+          'updateCurrentLocation',
+          this.$store.getters.getPathFromLocation(curState.lastIndexOf('/'))
         );
         await this.updateDisplayAndSort(
-            this.$store.getters.getCurrentLocationAsString
+          this.$store.getters.getCurrentLocationAsString
         );
-      }, 300)
-
+      }, 300);
     },
     async updateDisplayAndSort(path) {
       await this.$store.dispatch('fetchRepoContentsAtLocation', {
@@ -143,10 +139,10 @@ export default {
     },
     handleClick(doc) {
       setTimeout(() => {
-        if (doc.type === 'dir') this.updateRepoContents(doc.path)
-        if (doc.type === 'file') this.openModal(doc.download_url, doc.name)
-      }, 300)
-    }
+        if (doc.type === 'dir') this.updateRepoContents(doc.path);
+        if (doc.type === 'file') this.openModal(doc.download_url, doc.name);
+      }, 300);
+    },
   },
 };
 </script>
@@ -210,7 +206,8 @@ export default {
   cursor: pointer;
 }
 .clickable:hover {
-  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%) center/15000%;
+  background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%)
+    center/15000%;
 }
 .clickable:active {
   background-color: #6eb9f7;

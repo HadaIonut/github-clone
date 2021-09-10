@@ -23,7 +23,9 @@
         <b-list-group-item
           class="font-weight-bold bg-secondary text-white d-flex rounded-top"
         >
-          {{ commitsInfo }} commits have been made in this repository. {{nrOfBranches }} active<span v-if="nrOfBranches == 1 ">&nbsp;branch </span><span v-if="nrOfBranches >1">&nbsp;branches</span>.
+          {{ commitsInfo }} commits have been made in this repository. {{nrOfBranches }} active
+          <span v-if="nrOfBranches == 1 ">&nbsp;branch </span>
+          <span v-if="nrOfBranches >1">&nbsp;branches</span>.
         </b-list-group-item>
         <b-list-group-item
           class="clickable d-flex font-weight-bold"
@@ -102,14 +104,14 @@ export default {
     });
     this.sortDocuments(this.docs);
 
-    await this.$store.dispatch('fetchCommits', {
+    await this.fetchCommits({
       userName: this.username,
       repoName: this.reponame,
       context: this,
     });
     this.commitsInfo = this.commits.length;
 
-    await this.$store.dispatch('fetchBranches', {
+    await this.fetchBranches({
       userName: this.username,
       repoName: this.reponame,
       context: this,
@@ -119,7 +121,7 @@ export default {
     
   },
   methods: {
-    ...mapActions(['fetchRepoContents', 'updateCurrentLocation', 'fetchRepoContentsAtLocation', 'updateFileContent', 'updateFileName']),
+    ...mapActions(['fetchRepoContents', 'updateCurrentLocation', 'fetchRepoContentsAtLocation', 'updateFileContent', 'updateFileName','fetchCommits','fetchBranches']),
     sortDocuments(docs) {
       docs.sort((a, b) => (a.type < b.type ? -1 : 1));
     },

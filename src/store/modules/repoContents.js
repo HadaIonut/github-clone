@@ -12,6 +12,7 @@ const state = {
   commits: [],
   branches: [],
   collaboratos: [],
+  languages: {},
 };
 
 const actions = {
@@ -95,6 +96,19 @@ const actions = {
   updateFileName({ commit }, name) {
     commit('setFileName', name);
   },
+  async fetchLanguages({ commit }, { userName, repoName, context }) {
+    try {
+      const languages = (
+        await octokit.request(`GET /repos/${userName}/${repoName}/languages`)
+      ).data;
+      commit('setLanguages', languages);
+    } catch (error) {
+      makeErrorToast(
+        context,
+        error.message || `Unable to fetch ${repoName}'s languages`
+      );
+    }
+  },
 };
 
 const getters = {
@@ -108,17 +122,20 @@ const getters = {
   getCommits: (state) => state.commits,
   getBranches: (state) => state.branches,
   getCollaborators: (state) => state.collaborators,
+  getLanguages: (state) => state.languages,
 };
 
 const mutations = {
   setRepoContents: (state, repoContents) => (state.repoContents = repoContents),
-  setCurrentLocation: (state, newLocation) => (state.currentLocation = newLocation),
+  setCurrentLocation: (state, newLocation) =>
+    (state.currentLocation = newLocation),
   setContent: (state, content) => (state.fileContent = content),
   setFileName: (state, name) => (state.fileName = name),
   setCommits: (state, commits) => (state.commits = commits),
   setBranches: (state, branches) => (state.branches = branches),
   setCollaborators: (state, collaborators) => (state.collaborators = collaborators),
-  
+
+  setLanguages: (state, languages) => (state.languages = languages),
 };
 
 export default {

@@ -32,6 +32,7 @@
 import { mapActions, mapGetters } from 'vuex';
 import UserSkeleton from './UserSkeleton.vue';
 
+
 export default {
   name: 'SidePanel',
   props: ['username'],

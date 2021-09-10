@@ -24,12 +24,14 @@
         <b-list-group-item
           class="font-weight-bold bg-secondary text-white d-flex rounded-top"
         >
-          {{ commitsInfo }} commits have been made in this repository
+          {{ commitsInfo }} commits have been made in this repository. {{nrOfBranches }} active
+          <span v-if="nrOfBranches == 1 ">&nbsp;branch </span>
+          <span v-if="nrOfBranches >1">&nbsp;branches</span>.
         </b-list-group-item>
         <b-list-group-item
           class="clickable d-flex font-weight-bold"
           @click="goToParentDirectory"
-          v-if="this.$store.getters.getCurrentLocationAsString !== ''"
+          v-if="this.currentLocationString !== ''"
         >
           ..
         </b-list-group-item>
@@ -60,6 +62,7 @@
 import Modal from '../components/Modal.vue';
 import LanguagesBar from './repos/LanguagesBar.vue';
 
+import {mapActions, mapGetters} from 'vuex';
 export default {
   components: { Modal, LanguagesBar },
   name: 'RepoView',
@@ -70,47 +73,72 @@ export default {
   data() {
     return {
       commitsInfo: null,
+      nrOfBranches: null,
+      curState: '',
+      targetLocation: ''
     };
   },
   computed: {
-    docs() {
-      return this.$store.getters.allRepoContents;
-    },
-    paths() {
-      return this.$store.getters.getCurrentLocationAsArray;
-    },
+
+    ...mapGetters({
+      docs: 'allRepoContents',
+      paths: 'getCurrentLocationAsArray',
+      currentLocationString: 'getCurrentLocationAsString',
+      getPathFromLocation: 'getPathFromLocation',
+      commits: 'getCommits',
+      branches: 'getBranches',
+    }),
+    pathFromLocation() {
+      return this.getPathFromLocation(this.targetLocation)
+
+    }
   },
   async created() {
-    await this.$store.dispatch('fetchRepoContents', {
+    await this.fetchRepoContents({
       userName: this.username,
       repoName: this.reponame,
       context: this,
     });
     this.sortDocuments(this.docs);
-    this.commitsInfo = this.docs.length;
+
+    await this.fetchCommits({
+      userName: this.username,
+      repoName: this.reponame,
+      context: this,
+    });
+    this.commitsInfo = this.commits.length;
+
+    await this.fetchBranches({
+      userName: this.username,
+      repoName: this.reponame,
+      context: this,
+    });
+
+    this.nrOfBranches = this.branches.length
+
   },
   methods: {
+    ...mapActions(['fetchRepoContents', 'updateCurrentLocation', 'fetchRepoContentsAtLocation', 'updateFileContent', 'updateFileName','fetchCommits','fetchBranches']),
     sortDocuments(docs) {
       docs.sort((a, b) => (a.type < b.type ? -1 : 1));
     },
     async updateRepoContents(path) {
-      await this.$store.dispatch('updateCurrentLocation', path);
+      await this.updateCurrentLocation(path);
       await this.updateDisplayAndSort(path);
     },
     async goToParentDirectory() {
       setTimeout(async () => {
-        const curState = this.$store.getters.getCurrentLocationAsString;
-        await this.$store.dispatch(
-          'updateCurrentLocation',
-          this.$store.getters.getPathFromLocation(curState.lastIndexOf('/'))
+        this.curState = this.currentLocationString;
+        this.targetLocation = this.curState.lastIndexOf('/')
+        await this.updateCurrentLocation(
+            this.pathFromLocation
         );
-        await this.updateDisplayAndSort(
-          this.$store.getters.getCurrentLocationAsString
-        );
-      }, 300);
+        await this.updateDisplayAndSort(this.currentLocationString);
+      }, 300)
+
     },
     async updateDisplayAndSort(path) {
-      await this.$store.dispatch('fetchRepoContentsAtLocation', {
+      await this.fetchRepoContentsAtLocation({
         userName: this.username,
         repoName: this.reponame,
         location: encodeURIComponent(path),
@@ -119,21 +147,19 @@ export default {
       this.sortDocuments(this.docs);
     },
     async goToLocation(path) {
-      const curState = this.$store.getters.getCurrentLocationAsString;
-      await this.$store.dispatch(
-        'updateCurrentLocation',
-        this.$store.getters.getPathFromLocation(curState.indexOf(`/${path}`))
+      this.curState = this.currentLocationString;
+      this.targetLocation = this.curState.lastIndexOf(`/${path}`)
+      await this.updateCurrentLocation(
+        this.pathFromLocation
       );
-      await this.updateDisplayAndSort(
-        this.$store.getters.getCurrentLocationAsString
-      );
+      await this.updateDisplayAndSort(this.currentLocationString);
     },
     async openModal(downloadUrl, name) {
       const body = (await fetch(downloadUrl)).body;
       const readable = await body.getReader().read();
       const final = new TextDecoder('utf-8').decode(readable.value);
-      await this.$store.dispatch('updateFileContent', final);
-      await this.$store.dispatch('updateFileName', name);
+      await this.updateFileContent(final);
+      await this.updateFileName(name);
 
       this.$bvModal.show('bv-modal');
     },

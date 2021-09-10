@@ -1,5 +1,5 @@
 <template>
-  <b-container class="py-5 container">
+  <b-container class="pt-5 container">
     <div class="list-container">
       <h4 class="repo-title">{{ reponame }}</h4>
       <b-breadcrumb class="bread">
@@ -117,7 +117,7 @@ export default {
       await this.$store.dispatch('fetchRepoContentsAtLocation', {
         userName: this.username,
         repoName: this.reponame,
-        location: path,
+        location: encodeURIComponent(path),
         context: this,
       });
       this.sortDocuments(this.docs);
@@ -158,7 +158,7 @@ export default {
 
 .list {
   width: 100%;
-  height: 70vh;
+  height: 65vh;
   overflow: auto;
   border-radius: 0;
 }

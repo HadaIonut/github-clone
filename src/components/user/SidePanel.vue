@@ -1,8 +1,8 @@
 <template>
   <div>
-    <UserSkeleton v-if="!user" />
+    <UserSkeleton v-if="loading" />
 
-    <b-card class="mb-3" v-else>
+    <b-card class="mb-3" v-else-if="user && !loading">
       <b-card-img v-bind:src="user.avatar_url" />
       <b-container class="py-3">
         <h5 class="font-weight-bold">
@@ -36,15 +36,23 @@ export default {
   name: 'SidePanel',
   props: ['username'],
   components: { UserSkeleton },
+  data() {
+    return {
+      loading: false,
+    };
+  },
   async created() {
+    this.loading = true;
     await this.fetchUser({
       username: this.username,
       context: this,
     });
+    this.loading = false;
   },
   methods: {
     ...mapActions(['fetchUser']),
   },
+
   computed: {
     ...mapGetters({ user: 'getUser' }),
   },

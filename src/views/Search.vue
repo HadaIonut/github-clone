@@ -164,9 +164,14 @@ export default {
   border: 0;
 }
 
-@media (max-width: 800px) {
+@media (max-width: 991px) {
   .myPagination {
     position: relative;
+  }
+}
+@media (max-height: 862px) {
+  .myPagination {
+    margin-bottom: 0;
   }
 }
 

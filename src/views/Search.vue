@@ -2,11 +2,10 @@
   <div class="searchPage">
     <Spinner v-if="loading" />
     <h3 v-if="users" class="text-center mt-4">
-      <b-badge>{{ totalUserCount }}</b-badge> results found for '{{
-        this.$route.query.query
-      }}'.
+      <b-badge class="myBadge">{{ totalUserCount }}</b-badge> results found for
+      '{{ this.$route.query.query }}'.
       <span v-if="totalUserCount > 99">
-        Here are the first <b-badge> {{ rows }}</b-badge>
+        Here are the first <b-badge class="myBadge"> {{ rows }}</b-badge>
       </span>
     </h3>
 
@@ -110,7 +109,7 @@ export default {
         };
 
         let res = await searchUsers(params);
-        this.loading=false;
+        this.loading = false;
         this.users = this.users.concat(res.items);
         this.rows = this.users.length;
         this.totalUserCount = res.total_count;
@@ -134,17 +133,36 @@ export default {
 <style>
 .myCard .card-title {
   font-size: 16px;
+  color: rgb(0, 0, 0);
+  font-weight: bold;
 }
+
+.myCard:hover .card-body .card-title{
+  color: #47a7f5;
+}
+
+
 .myPagination {
   margin-bottom: 2rem;
 }
 
-myPagination button {
+.myPagination button {
   transition: transform 0.2s; /* Animation */
+  border-radius: 0%;
 }
 
 .myPagination button:hover {
   transform: scale(1.07);
+}
+
+.myPagination button:focus {
+  box-shadow: none;
+}
+
+/* some weird bootstrap selectors */
+.page-item.active .page-link {
+  background-color: #47a7f5;
+  border: 0;
 }
 
 @media (max-width: 800px) {
@@ -165,5 +183,9 @@ myPagination button {
 .userLink:hover {
   text-decoration: none;
   outline: none;
+}
+
+.myBadge {
+  background-color: #47a7f5;
 }
 </style>

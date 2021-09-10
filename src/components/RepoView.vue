@@ -23,7 +23,7 @@
         <b-list-group-item
           class="font-weight-bold bg-secondary text-white d-flex rounded-top"
         >
-          {{ commitsInfo }} commits have been made in this repository
+          {{ commitsInfo }} commits have been made in this repository. {{nrOfBranches }} active<span v-if="nrOfBranches == 1 ">&nbsp;branch </span><span v-if="nrOfBranches >1">&nbsp;branches</span>.
         </b-list-group-item>
         <b-list-group-item
           class="clickable d-flex font-weight-bold"
@@ -74,6 +74,7 @@ export default {
   data() {
     return {
       commitsInfo: null,
+      nrOfBranches: null,
       curState: '',
       targetLocation: ''
     };
@@ -86,6 +87,7 @@ export default {
       currentLocationString: 'getCurrentLocationAsString',
       getPathFromLocation: 'getPathFromLocation',
       commits: 'getCommits',
+      branches: 'getBranches',
     }),
     pathFromLocation() {
       return this.getPathFromLocation(this.targetLocation)
@@ -105,7 +107,15 @@ export default {
       repoName: this.reponame,
       context: this,
     });
-        this.commitsInfo = this.commits.length;
+    this.commitsInfo = this.commits.length;
+
+    await this.$store.dispatch('fetchBranches', {
+      userName: this.username,
+      repoName: this.reponame,
+      context: this,
+    });
+
+    this.nrOfBranches = this.branches.length
     
   },
   methods: {

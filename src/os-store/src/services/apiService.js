@@ -144,8 +144,9 @@ class APIService {
     } = requestConfig;
 
     this.request.url = this.urlBuilder(endpoint, queryParams, routeParams);
+    console.log(this.request.url)
     this.request.headers = this.headersBuilder(headers, requestType);
-    this.request.withCredentials = true;
+    this.request.withCredentials = false;
 
     this.setRequestParams(method, body, requestType);
     this.getContent();

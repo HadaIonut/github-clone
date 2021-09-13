@@ -14,6 +14,9 @@ export default {
   name: 'Home',
   components: {
     Search,
+  },
+  created() {
+    this.$store.dispatch('getDemoAction')
   }
 }
 </script>

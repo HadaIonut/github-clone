@@ -155,10 +155,7 @@ export default {
       await this.updateDisplayAndSort(this.currentLocationString);
     },
     async openModal(downloadUrl, name) {
-      const body = (await fetch(downloadUrl)).body;
-      const readable = await body.getReader().read();
-      const final = new TextDecoder('utf-8').decode(readable.value);
-      await this.updateFileContent(final);
+      await this.$store.dispatch('getFileContentAction', {routeParams: {url: downloadUrl}})
       await this.updateFileName(name);
 
       this.$bvModal.show('bv-modal');

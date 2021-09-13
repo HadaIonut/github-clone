@@ -77,4 +77,11 @@ store.createGetEntry({
   ]),
 });
 
+store.createGetEntry({
+  resourceName: 'fileContent',
+  initialValue: [],
+  endpoint: ':url',
+  serializer: (response) => response,
+});
+
 export default store.createStore();

@@ -16,7 +16,7 @@ export default {
   name: 'Modal',
   computed: {
     content() {
-      return this.$store.getters.getFileContent;
+      return this.$store.state.apiCalls.getFileContentEntry.data;
     },
     name() {
       return this.$store.getters.getFileName;

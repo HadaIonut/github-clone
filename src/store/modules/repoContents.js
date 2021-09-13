@@ -1,8 +1,4 @@
-import { Octokit } from '@octokit/core';
-
 import { makeErrorToast } from '../../utils/toast';
-
-const octokit = new Octokit();
 
 const state = {
   repoContents: [],
@@ -17,75 +13,44 @@ const state = {
 
 const actions = {
   async fetchCollaborators({commit}, {userName, repoName, context}){
-    try {
-      const collaborators = (
-        await octokit.request(`GET /repos/${userName}/${repoName}/branches`)
-      ).data;
-      commit('setCollaborators', collaborators);
-    } catch (error) {
-      makeErrorToast(
-        context,
-        error.message || `Unable to fetch ${repoName}'collaborators`
-      );
-    }
+    await this.dispatch('getCollaboratorsAction', {routeParams: {userName: userName, repoName: repoName}})
+    const collaborators = this.state.apiCalls.getCollaboratorsEntry;
+
+    if (collaborators.error)
+      makeErrorToast(context, collaborators.error.message || `Unable to fetch ${repoName}'collaborators`);
+    else commit("setCollaborators", collaborators.data);
   },
   async fetchBranches({commit}, {userName, repoName, context}){
-    try {
-      const branches = (
-        await octokit.request(`GET /repos/${userName}/${repoName}/branches`)
-      ).data;
-      commit('setBranches', branches);
-    } catch (error) {
-      makeErrorToast(
-        context,
-        error.message || `Unable to fetch ${repoName}'branches`
-      );
-    }
+    await this.dispatch('getBranchesAction', {routeParams: {userName: userName, repoName: repoName}})
+    const branches = this.state.apiCalls.getBranchesEntry;
+
+    if (branches.error)
+      makeErrorToast(context, branches.error.message || `Unable to fetch ${repoName}'branches`);
+    else commit("setBranches", branches.data);
   },
   async fetchCommits({commit}, {userName, repoName, context}){
-    try {
-      const commits = (
-        await octokit.request(`GET /repos/${userName}/${repoName}/commits`)
-      ).data;
-      commit('setCommits', commits);
-    } catch (error) {
-      makeErrorToast(
-        context,
-        error.message || `Unable to fetch ${repoName}'commits`
-      );
-    }
+    await this.dispatch('getCommitsAction', {routeParams: {userName: userName, repoName: repoName}})
+    const commits = this.state.apiCalls.getCommitsEntry;
 
+    if (commits.error)
+      makeErrorToast(context, commits.error.message || `Unable to fetch ${repoName}'commits`);
+    else commit("setCommits", commits.data);
   },
   async fetchRepoContents({ commit }, { userName, repoName, context }) {
-    try {
-      const docs = (
-        await octokit.request(`GET /repos/${userName}/${repoName}/contents`)
-      ).data;
-      commit('setRepoContents', docs);
-    } catch (error) {
-      makeErrorToast(
-        context,
-        error.message || `Unable to fetch ${repoName}'s contents`
-      );
-    }
+    await this.dispatch('getContentsAction', {routeParams: {userName: userName, repoName: repoName}})
+    const contents = this.state.apiCalls.getContentsEntry;
+
+    if (contents.error)
+      makeErrorToast(context, contents.error.message || `Unable to fetch ${repoName}'contents`);
+    else commit("setRepoContents", contents.data);
   },
-  async fetchRepoContentsAtLocation(
-    { commit },
-    { userName, repoName, location, context }
-  ) {
-    try {
-      const docs = (
-        await octokit.request(
-          `GET /repos/${userName}/${repoName}/contents/${location}`
-        )
-      ).data;
-      commit('setRepoContents', docs);
-    } catch (error) {
-      makeErrorToast(
-        context,
-        error.message || `Unable to fetch ${repoName}'s contents`
-      );
-    }
+  async fetchRepoContentsAtLocation({ commit }, { userName, repoName, location, context }) {
+    await this.dispatch('getLocationAction', {routeParams: {userName: userName, repoName: repoName, location}})
+    const dataAtLocation = this.state.apiCalls.getLocationEntry;
+
+    if (dataAtLocation.error)
+      makeErrorToast(context, dataAtLocation.error.message || `Unable to fetch ${repoName}'s contents`);
+    else commit("setRepoContents", dataAtLocation.data);
   },
   updateCurrentLocation({ commit }, newLocation) {
     commit('setCurrentLocation', newLocation);
@@ -97,17 +62,12 @@ const actions = {
     commit('setFileName', name);
   },
   async fetchLanguages({ commit }, { userName, repoName, context }) {
-    try {
-      const languages = (
-        await octokit.request(`GET /repos/${userName}/${repoName}/languages`)
-      ).data;
-      commit('setLanguages', languages);
-    } catch (error) {
-      makeErrorToast(
-        context,
-        error.message || `Unable to fetch ${repoName}'s languages`
-      );
-    }
+    await this.dispatch('getLanguagesAction', {routeParams: {userName: userName, repoName: repoName}})
+    const languages = this.state.apiCalls.getLanguagesEntry;
+
+    if (languages.error)
+      makeErrorToast(context, languages.error.message || `Unable to fetch ${repoName}'s languages`);
+    else commit("setLanguages", languages.data);
   },
 };
 

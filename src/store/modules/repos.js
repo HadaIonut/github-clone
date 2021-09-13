@@ -1,8 +1,4 @@
-import { Octokit } from '@octokit/core';
-
 import { makeErrorToast } from '../../utils/toast';
-
-const octokit = new Octokit();
 
 const state = {
   repos: [],
@@ -18,18 +14,12 @@ const getters = {
 
 const actions = {
   async fetchRepos({ commit }, { username, context }) {
-    try {
-      const repos = await octokit.request('GET /users/{username}/repos', {
-        username,
-      });
+    await this.dispatch('getReposAction', {routeParams: {userName: username}})
+    const repos = this.state.apiCalls.getReposEntry;
 
-      commit('setRepos', repos.data);
-    } catch (error) {
-      makeErrorToast(
-        context,
-        error.message || `Unable to fetch ${username}'s repositories`
-      );
-    }
+    if (repos.error)
+      makeErrorToast(context, repos.error.message || `Unable to fetch ${username}'s repositories`);
+    else commit("setRepos", Object.values(repos.data));
   },
   updateRepos({ commit }, repos) {
     commit('setRepos', repos);

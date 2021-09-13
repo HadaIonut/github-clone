@@ -1,3 +1,4 @@
+/*eslint-disable*/
 import { Octokit } from "@octokit/core";
 
 import { makeErrorToast } from "../../utils/toast";
@@ -14,18 +15,12 @@ const getters = {
 
 const actions = {
   async fetchUser({ commit }, {username, context}) {
-    try {
-      const user = await octokit.request("GET /users/{username}", {
-        username,
-      });
+    await this.dispatch('getUserDetailsAction', {routeParams: {userName: username}})
+    const userDetails = this.state.apiCalls.getUserDetailsEntry;
 
-      commit("setUser", user.data);
-    } catch (error) {
-      makeErrorToast(
-        context,
-        error.message || `Unable to fetch ${username}'s github profile`
-      );
-    }
+    if (userDetails.error)
+      makeErrorToast(context, userDetails.error.message || `Unable to fetch ${username}'s github profile`);
+    else commit("setUser", userDetails.data);
   },
   updateUser({ commit }, user) {
     commit("setUser", user);

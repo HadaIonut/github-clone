@@ -16,7 +16,7 @@ export default {
     Search,
   },
   created() {
-    this.$store.dispatch('getDemoAction', {routeParams: {userName: 'CCChira'}})
+
   }
 }
 </script>

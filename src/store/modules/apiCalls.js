@@ -5,15 +5,10 @@ const store = new StoreCreator({
   // ...any other store config options
 });
 
-console.log(store);
-
 store.createGetEntry({
   resourceName: 'demo',
-  // customHeaders: {
-  //   'Access-Control-Allow-Origin':'*'
-  // },
   initialValue: [],
-  endpoint: 'https://api.github.com/users/HadaIonut',
+  endpoint: 'https://api.github.com/users/:userName',
   serializer: (response) => ({
     ...response,
   }),

@@ -37,7 +37,7 @@ const actions = {
     else commit("setCommits", commits.data);
   },
   async fetchRepoContents({ commit }, { userName, repoName, context }) {
-    await this.dispatch('getContentsAction', {routeParams: {userName: userName, repoName: repoName}})
+    await this.dispatch('getContentsAction', {routeParams: {userName, repoName}})
     const contents = this.state.apiCalls.getContentsEntry;
 
     if (contents.error)

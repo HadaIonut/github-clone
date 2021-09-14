@@ -85,4 +85,11 @@ store.createGetEntry({
   serializer: (response) => response,
 });
 
+store.createGetEntry({
+  resourceName: 'userList',
+  initialValue: [],
+  endpoint: `https://api.github.com/search/users`,
+  serializer: (response) =>  response,
+});
+
 export default store.createStore();

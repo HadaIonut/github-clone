@@ -57,7 +57,7 @@
 <script>
 import chunk from "lodash/chunk";
 import Spinner from "../components/Spinner";
-import { searchUsers } from "../utils/github";
+// import { searchUsers } from "../utils/github";
 
 export default {
   data() {
@@ -84,11 +84,14 @@ export default {
       let params = {
         q: this.$route.query.query,
         per_page: 100,
-        context: this,
       };
 
       this.loading = true;
-      let res = await searchUsers(params);
+      // let res = await searchUsers(params);
+     await this.$store.dispatch('getUserListAction', {queryParams:{...params} })
+     let res = this.$store.state.apiCalls.getUserListEntry.data
+     console.log(res.items)
+    
       this.loading = false;
       this.users = res.items;
       this.rows = res.items.length;
@@ -105,10 +108,10 @@ export default {
           q: this.$route.query.query,
           per_page: 100,
           page: this.currentRequestPage,
-          context: this,
         };
 
-        let res = await searchUsers(params);
+        await this.$store.dispatch('getUserListAction', {queryParams:{...params} })
+        let res = this.$store.state.apiCalls.getUserListEntry.data
         this.loading = false;
         this.users = this.users.concat(res.items);
         this.rows = this.users.length;

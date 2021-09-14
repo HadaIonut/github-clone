@@ -1,14 +1,14 @@
 <template>
   <div>
     <b-input-group class="input mx-auto">
-      <b-form-input
+      <input
         @input="handleInput"
         @keypress="handleSend"
         placeholder="Enter username..."
       />
       <b-input-group-append>
         <b-input-group-text>
-          <b-icon icon="search" />
+          <!-- <b-icon icon="search" /> -->
         </b-input-group-text>
       </b-input-group-append>
     </b-input-group>
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import chunk from "lodash/chunk";
 
 import router from "../router";
@@ -85,29 +86,38 @@ export default {
       this.searchResultGroups = data;
       this.loadingSearchResultGroups = false;
     },
-    handleInput(value) {
-      this.userQuery = value;
+    async handleInput(value) {
+      this.userQuery = value.target.value;
+      console.log(value.target.value)
 
-      value.trim()
-        ? (this.loadingSearchResultGroups = true)
-        : (this.loadingSearchResultGroups = false);
+      await this.$store.dispatch('getUserListAction', {queryParams:{q:value.target.value, per_page:6} })
+    //   value.trim()
+    //     ? (this.loadingSearchResultGroups = true)
+    //     : (this.loadingSearchResultGroups = false);
 
-      clearTimeout(this.debounceTimeout);
-      this.debounceTimeout = setTimeout(
-        async () =>
-          value.trim()
-            ? this.handleSearchResultGroupsChange(
-                chunk(
-                  (await searchUsers({ context: this, q: value, per_page: 6 }))
-                    .items,
-                  2
-                )
-              )
-            : this.handleSearchResultGroupsChange([]),
-        350
-      );
+    //   clearTimeout(this.debounceTimeout);
+    //   this.debounceTimeout = setTimeout(
+    //     async () => {
+    //       const users = (await searchUsers({ context: this, q: value, per_page: 6 }))
+
+    //       console.log(users)
+                    
+
+    //       return value.trim()
+    //         ? this.handleSearchResultGroupsChange(
+    //             chunk(
+    //               (await searchUsers({ context: this, q: value, per_page: 6 }))
+    //                 .items,
+    //               2
+    //             )
+    //           )
+    //         : this.handleSearchResultGroupsChange([])
+    //       },
+    //     350
+    //   );
     },
     handleSend(e) {
+      
       if (e.code === "Enter" && !e.shiftKey) {
         router.push({ path: "/search", query: { query: this.userQuery } });
       }

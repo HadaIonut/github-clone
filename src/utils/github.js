@@ -1,16 +1,19 @@
-import { Octokit } from '@octokit/core';
-const octokit = new Octokit();
+ 
 
-import { makeErrorToast } from "../utils/toast"
 
-const searchUsers = async (params) => {
+const searchUsers = async () => {
   try {
-    return (await octokit.request('GET /search/users', params)).data;
+    // const items =  await fetch('api.github.com/search/users?q=majeri')
+    // await $store.dispatch('getUserListAction', {queryParams: {...params}})
+    
+    // console.log(items)
+    // return items
   } catch (error) {
-    makeErrorToast(
-      params?.context,
-      error.message || `Unable to search for users like '${params?.q}'`
-    );
+    // makeErrorToast(
+    //   params?.context,
+    //   error.message || `Unable to search for users like '${params?.q}'`
+    // );
+  console.log(error)
   }
 
 };

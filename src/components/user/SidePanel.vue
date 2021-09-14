@@ -29,11 +29,15 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, useStore } from 'vuex';
 import UserSkeleton from './UserSkeleton.vue';
 
 
 export default {
+  setup(){
+    const store = useStore()
+    console.log(store)
+  },
   name: 'SidePanel',
   props: ['username'],
   components: { UserSkeleton },

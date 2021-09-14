@@ -1,5 +1,6 @@
 <template>
   <b-container class="pt-5 container">
+    {
     <div class="list-container">
       <h4 class="repo-title">{{ reponame }}</h4>
       <b-breadcrumb class="bread">
@@ -54,17 +55,18 @@
         </b-list-group>
       </b-container>
     </div>
-    <Modal />
+    <!-- <Modal /> -->
   </b-container>
 </template>
 
 <script>
-import Modal from '../components/Modal.vue';
+// import Modal from '../components/Modal.vue';
 import LanguagesBar from './repos/LanguagesBar.vue';
 
 import {mapActions, mapGetters} from 'vuex';
+
 export default {
-  components: { Modal, LanguagesBar },
+  components: { LanguagesBar },
   name: 'RepoView',
   props: {
     reponame: String,
@@ -158,7 +160,7 @@ export default {
       await this.$store.dispatch('getFileContentAction', {routeParams: {url: downloadUrl}})
       await this.updateFileName(name);
 
-      this.$bvModal.show('bv-modal');
+      // this.$bvModal.show('bv-modal');
     },
     handleClick(doc) {
       setTimeout(() => {

@@ -2,22 +2,23 @@
   <div class="searchPage">
     <Spinner v-if="loading" />
     <h4 v-if="users" class="text-center mt-3">
-      <b-badge class="myBadge">{{ totalUserCount }}</b-badge> results found for
+      <div class="badge myBadge">{{ totalUserCount }}</div> results found for
       '{{ this.$route.query.query }}'.
       <span v-if="totalUserCount > 99">
-        Here are the first <b-badge class="myBadge"> {{ rows }}</b-badge>
+        Here are the first <div class="myBadge"> {{ rows }}</div>
       </span>
     </h4>
 
-    <b-container class="mt-3 my-container">
-      <b-row
+    <div class="container mt-3 my-container">
+      <div class="row"
         v-for="(row, index) in groupedUsers.slice(
           (currentPage - 1) * perPage,
           (currentPage - 1) * perPage + perPage
         )"
         v-bind:key="index"
       >
-        <b-col
+        <div
+          class="col"
           md="4"
           xs="12"
           sm="6"
@@ -26,22 +27,23 @@
           v-for="item in row"
           v-bind:key="item.id"
         >
+        
           <router-link class="userLink" :to="{ path: `/user/${item.login}` }">
-            <b-card
-              v-bind:title="item.login"
-              v-bind:img-src="item.avatar_url"
-              img-alt="products"
-              img-top
-              tag="article"
+            <div
+              class="card myCard mb-2"
               style="max-width: 20rem; "
-              class="myCard mb-2"
             >
-            </b-card>
+              <img v-bind:src='item.avatar_url' class="card-img-top" alt="some user">
+             <div class="card-body">
+           <h5 class="card-title">{{item.login}}</h5>
+  </div>
+
+            </div>
           </router-link>
-        </b-col>
-      </b-row>
-    </b-container>
-    <b-pagination
+        </div>
+      </div>
+    </div>
+    <!-- <b-pagination
       class="fixed-bottom myPagination"
       v-model="currentPage"
       :total-rows="rows"
@@ -50,7 +52,7 @@
       align="center"
       pills
       size="lg"
-    ></b-pagination>
+    ></b-pagination> -->
   </div>
 </template>
 
@@ -138,9 +140,13 @@ export default {
   font-size: 16px;
   color: rgb(0, 0, 0);
   font-weight: bold;
+
 }
 
 .myCard:hover .card-body .card-title {
+  color: #47a7f5;
+}
+.myCard.card-body .card-title {
   color: #47a7f5;
 }
 
@@ -185,6 +191,10 @@ export default {
 .myCard:hover {
   transform: scale(1.07);
   z-index: 100;
+}
+.userLink{
+  text-decoration: none;
+  outline: none;
 }
 
 .userLink:hover {

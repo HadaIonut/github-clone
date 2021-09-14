@@ -1,16 +1,15 @@
 import StoreCreator from '../../os-store';
+import {BASE, ENDPOINTS} from '../../../constants/routes';
 
 const store = new StoreCreator({
   namespaced: false,
   // ...any other store config options
 });
 
-const BASE = 'https://api.github.com'
-
 store.createGetEntry({
   resourceName: 'userDetails',
   initialValue: [],
-  endpoint: `${BASE}/users/:userName`,
+  endpoint: `${BASE}/${ENDPOINTS['userDetails']}`,
   serializer: (response) => ({
     ...response,
   }),
@@ -19,7 +18,7 @@ store.createGetEntry({
 store.createGetEntry({
   resourceName: 'repos',
   initialValue: [],
-  endpoint: `${BASE}/users/:userName/repos`,
+  endpoint: `${BASE}/${ENDPOINTS['repos']}`,
   serializer: (response) => ([
       ...response,
   ]),
@@ -28,7 +27,7 @@ store.createGetEntry({
 store.createGetEntry({
   resourceName: 'collaborators',
   initialValue: [],
-  endpoint: `${BASE}/repos/:userName/:repoName/collaborators`,
+  endpoint: `${BASE}/${ENDPOINTS['collaborators']}`,
   serializer: (response) => ({
     ...response,
   }),
@@ -37,7 +36,7 @@ store.createGetEntry({
 store.createGetEntry({
   resourceName: 'branches',
   initialValue: [],
-  endpoint: `${BASE}/repos/:userName/:repoName/branches`,
+  endpoint: `${BASE}/${ENDPOINTS['branches']}`,
   serializer: (response) => ([
     ...response,
   ]),
@@ -46,7 +45,7 @@ store.createGetEntry({
 store.createGetEntry({
   resourceName: 'commits',
   initialValue: [],
-  endpoint: `${BASE}/repos/:userName/:repoName/commits`,
+  endpoint: `${BASE}/${ENDPOINTS['commits']}`,
   serializer: (response) => ([
     ...response,
   ]),
@@ -55,7 +54,7 @@ store.createGetEntry({
 store.createGetEntry({
   resourceName: 'contents',
   initialValue: [],
-  endpoint: `${BASE}/repos/:userName/:repoName/contents`,
+  endpoint: `${BASE}/${ENDPOINTS['contents']}`,
   serializer: (response) => ([
     ...response,
   ]),
@@ -64,7 +63,7 @@ store.createGetEntry({
 store.createGetEntry({
   resourceName: 'languages',
   initialValue: [],
-  endpoint: `${BASE}/repos/:userName/:repoName/languages`,
+  endpoint: `${BASE}/${ENDPOINTS['languages']}`,
   serializer: (response) => ({
       ...response,
   }),
@@ -73,7 +72,7 @@ store.createGetEntry({
 store.createGetEntry({
   resourceName: 'location',
   initialValue: [],
-  endpoint: `${BASE}/repos/:userName/:repoName/contents/:location`,
+  endpoint: `${BASE}/${ENDPOINTS['location']}`,
   serializer: (response) => ([
     ...response,
   ]),

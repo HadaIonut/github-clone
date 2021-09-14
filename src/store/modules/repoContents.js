@@ -13,7 +13,7 @@ const state = {
 
 const actions = {
   async fetchCollaborators({commit}, {userName, repoName, context}){
-    await this.dispatch('getCollaboratorsAction', {routeParams: {userName: userName, repoName: repoName}})
+    await this.dispatch('getCollaboratorsAction', {routeParams: {userName, repoName}})
     const collaborators = this.state.apiCalls.getCollaboratorsEntry;
 
     if (collaborators.error)
@@ -21,7 +21,7 @@ const actions = {
     else commit("setCollaborators", collaborators.data);
   },
   async fetchBranches({commit}, {userName, repoName, context}){
-    await this.dispatch('getBranchesAction', {routeParams: {userName: userName, repoName: repoName}})
+    await this.dispatch('getBranchesAction', {routeParams: {userName, repoName}})
     const branches = this.state.apiCalls.getBranchesEntry;
 
     if (branches.error)
@@ -29,7 +29,7 @@ const actions = {
     else commit("setBranches", branches.data);
   },
   async fetchCommits({commit}, {userName, repoName, context}){
-    await this.dispatch('getCommitsAction', {routeParams: {userName: userName, repoName: repoName}})
+    await this.dispatch('getCommitsAction', {routeParams: {userName, repoName}})
     const commits = this.state.apiCalls.getCommitsEntry;
 
     if (commits.error)
@@ -45,7 +45,7 @@ const actions = {
     else commit("setRepoContents", contents.data);
   },
   async fetchRepoContentsAtLocation({ commit }, { userName, repoName, location, context }) {
-    await this.dispatch('getLocationAction', {routeParams: {userName: userName, repoName: repoName, location}})
+    await this.dispatch('getLocationAction', {routeParams: {userName, repoName, location}})
     const dataAtLocation = this.state.apiCalls.getLocationEntry;
 
     if (dataAtLocation.error)
@@ -62,7 +62,7 @@ const actions = {
     commit('setFileName', name);
   },
   async fetchLanguages({ commit }, { userName, repoName, context }) {
-    await this.dispatch('getLanguagesAction', {routeParams: {userName: userName, repoName: repoName}})
+    await this.dispatch('getLanguagesAction', {routeParams: {userName, repoName}})
     const languages = this.state.apiCalls.getLanguagesEntry;
 
     if (languages.error)
@@ -75,8 +75,7 @@ const getters = {
   allRepoContents: (state) => state.repoContents,
   getCurrentLocationAsString: (state) => state.currentLocation,
   getCurrentLocationAsArray: (state) => state.currentLocation.split('/'),
-  getPathFromLocation: (state) => (location) =>
-    state.currentLocation.substr(0, location),
+  getPathFromLocation: (state) => (location) => state.currentLocation.substr(0, location),
   getFileContent: (state) => state.fileContent,
   getFileName: (state) => state.fileName,
   getCommits: (state) => state.commits,

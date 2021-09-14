@@ -19,7 +19,7 @@ const actions = {
 
     if (repos.error)
       makeErrorToast(context, repos.error.message || `Unable to fetch ${username}'s repositories`);
-    else commit("setRepos", Object.values(repos.data));
+    else commit("setRepos", repos.data);
   },
   updateRepos({ commit }, repos) {
     commit('setRepos', repos);

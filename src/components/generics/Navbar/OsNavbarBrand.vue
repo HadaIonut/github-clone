@@ -1,11 +1,14 @@
 <template>
-  <li class="breadcrumb-item active">
+  <a href="#" class="navbar-brand">
     <slot></slot>
-  </li>
+  </a>
 </template>
 
 <script>
 export default {
+  props: {
+    href: String,
+  }
 }
 </script>
 

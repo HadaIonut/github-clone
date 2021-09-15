@@ -1,27 +1,41 @@
 <template>
   <div>
-    <b-navbar toggleable="sm" type="light" variant="light">
-      <b-navbar-toggle target="nav-text-collapse"></b-navbar-toggle>
-      <b-navbar-brand
-        ><img
+    <OsNavbar>
+      <OsNavbarToggle></OsNavbarToggle>
+      <OsNavbarBrand>
+        <img
           src="https://cdn-icons-png.flaticon.com/512/1832/1832144.png"
-          alt=""
+          alt="cacamaca"
           style="max-width:30px"
-      /></b-navbar-brand>
-      <b-collapse id="nav-text-collapse" is-nav>
-        <b-navbar-nav>
-          <b-nav-item class="font-weight-bold"
-            ><router-link to="/">Home</router-link></b-nav-item
-          >
-        </b-navbar-nav>
-      </b-collapse>
-    </b-navbar>
+        />
+      </OsNavbarBrand>
+      <OsNavbarCollapse>
+        <OsNavbarNav>
+          <OsNavbarNavItem>
+            <router-link to="/">Home</router-link>
+          </OsNavbarNavItem>
+        </OsNavbarNav>
+      </OsNavbarCollapse>
+    </OsNavbar>
   </div>
 </template>
-
 <script>
+import OsNavbar from './generics/Navbar/OsNavbar';
+import OsNavbarBrand from './generics/Navbar/OsNavbarBrand';
+import OsNavbarCollapse from './generics/Navbar/OsNavbarCollapse';
+import OsNavbarNav from './generics/Navbar/OsNavbarNav';
+import OsNavbarNavItem from './generics/Navbar/OsNavbarNavItem';
+import OsNavbarToggle from './generics/Navbar/OsNavbarToggle';
 export default {
   name: 'global-navbar',
+  components: {
+    OsNavbar,
+    OsNavbarBrand,
+    OsNavbarCollapse,
+    OsNavbarNav,
+    OsNavbarNavItem,
+    OsNavbarToggle,
+  },
 };
 </script>
 

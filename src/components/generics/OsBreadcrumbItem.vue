@@ -1,12 +1,12 @@
 <template>
-  <ol class="breadcrumb">
+  <li class="breadcrumb-item active">
     <slot></slot>
-  </ol>
+  </li>
 </template>
 
 <script>
 export default {
-  name: 'OsBreadcrumb',
+  name: 'OsBreadcrumbItem',
 };
 </script>
 

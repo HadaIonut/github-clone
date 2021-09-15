@@ -6,7 +6,7 @@
         <OsBreadcrumbItem
           v-for="(path, index) in paths"
           :key="index"
-          v-on:click="goToLocation(paths[index + 1])"
+          @click="goToLocation(paths[index + 1])"
         >
           {{ path }}
         </OsBreadcrumbItem>
@@ -54,7 +54,7 @@
 <script>
 // import Modal from '../components/Modal.vue';
 import LanguagesBar from './repos/LanguagesBar.vue';
-import OsBreadcrumbItem from '../components/generics/OsBreacrumbItem.vue';
+import OsBreadcrumbItem from './generics/OsBreadcrumbItem.vue';
 import OsBreadcrumb from '../components/generics/OsBreadcrumb.vue';
 import { mapActions, mapGetters } from 'vuex';
 

@@ -1,13 +1,15 @@
 <template>
-  <ol class="breadcrumb">
+  <ul class="navbar-nav">
     <slot></slot>
-  </ol>
+  </ul>
 </template>
 
 <script>
 export default {
-  name: 'OsBreadcrumb',
-};
+  name: "OsNavbarNav",
+}
 </script>
 
-<style></style>
+<style>
+
+</style>

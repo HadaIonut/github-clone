@@ -2,7 +2,7 @@
   <div>
     <div class="d-flex justify-content-center spinner">
       <div class="spinner-border" role="status">
-        <span class="sr-only">Loading...</span>
+        <span class="visually-hidden">Loading...</span>
       </div>
     </div>
   </div>

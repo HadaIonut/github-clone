@@ -1,8 +1,8 @@
 <template>
   <div>
     <div>
-      <b-row>
-        <b-col lg="6" xs="12" class="mb-3">
+      <os-row>
+        <os-col class="col-xs-12 col-lg-6 col-xl-6 mb-3">
           <b-input-group class="input">
             <b-form-input
               placeholder="Enter repo name"
@@ -14,34 +14,41 @@
               </b-input-group-text>
             </b-input-group-append>
           </b-input-group>
-        </b-col>
-      </b-row>
+        </os-col>
+      </os-row>
     </div>
     <div>
-      <b-row class="">
-        <span
+      <os-row class="">
+        <os-col
           v-for="(repo, index) in repos"
           :key="index"
-          class="col-lg-4 col-md-6 col-xs-12  mb-2"
+          class="col-lg-6 col-md-6 col-xs-12  mb-2"
         >
           <router-link :to="{ path: `/user/${username}/repo/${repo.name}` }">
-            <b-card class="clickable">
-              <b-container class="py-3">
+            <os-card class="clickable">
+              <os-container class="py-3">
                 <h6 class="font-weight-bold text-left ">
                   {{ repo.name }}
                 </h6>
-                <b-card-text class="text-left"> @{{ username }} </b-card-text>
-              </b-container>
-            </b-card>
+                <div  class="card-txt text-left"> @{{ username }} </div>
+              </os-container>
+            </os-card>
           </router-link>
-        </span>
-      </b-row>
+        </os-col>
+      </os-row>
     </div>
   </div>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
+import OsRow from "../generics/OsRow";
+import OsCol from "../generics/OsCol";
+import OsContainer from '../generics/OsContainer.vue';
+import OsCard from "../generics/OsCard.vue"
+// import OsCardBody from "../components/generics/OsCardBody";
+// import OsCardTitle from "../components/generics/OsCardTitle";
+
 export default {
   name: 'RepoPanel',
   props: ['username'],
@@ -74,6 +81,14 @@ export default {
       return this.filteredRepos(this.keyword);
     },
   },
+  components:{
+    OsContainer,
+    OsRow,
+    OsCol,
+    OsCard,
+    // OsCardBody,
+    // OsCardTitle,
+  }
 };
 </script>
 <style scoped>

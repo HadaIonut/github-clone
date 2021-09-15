@@ -2,35 +2,37 @@
   <div>
     <UserSkeleton v-if="loading" />
 
-    <b-card class="mb-3" v-else-if="user && !loading">
-      <b-card-img v-bind:src="user.avatar_url" />
-      <b-container class="py-3">
+    <os-card class="mb-3" v-else-if="user && !loading">
+      <img class="card-img-top" v-bind:src="user.avatar_url" />
+      <os-container class="py-3">
         <h5 class="font-weight-bold">
           {{ user.name }}
         </h5>
         <a v-bind:href="user.html_url">
-          <b-card-text> @{{ user.login }} </b-card-text>
+          <div class="card-text"> @{{ user.login }} </div>
         </a>
-        <b-container class="p-0 mt-2" fluid>
-          <b-icon icon="geo-alt" scale="1"></b-icon>
+        <os-container class="p-0 mt-2" fluid>
+          <i class="bi bi-geo-alt"> </i>
           {{ user.location }}
-        </b-container>
-        <b-container class="p-0 mt-2" fluid>
-          <b-icon icon="people" scale="1"></b-icon>
+        </os-container>
+        <os-container class="p-0 mt-2" fluid>
+          <i class="bi bi-people"> </i>
           Followers: {{ user.followers }}
-        </b-container>
-        <b-container class="p-0 mt-2" fluid>
-          <b-icon icon="archive" scale="1"></b-icon>
+        </os-container>
+        <os-container class="p-0 mt-2" fluid>
+          <i class="bi bi-archive"> </i>
           Repos: {{ user.public_repos }}
-        </b-container>
-      </b-container>
-    </b-card>
+        </os-container>
+      </os-container>
+    </os-card>
   </div>
 </template>
 
 <script>
 import { mapActions, mapGetters, useStore } from 'vuex';
 import UserSkeleton from './UserSkeleton.vue';
+import OsCard from "../generics/OsCard.vue"
+import OsContainer from '../generics/OsContainer.vue';
 
 
 export default {
@@ -40,7 +42,7 @@ export default {
   },
   name: 'SidePanel',
   props: ['username'],
-  components: { UserSkeleton },
+  components: { UserSkeleton, OsCard, OsContainer},
   data() {
     return {
       loading: false,

@@ -2,64 +2,63 @@
   <div class="searchPage">
     <Spinner v-if="loading" />
     <h4 v-if="users" class="text-center mt-3">
-      <div class="badge myBadge">{{ totalUserCount }}</div> results found for
-      '{{ this.$route.query.query }}'.
+      <div class="badge myBadge">{{ totalUserCount }}</div>
+      results found for '{{ this.$route.query.query }}'.
       <span v-if="totalUserCount > 99">
-        Here are the first <div class="myBadge"> {{ rows }}</div>
+        Here are the first
+        <div class="badge myBadge">{{ rows }}</div>
       </span>
     </h4>
 
-    <div class="container mt-3 my-container">
-      <div class="row"
+    <os-container class="mt-3 my-container">
+      <os-row
         v-for="(row, index) in groupedUsers.slice(
           (currentPage - 1) * perPage,
           (currentPage - 1) * perPage + perPage
         )"
         v-bind:key="index"
       >
-        <div
-          class="col"
-          md="4"
-          xs="12"
-          sm="6"
-          lg="2"
-          xl="2"
+        <os-col
+          class="col-6 col-xs-6 col-sm-6 col-md-4 col-lg-2 col-xl-2"
           v-for="item in row"
           v-bind:key="item.id"
         >
-        
           <router-link class="userLink" :to="{ path: `/user/${item.login}` }">
-            <div
-              class="card myCard mb-2"
-              style="max-width: 20rem; "
-            >
-              <img v-bind:src='item.avatar_url' class="card-img-top" alt="some user">
-             <div class="card-body">
-           <h5 class="card-title">{{item.login}}</h5>
-  </div>
-
-            </div>
+            <os-card class="myCard mb-2" style="max-width: 20rem; ">
+              <img
+                v-bind:src="item.avatar_url"
+                class="card-img-top"
+                alt="some user"
+              />
+              <os-card-body>
+                <os-card-title>{{ item.login }}</os-card-title>
+              </os-card-body>
+            </os-card>
           </router-link>
-        </div>
-      </div>
-    </div>
-    <!-- <b-pagination
-      class="fixed-bottom myPagination"
-      v-model="currentPage"
+        </os-col>
+      </os-row>
+    </os-container>
+    <div
+      class="pagination fixed-bottom myPagination"
       :total-rows="rows"
       :per-page="perPage * 6"
       aria-controls="my-container"
       align="center"
       pills
       size="lg"
-    ></b-pagination> -->
+    ></div>
   </div>
 </template>
 
 <script>
 import chunk from "lodash/chunk";
 import Spinner from "../components/Spinner";
-// import { searchUsers } from "../utils/github";
+import OsContainer from "../components/generics/OsContainer";
+import OsRow from "../components/generics/OsRow";
+import OsCol from "../components/generics/OsCol";
+import OsCard from "../components/generics/OsCard";
+import OsCardBody from "../components/generics/OsCardBody";
+import OsCardTitle from "../components/generics/OsCardTitle";
 
 export default {
   data() {
@@ -90,10 +89,12 @@ export default {
 
       this.loading = true;
       // let res = await searchUsers(params);
-     await this.$store.dispatch('getUserListAction', {queryParams:{...params} })
-     let res = this.$store.state.apiCalls.getUserListEntry.data
-     console.log(res.items)
-    
+      await this.$store.dispatch("getUserListAction", {
+        queryParams: { ...params },
+      });
+      let res = this.$store.state.apiCalls.getUserListEntry.data;
+      console.log(res.items);
+
       this.loading = false;
       this.users = res.items;
       this.rows = res.items.length;
@@ -112,8 +113,10 @@ export default {
           page: this.currentRequestPage,
         };
 
-        await this.$store.dispatch('getUserListAction', {queryParams:{...params} })
-        let res = this.$store.state.apiCalls.getUserListEntry.data
+        await this.$store.dispatch("getUserListAction", {
+          queryParams: { ...params },
+        });
+        let res = this.$store.state.apiCalls.getUserListEntry.data;
         this.loading = false;
         this.users = this.users.concat(res.items);
         this.rows = this.users.length;
@@ -131,6 +134,12 @@ export default {
   name: "Search",
   components: {
     Spinner,
+    OsContainer,
+    OsRow,
+    OsCol,
+    OsCard,
+    OsCardBody,
+    OsCardTitle,
   },
 };
 </script>
@@ -140,7 +149,6 @@ export default {
   font-size: 16px;
   color: rgb(0, 0, 0);
   font-weight: bold;
-
 }
 
 .myCard:hover .card-body .card-title {
@@ -192,7 +200,7 @@ export default {
   transform: scale(1.07);
   z-index: 100;
 }
-.userLink{
+.userLink {
   text-decoration: none;
   outline: none;
 }

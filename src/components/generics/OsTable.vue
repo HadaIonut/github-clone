@@ -19,7 +19,7 @@
         v-for="(item, index) in items"
         :key="index">
       <td v-for="(itemName, index) in tableHeaders"
-          :class="[applySpecialCellProps(item, itemName), applyColumnVariant(itemName.variant)]"
+          :class="[applySpecialCellProps(item, itemName.key), applyColumnVariant(itemName.variant)]"
           :key="`${index}-${itemName.key}`">{{ item[itemName.key] }}
       </td>
     </tr>

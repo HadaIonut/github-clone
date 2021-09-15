@@ -1,33 +1,25 @@
 <template>
   <b-container class="pt-5 container">
-    {
     <div class="list-container">
       <h4 class="repo-title">{{ reponame }}</h4>
-      <b-breadcrumb class="bread">
-        <b-breadcrumb-item @click="goToLocation('')">
-          <b-icon
-            icon="house-fill"
-            scale="1.25"
-            shift-v="1.25"
-            aria-hidden="true"
-          />
-          Home
-        </b-breadcrumb-item>
-        <b-breadcrumb-item
+      <OsBreadcrumb>
+        <OsBreadcrumbItem
           v-for="(path, index) in paths"
           :key="index"
-          @click="goToLocation(paths[index + 1])"
-          >{{ path }}</b-breadcrumb-item
+          v-on:click="goToLocation(paths[index + 1])"
         >
-      </b-breadcrumb>
+          {{ path }}
+        </OsBreadcrumbItem>
+      </OsBreadcrumb>
       <LanguagesBar v-bind:username="username" v-bind:reponame="reponame" />
       <b-container fluid class="p-0">
         <b-list-group-item
           class="font-weight-bold bg-secondary text-white d-flex rounded-top"
         >
-          {{ commitsInfo }} commits have been made in this repository. {{nrOfBranches }} active
-          <span v-if="nrOfBranches == 1 ">&nbsp;branch </span>
-          <span v-if="nrOfBranches >1">&nbsp;branches</span>.
+          {{ commitsInfo }} commits have been made in this repository.
+          {{ nrOfBranches }} active
+          <span v-if="nrOfBranches == 1">&nbsp;branch </span>
+          <span v-if="nrOfBranches > 1">&nbsp;branches</span>.
         </b-list-group-item>
         <b-list-group-item
           class="clickable d-flex font-weight-bold"
@@ -62,11 +54,12 @@
 <script>
 // import Modal from '../components/Modal.vue';
 import LanguagesBar from './repos/LanguagesBar.vue';
-
-import {mapActions, mapGetters} from 'vuex';
+import OsBreadcrumbItem from '../components/generics/OsBreacrumbItem.vue';
+import OsBreadcrumb from '../components/generics/OsBreadcrumb.vue';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  components: { LanguagesBar },
+  components: { LanguagesBar, OsBreadcrumb, OsBreadcrumbItem },
   name: 'RepoView',
   props: {
     reponame: String,
@@ -77,11 +70,10 @@ export default {
       commitsInfo: null,
       nrOfBranches: null,
       curState: '',
-      targetLocation: ''
+      targetLocation: '',
     };
   },
   computed: {
-
     ...mapGetters({
       docs: 'allRepoContents',
       paths: 'getCurrentLocationAsArray',
@@ -91,9 +83,8 @@ export default {
       branches: 'getBranches',
     }),
     pathFromLocation() {
-      return this.getPathFromLocation(this.targetLocation)
-
-    }
+      return this.getPathFromLocation(this.targetLocation);
+    },
   },
   async created() {
     await this.fetchRepoContents({
@@ -116,11 +107,18 @@ export default {
       context: this,
     });
 
-    this.nrOfBranches = this.branches.length
-
+    this.nrOfBranches = this.branches.length;
   },
   methods: {
-    ...mapActions(['fetchRepoContents', 'updateCurrentLocation', 'fetchRepoContentsAtLocation', 'updateFileContent', 'updateFileName','fetchCommits','fetchBranches']),
+    ...mapActions([
+      'fetchRepoContents',
+      'updateCurrentLocation',
+      'fetchRepoContentsAtLocation',
+      'updateFileContent',
+      'updateFileName',
+      'fetchCommits',
+      'fetchBranches',
+    ]),
     sortDocuments(docs) {
       docs.sort((a, b) => (a.type < b.type ? -1 : 1));
     },
@@ -131,13 +129,10 @@ export default {
     async goToParentDirectory() {
       setTimeout(async () => {
         this.curState = this.currentLocationString;
-        this.targetLocation = this.curState.lastIndexOf('/')
-        await this.updateCurrentLocation(
-            this.pathFromLocation
-        );
+        this.targetLocation = this.curState.lastIndexOf('/');
+        await this.updateCurrentLocation(this.pathFromLocation);
         await this.updateDisplayAndSort(this.currentLocationString);
-      }, 300)
-
+      }, 300);
     },
     async updateDisplayAndSort(path) {
       await this.fetchRepoContentsAtLocation({
@@ -150,14 +145,14 @@ export default {
     },
     async goToLocation(path) {
       this.curState = this.currentLocationString;
-      this.targetLocation = this.curState.lastIndexOf(`/${path}`)
-      await this.updateCurrentLocation(
-        this.pathFromLocation
-      );
+      this.targetLocation = this.curState.lastIndexOf(`/${path}`);
+      await this.updateCurrentLocation(this.pathFromLocation);
       await this.updateDisplayAndSort(this.currentLocationString);
     },
     async openModal(downloadUrl, name) {
-      await this.$store.dispatch('getFileContentAction', {routeParams: {url: downloadUrl}})
+      await this.$store.dispatch('getFileContentAction', {
+        routeParams: { url: downloadUrl },
+      });
       await this.updateFileName(name);
 
       // this.$bvModal.show('bv-modal');

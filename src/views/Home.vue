@@ -33,7 +33,6 @@ export default {
           key: 'age',
           label: 'Person age',
           sortable: true,
-          // Variant applies to the whole column, including the header and footer
           variant: 'danger'
         }
       ],

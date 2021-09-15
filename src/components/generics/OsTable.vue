@@ -5,15 +5,21 @@
       <th
           scope="col"
           v-for="header in tableHeaders"
+          :class="applyColumnVariant(header.variant)"
           :key="header.key">
         {{ header.key }}
-        <i @click="sortByColumn(header.key)" v-if="header.sortable" :class="sortModifiers[header.key] !== -1 ? 'bi bi-sort-down': 'bi bi-sort-up'"></i>
+        <i @click="sortByColumn(header.key)"
+           v-if="header.sortable"
+           :class="sortButtonPosition(header.key)"/>
       </th>
     </tr>
     </thead>
     <tbody>
-    <tr :class="applySpecialRowProps(item)" v-for="(item, index) in items" :key="index">
-      <td :class="applySpecialCellProps(item, itemName)" v-for="(itemName, index) in tableHeaders"
+    <tr :class="applySpecialRowProps(item)"
+        v-for="(item, index) in items"
+        :key="index">
+      <td v-for="(itemName, index) in tableHeaders"
+          :class="[applySpecialCellProps(item, itemName), applyColumnVariant(itemName.variant)]"
           :key="`${index}-${itemName.key}`">{{ item[itemName.key] }}
       </td>
     </tr>
@@ -32,20 +38,15 @@ export default {
     hover: Boolean
   },
   setup(props) {
-    const sortModifiers = ref([]);
-    const sortablesCount = ref(0);
+    const sortModifiers = ref({});
     const RESERVED_NAMES = {
       'row': '_rowVariant',
       'cell': '_cellVariants',
       'details': '_showDetails'
     };
 
-    const objectifyHeaders = (headers) => headers.reduce((prev, curr) => {
-      if (curr.sortable) sortablesCount.value++;
-      if (typeof curr === 'string')
-        return [...prev, {key: curr, sortable: false}]
-      else return [...prev, curr]
-    }, []);
+    const objectifyHeaders = (headers) => headers.reduce((prev, curr) =>
+        [...prev, typeof curr === 'string' ? {key: curr, sortable: false} : curr], []);
 
     const tableHeaders = computed(() => objectifyHeaders(props.fields || Object.keys(props.items[0])));
 
@@ -67,12 +68,17 @@ export default {
       sortModifiers.value[header] *= -1;
     }
 
+    const sortButtonPosition = (headerKey) => sortModifiers.value[headerKey] !== -1 ? 'bi bi-sort-down': 'bi bi-sort-up';
+    const applyColumnVariant = (variant) =>  variant ? `table-${variant}` : ''
+
     return {
       tableHeaders,
+      sortModifiers,
       applySpecialRowProps,
       applySpecialCellProps,
       sortByColumn,
-      sortModifiers
+      sortButtonPosition,
+      applyColumnVariant
     };
   }
 };

@@ -53,12 +53,12 @@
 <script>
 import chunk from "lodash/chunk";
 import Spinner from "../components/Spinner";
-import OsContainer from "../components/generics/OsContainer";
-import OsRow from "../components/generics/OsRow";
-import OsCol from "../components/generics/OsCol";
-import OsCard from "../components/generics/OsCard";
-import OsCardBody from "../components/generics/OsCardBody";
-import OsCardTitle from "../components/generics/OsCardTitle";
+import OsContainer from "../components/generics/Layout/OsContainer";
+import OsRow from "../components/generics/Layout/OsRow";
+import OsCol from "../components/generics/Layout/OsCol";
+import OsCard from "../components/generics/Card/OsCard";
+import OsCardBody from "../components/generics/Card/OsCardBody";
+import OsCardTitle from "../components/generics/Card//OsCardTitle";
 
 export default {
   data() {

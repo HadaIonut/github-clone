@@ -14,9 +14,9 @@
 <script>
 import SidePanel from '@/components/user/SidePanel.vue';
 import RepoPanel from '@/components/user/RepoPanel.vue';
-import OsRow from "../components/generics/OsRow";
-import OsCol from "../components/generics/OsCol";
-import OsContainer from '../components/generics/OsContainer.vue';
+import OsRow from "../components/generics/Layout/OsRow";
+import OsCol from "../components/generics/Layout/OsCol";
+import OsContainer from '../components/generics/Layout/OsContainer.vue';
 
 export default {
   name: 'User',

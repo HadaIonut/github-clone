@@ -24,13 +24,13 @@
           :key="index"
           class="col-lg-6 col-md-6 col-xs-12  mb-2"
         >
-          <router-link :to="{ path: `/user/${username}/repo/${repo.name}` }">
+          <router-link class="repoLink" :to="{ path: `/user/${username}/repo/${repo.name}` }">
             <os-card class="clickable">
               <os-container class="py-3">
                 <h6 class="font-weight-bold text-left ">
                   {{ repo.name }}
                 </h6>
-                <div  class="card-txt text-left"> @{{ username }} </div>
+                <os-card-text class="text-left"> @{{ username }} </os-card-text>
               </os-container>
             </os-card>
           </router-link>
@@ -42,10 +42,11 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import OsRow from "../generics/OsRow";
-import OsCol from "../generics/OsCol";
-import OsContainer from '../generics/OsContainer.vue';
-import OsCard from "../generics/OsCard.vue"
+import OsRow from "../generics/Layout/OsRow";
+import OsCol from "../generics/Layout/OsCol";
+import OsContainer from '../generics/Layout/OsContainer.vue';
+import OsCard from "../generics/Card/OsCard.vue"
+import OsCardText from "../generics/Card/OsCardText.vue"
 // import OsCardBody from "../components/generics/OsCardBody";
 // import OsCardTitle from "../components/generics/OsCardTitle";
 
@@ -86,8 +87,7 @@ export default {
     OsRow,
     OsCol,
     OsCard,
-    // OsCardBody,
-    // OsCardTitle,
+   OsCardText,
   }
 };
 </script>
@@ -104,5 +104,9 @@ export default {
 .clickable:hover {
   background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%)
     center/15000%;
+}
+.repoLink{
+   text-decoration: none;
+
 }
 </style>

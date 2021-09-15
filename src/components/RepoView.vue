@@ -20,7 +20,7 @@
         >
       </b-breadcrumb>
       <LanguagesBar v-bind:username="username" v-bind:reponame="reponame" />
-      <div class="container-fluid p-0">
+      <os-container-fluid class="p-0">
         <b-list-group-item
           class="font-weight-bold bg-secondary text-white d-flex rounded-top"
         >
@@ -52,7 +52,7 @@
             </div>
           </b-list-group-item>
         </b-list-group>
-      </div>
+      </os-container-fluid>
     </div>
     <!-- <Modal /> -->
   </os-container>
@@ -61,12 +61,13 @@
 <script>
 // import Modal from '../components/Modal.vue';
 import LanguagesBar from './repos/LanguagesBar.vue';
-import OsContainer from './generics/OsContainer.vue'
+import OsContainer from './generics/Layout/OsContainer.vue'
+import OsContainerFluid from './generics/Layout/OsContainerFluid.vue'
 
 import {mapActions, mapGetters} from 'vuex';
 
 export default {
-  components: { OsContainer,LanguagesBar },
+  components: { OsContainer,LanguagesBar, OsContainerFluid },
   name: 'RepoView',
   props: {
     reponame: String,

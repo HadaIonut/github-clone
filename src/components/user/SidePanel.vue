@@ -8,8 +8,8 @@
         <h5 class="font-weight-bold">
           {{ user.name }}
         </h5>
-        <a v-bind:href="user.html_url">
-          <div class="card-text"> @{{ user.login }} </div>
+        <a class="profileLink" v-bind:href="user.html_url">
+          <os-card-text> @{{ user.login }} </os-card-text>
         </a>
         <os-container class="p-0 mt-2" fluid>
           <i class="bi bi-geo-alt"> </i>
@@ -31,8 +31,9 @@
 <script>
 import { mapActions, mapGetters, useStore } from 'vuex';
 import UserSkeleton from './UserSkeleton.vue';
-import OsCard from "../generics/OsCard.vue"
-import OsContainer from '../generics/OsContainer.vue';
+import OsCard from "../generics/Card/OsCard.vue"
+import OsContainer from '../generics/Layout/OsContainer.vue';
+import OsCardText from '../generics/Card/OsCardText.vue';
 
 
 export default {
@@ -42,7 +43,7 @@ export default {
   },
   name: 'SidePanel',
   props: ['username'],
-  components: { UserSkeleton, OsCard, OsContainer},
+  components: { UserSkeleton, OsCard, OsContainer, OsCardText},
   data() {
     return {
       loading: false,
@@ -66,4 +67,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.profileLink{
+  text-decoration: none;
+}
+</style>

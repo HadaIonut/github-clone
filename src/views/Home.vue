@@ -20,7 +20,23 @@ export default {
   },
   data() {
     return {
-      fields: ['first_name', 'last_name', 'age'],
+      fields: [
+        {
+          key: 'last_name',
+          sortable: true
+        },
+        {
+          key: 'first_name',
+          sortable: false
+        },
+        {
+          key: 'age',
+          label: 'Person age',
+          sortable: true,
+          // Variant applies to the whole column, including the header and footer
+          variant: 'danger'
+        }
+      ],
       items: [
         { isActive: true, age: 40, first_name: 'Dickerson', last_name: 'Macdonald' },
         { isActive: false, age: 21, first_name: 'Larsen', last_name: 'Shaw' },

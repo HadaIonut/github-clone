@@ -7,7 +7,7 @@
           v-for="header in tableHeaders"
           :key="header.key">
         {{ header.key }}
-        {{ header.sortable ? 'sort' : ''}}
+        <i @click="sortByColumn(header.key)" v-if="header.sortable" :class="sortModifiers[header.key] !== -1 ? 'bi bi-sort-down': 'bi bi-sort-up'"></i>
       </th>
     </tr>
     </thead>
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import {computed} from 'vue';
+import {computed, ref} from 'vue';
 
 export default {
   name: 'OsTable',
@@ -32,6 +32,8 @@ export default {
     hover: Boolean
   },
   setup(props) {
+    const sortModifiers = ref([]);
+    const sortablesCount = ref(0);
     const RESERVED_NAMES = {
       'row': '_rowVariant',
       'cell': '_cellVariants',
@@ -39,6 +41,7 @@ export default {
     };
 
     const objectifyHeaders = (headers) => headers.reduce((prev, curr) => {
+      if (curr.sortable) sortablesCount.value++;
       if (typeof curr === 'string')
         return [...prev, {key: curr, sortable: false}]
       else return [...prev, curr]
@@ -54,10 +57,22 @@ export default {
       if (item?.[RESERVED_NAMES['cell']]?.[itemName]) return `table-${item[RESERVED_NAMES['cell']][itemName]}`;
     };
 
+    const sortByColumn = (header) => {
+      sortModifiers.value[header] = sortModifiers.value[header] || 1;
+      props.items.sort((a, b) => {
+        if(a[header] < b[header]) { return -sortModifiers.value[header]; }
+        if(a[header] > b[header]) { return sortModifiers.value[header]; }
+        return 0;
+      })
+      sortModifiers.value[header] *= -1;
+    }
+
     return {
       tableHeaders,
       applySpecialRowProps,
-      applySpecialCellProps
+      applySpecialCellProps,
+      sortByColumn,
+      sortModifiers
     };
   }
 };

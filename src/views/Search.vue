@@ -51,6 +51,9 @@
 </template>
 
 <script>
+import { computed, onMounted, ref, watch } from "vue";
+import { useStore } from "vuex";
+import { useRoute } from "vue-router";
 import chunk from "lodash/chunk";
 import Spinner from "../components/Spinner";
 import OsContainer from "../components/generics/Layout/OsContainer";
@@ -61,76 +64,6 @@ import OsCardBody from "../components/generics/Card/OsCardBody";
 import OsCardTitle from "../components/generics/Card//OsCardTitle";
 
 export default {
-  data() {
-    return {
-      loading: false,
-      users: null,
-      error: null,
-      perPage: 3,
-      currentPage: 1,
-      lastpage: 0,
-      rows: 0,
-      totalUserCount: 0,
-      currentRequestPage: 1,
-    };
-  },
-  created() {
-    this.fetchUsers();
-  },
-  watch: {
-    currentPage: "fetchMoreUsers",
-  },
-  methods: {
-    async fetchUsers() {
-      let params = {
-        q: this.$route.query.query,
-        per_page: 100,
-      };
-
-      this.loading = true;
-      // let res = await searchUsers(params);
-      await this.$store.dispatch("getUserListAction", {
-        queryParams: { ...params },
-      });
-      let res = this.$store.state.apiCalls.getUserListEntry.data;
-      console.log(res.items);
-
-      this.loading = false;
-      this.users = res.items;
-      this.rows = res.items.length;
-      this.totalUserCount = res.total_count;
-      this.lastpage = Math.ceil(this.rows / 18);
-      this.currentRequestPage++;
-    },
-    async fetchMoreUsers() {
-      if (
-        this.totalUserCount > this.rows &&
-        this.currentPage == this.lastpage
-      ) {
-        let params = {
-          q: this.$route.query.query,
-          per_page: 100,
-          page: this.currentRequestPage,
-        };
-
-        await this.$store.dispatch("getUserListAction", {
-          queryParams: { ...params },
-        });
-        let res = this.$store.state.apiCalls.getUserListEntry.data;
-        this.loading = false;
-        this.users = this.users.concat(res.items);
-        this.rows = this.users.length;
-        this.totalUserCount = res.total_count;
-        this.lastpage = Math.ceil(this.rows / 18);
-        this.currentRequestPage++;
-      }
-    },
-  },
-  computed: {
-    groupedUsers() {
-      return chunk(this.users, 6);
-    },
-  },
   name: "Search",
   components: {
     Spinner,
@@ -140,6 +73,62 @@ export default {
     OsCard,
     OsCardBody,
     OsCardTitle,
+  },
+  setup() {
+    const store = useStore();
+    const route = useRoute();
+
+    const loading = ref(false);
+    const users = ref([]);
+
+    const rows = ref(0);
+    const totalUserCount = ref(0);
+
+    const currentPage = ref(1);
+    const currentRequestPage = ref(1);
+    const lastpage = ref(0);
+    const perPage = ref(3);
+
+    const getUsers = async () => {
+      let params = {
+        q: route.query.query,
+        per_page: 100,
+        page: currentRequestPage.value,
+      };
+      loading.value = true;
+      await store.dispatch("getUserListAction", {
+        queryParams: { ...params },
+      });
+      let res = store.state.apiCalls.getUserListEntry.data;
+
+      loading.value = false;
+      users.value = users.value.concat(res.items);
+      rows.value = res.items.length;
+      totalUserCount.value = res.total_count;
+      lastpage.value = Math.ceil(rows.value / 18);
+      currentRequestPage.value++;
+    };
+
+    onMounted(getUsers);
+
+    watch(currentPage, getUsers);
+
+    const groupedUsers = computed(() => {
+      return chunk(users.value, 6);
+    });
+
+    return {
+      loading,
+      users,
+      rows,
+      totalUserCount,
+      perPage,
+      lastpage,
+      currentRequestPage,
+      currentPage,
+      groupedUsers,
+      getUsers,
+    };
   },
 };
 </script>

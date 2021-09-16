@@ -38,7 +38,14 @@
                     </div>
                   </small>
                 </h6>
-                <os-row><small class="text-muted mb-1 mt-1"> {{repo.description}} </small></os-row>
+                <os-row v-if="repo.description"
+                  ><small class="text-muted mb-1 mt-1">
+                    {{ repo.description }}
+                  </small></os-row
+                >
+                <os-row v-else
+                  ><small class="text-muted mb-1 mt-1"> </small
+                ></os-row>
                 <os-row>
                   <os-col>
                     <i
@@ -65,7 +72,7 @@
                         new Date(
                           Date.parse(repo.updated_at)
                         ).toLocaleDateString("en-US", {
-                          month: "long",
+                          month: "short",
                           day: "numeric",
                         })
                       }}</small

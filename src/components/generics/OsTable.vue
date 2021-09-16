@@ -30,8 +30,6 @@
         </td>
     </tr>
     </tbody>
-    <slot name="abcd"></slot>
-    <slot name="abcd"></slot>
   </table>
 </template>
 
@@ -77,6 +75,7 @@ export default {
     };
 
     const sortButtonPosition = (headerKey) => sortModifiers.value[headerKey] !== -1 ? 'bi bi-sort-down' : 'bi bi-sort-up';
+
     const applyColumnVariant = (variant) => variant ? `table-${variant}` : '';
 
     return {

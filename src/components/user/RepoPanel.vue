@@ -24,13 +24,53 @@
           :key="index"
           class="col-lg-6 col-md-6 col-xs-12  mb-2"
         >
-          <router-link class="repoLink" :to="{ path: `/user/${username}/repo/${repo.name}` }">
+          <router-link
+            class="repoLink"
+            :to="{ path: `/user/${username}/repo/${repo.name}` }"
+          >
             <os-card class="clickable">
               <os-container class="py-3">
                 <h6 class="font-weight-bold text-left ">
                   {{ repo.name }}
+                  <small>
+                    <div class="badge rounded-pill bg-secondary publicLabel">
+                      Public
+                    </div>
+                  </small>
                 </h6>
-                <os-card-text class="text-left"> @{{ username }} </os-card-text>
+                <os-row>
+                  <os-col>
+                    <i
+                      v-if="repo.language"
+                      class="bi bi-circle-fill"
+                      :style="getRandomColor()"
+                    >
+                    </i>
+                    <small class="text-muted"
+                      >&nbsp;{{ repo.language }}</small
+                    ></os-col
+                  >
+                  <os-col v-if="repo.stargazers_count">
+                    <i class="bi bi-star myStar"></i>
+                    <small class="text-muted"
+                      >&nbsp;{{ repo.stargazers_count }}</small
+                    ></os-col
+                  >
+                  <os-col v-else> <small class="text-muted"></small></os-col>
+                  <os-col
+                    ><small class="text-muted"
+                      >Updated on
+                      {{
+                        new Date(
+                          Date.parse(repo.updated_at)
+                        ).toLocaleDateString("en-US", {
+                          month: "long",
+                          day: "numeric",
+                        })
+                      }}</small
+                    ></os-col
+                  >
+                </os-row>
               </os-container>
             </os-card>
           </router-link>
@@ -41,28 +81,31 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex';
+/* eslint-disable */
+import { mapGetters, mapActions } from "vuex";
 import OsRow from "../generics/Layout/OsRow";
 import OsCol from "../generics/Layout/OsCol";
-import OsContainer from '../generics/Layout/OsContainer.vue';
-import OsCard from "../generics/Card/OsCard.vue"
-import OsCardText from "../generics/Card/OsCardText.vue"
-// import OsCardBody from "../components/generics/OsCardBody";
-// import OsCardTitle from "../components/generics/OsCardTitle";
+import OsContainer from "../generics/Layout/OsContainer.vue";
+import OsCard from "../generics/Card/OsCard.vue";
 
 export default {
-  name: 'RepoPanel',
-  props: ['username'],
+  name: "RepoPanel",
+  props: ["username"],
   data() {
     return {
-      keyword: '',
+      keyword: "",
     };
   },
 
   methods: {
-    ...mapActions(['fetchRepos']),
+    ...mapActions(["fetchRepos"]),
     handleFilter(e) {
       this.keyword = e;
+    },
+    getRandomColor() {
+      return {
+        color: "#" + Math.floor(Math.random() * 16777215).toString(16),
+      };
     },
   },
   async created() {
@@ -71,24 +114,20 @@ export default {
       context: this,
     });
   },
-  // computed: {
-  //   repos() {
-  //     return this.$store.getters.filteredRepos(this.keyword);
-  //   },
-  // },
+
   computed: {
-    ...mapGetters(['filteredRepos']),
+    ...mapGetters(["filteredRepos"]),
     repos() {
+      console.log(this.filteredRepos(this.keyword));
       return this.filteredRepos(this.keyword);
     },
   },
-  components:{
+  components: {
     OsContainer,
     OsRow,
     OsCol,
     OsCard,
-   OsCardText,
-  }
+  },
 };
 </script>
 <style scoped>
@@ -105,8 +144,13 @@ export default {
   background: #47a7f5 radial-gradient(circle, transparent 1%, #47a7f5 1%)
     center/15000%;
 }
-.repoLink{
-   text-decoration: none;
-
+.repoLink {
+  text-decoration: none;
+}
+.myStar:hover {
+  color: yellow;
+}
+.publicLabel {
+  font-weight: normal;
 }
 </style>

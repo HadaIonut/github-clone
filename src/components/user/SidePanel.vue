@@ -11,11 +11,11 @@
         <a class="profileLink" v-bind:href="user.html_url">
           <os-card-text> @{{ user.login }} </os-card-text>
         </a>
-        <os-container class="p-0 mt-2" fluid>
+        <os-container v-if="user.location" class="p-0 mt-2" fluid>
           <i class="bi bi-geo-alt"> </i>
           {{ user.location }}
         </os-container>
-        <os-container class="p-0 mt-2" fluid>
+        <os-container  class="p-0 mt-2" fluid>
           <i class="bi bi-people"> </i>
           Followers: {{ user.followers }}
         </os-container>

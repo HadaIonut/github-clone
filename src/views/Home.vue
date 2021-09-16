@@ -31,12 +31,10 @@ export default {
       fields: [
         {
           key: 'last_name',
-          sortable: true
+          sortable: true,
+          label: 'Last Name'
         },
-        {
-          key: 'first_name',
-          sortable: false
-        },
+        'first_name',
         {
           key: 'age',
           label: 'Person age',

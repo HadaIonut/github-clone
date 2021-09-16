@@ -7,7 +7,7 @@
           v-for="header in tableHeaders"
           :class="applyColumnVariant(header.variant)"
           :key="header.key">
-        {{ header.key }}
+        {{ header.label }}
         <i @click="sortByColumn(header.key)"
            v-if="header.sortable"
            :class="sortButtonPosition(header.key)"/>
@@ -18,7 +18,6 @@
     <tr :class="applySpecialRowProps(item)"
         v-for="(item, index) in items"
         :key="index">
-
         <td v-for="(itemName, index) in tableHeaders"
             :id="itemName.key"
             :class="[applySpecialCellProps(item, itemName.key), applyColumnVariant(itemName.variant)]"
@@ -54,7 +53,7 @@ export default {
     };
 
     const objectifyHeaders = (headers) => headers.reduce((prev, curr) =>
-        [...prev, typeof curr === 'string' ? {key: curr, sortable: false} : curr], []);
+        [...prev, typeof curr === 'string' ? {key: curr, sortable: false, label: curr} : {label:curr.key, ...curr}], []);
 
     const tableHeaders = computed(() => objectifyHeaders(props.fields || Object.keys(props.items[0])));
 

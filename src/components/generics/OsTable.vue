@@ -18,12 +18,20 @@
     <tr :class="applySpecialRowProps(item)"
         v-for="(item, index) in items"
         :key="index">
-      <td v-for="(itemName, index) in tableHeaders"
-          :class="[applySpecialCellProps(item, itemName.key), applyColumnVariant(itemName.variant)]"
-          :key="`${index}-${itemName.key}`">{{ item[itemName.key] }}
-      </td>
+
+        <td v-for="(itemName, index) in tableHeaders"
+            :id="itemName.key"
+            :class="[applySpecialCellProps(item, itemName.key), applyColumnVariant(itemName.variant)]"
+            :key="`${index}-${itemName.key}`">
+          <slot :name="itemName.key" :item="item" :headers="tableHeaders">
+            {{ item[itemName.key] }}
+          </slot>
+        </td>
     </tr>
     </tbody>
+<!--    <slot v-for="header in tableHeaders" :name="header.key"/>-->
+    <slot name="abcd"></slot>
+    <slot name="abcd"></slot>
   </table>
 </template>
 
@@ -61,15 +69,15 @@ export default {
     const sortByColumn = (header) => {
       sortModifiers.value[header] = sortModifiers.value[header] || 1;
       props.items.sort((a, b) => {
-        if(a[header] < b[header]) { return -sortModifiers.value[header]; }
-        if(a[header] > b[header]) { return sortModifiers.value[header]; }
+        if (a[header] < b[header]) return -sortModifiers.value[header];
+        if (a[header] > b[header]) return sortModifiers.value[header];
         return 0;
-      })
+      });
       sortModifiers.value[header] *= -1;
-    }
+    };
 
-    const sortButtonPosition = (headerKey) => sortModifiers.value[headerKey] !== -1 ? 'bi bi-sort-down': 'bi bi-sort-up';
-    const applyColumnVariant = (variant) =>  variant ? `table-${variant}` : ''
+    const sortButtonPosition = (headerKey) => sortModifiers.value[headerKey] !== -1 ? 'bi bi-sort-down' : 'bi bi-sort-up';
+    const applyColumnVariant = (variant) => variant ? `table-${variant}` : '';
 
     return {
       tableHeaders,

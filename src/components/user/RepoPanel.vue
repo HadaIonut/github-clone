@@ -38,6 +38,7 @@
                     </div>
                   </small>
                 </h6>
+                <os-row><small class="text-muted mb-1 mt-1"> {{repo.description}} </small></os-row>
                 <os-row>
                   <os-col>
                     <i

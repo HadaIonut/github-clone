@@ -5,6 +5,9 @@
 <!--      <Search />-->
 <!--    </div>-->
     <OsTable :items="items" :fields="fields" hover>
+      <template #head-last_name="{header}">
+        {{header.label.toUpperCase()}} wow, custom headers xD lol funny
+      </template>
       <template #first_name="{item}">
         <div style="background: #6eb9f7">
           first name but from a template: <b>{{item.first_name}}</b>

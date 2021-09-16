@@ -7,7 +7,9 @@
           v-for="header in tableHeaders"
           :class="applyColumnVariant(header.variant)"
           :key="header.key">
-        {{ header.label }}
+        <slot :name="`head-${header.key}`" :header="header">
+          {{ header.label }}
+        </slot>
         <i @click="sortByColumn(header.key)"
            v-if="header.sortable"
            :class="sortButtonPosition(header.key)"/>
@@ -28,7 +30,6 @@
         </td>
     </tr>
     </tbody>
-<!--    <slot v-for="header in tableHeaders" :name="header.key"/>-->
     <slot name="abcd"></slot>
     <slot name="abcd"></slot>
   </table>

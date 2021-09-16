@@ -1,9 +1,4 @@
-/*eslint-disable*/
-import { Octokit } from "@octokit/core";
-
 import { makeErrorToast } from "../../utils/toast";
-
-const octokit = new Octokit();
 
 const state = {
   user: null,

@@ -5,6 +5,7 @@
         @input="handleInput"
         @keypress="handleSend"
         placeholder="Enter username..."
+        type="text"
       />
       <b-input-group-append>
         <b-input-group-text>
@@ -12,8 +13,16 @@
         </b-input-group-text>
       </b-input-group-append>
     </b-input-group>
-    <b-container fluid class="mt-3 search-results" v-if="!loadingSearchResultGroups">
-      <b-row v-for="(searchResultGroup, i) in searchResultGroups" :key="i" class="search">
+    <b-container
+      fluid
+      class="mt-3 search-results"
+      v-if="!loadingSearchResultGroups"
+    >
+      <b-row
+        v-for="(searchResultGroup, i) in searchResultGroups"
+        :key="i"
+        class="search"
+      >
         <b-col
           md="12"
           lg="6"
@@ -61,11 +70,10 @@
 </template>
 
 <script>
-/* eslint-disable */
-import chunk from "lodash/chunk";
+// import chunk from "lodash/chunk";
 
 import router from "../router";
-import { searchUsers } from "../utils/github";
+// import { searchUsers } from "../utils/github";
 import SearchResultsSkeletonCard from "./search/SearchResultsSkeletonCard.vue";
 
 export default {
@@ -86,38 +94,15 @@ export default {
       this.searchResultGroups = data;
       this.loadingSearchResultGroups = false;
     },
-    async handleInput(value) {
-      this.userQuery = value.target.value;
-      console.log(value.target.value)
+    async handleInput(event) {
+      this.userQuery = event.target.value;
+      console.log(event.target.value);
 
-      await this.$store.dispatch('getUserListAction', {queryParams:{q:value.target.value, per_page:6} })
-    //   value.trim()
-    //     ? (this.loadingSearchResultGroups = true)
-    //     : (this.loadingSearchResultGroups = false);
-
-    //   clearTimeout(this.debounceTimeout);
-    //   this.debounceTimeout = setTimeout(
-    //     async () => {
-    //       const users = (await searchUsers({ context: this, q: value, per_page: 6 }))
-
-    //       console.log(users)
-                    
-
-    //       return value.trim()
-    //         ? this.handleSearchResultGroupsChange(
-    //             chunk(
-    //               (await searchUsers({ context: this, q: value, per_page: 6 }))
-    //                 .items,
-    //               2
-    //             )
-    //           )
-    //         : this.handleSearchResultGroupsChange([])
-    //       },
-    //     350
-    //   );
+      event.target.value && await this.$store.dispatch("getUserListAction", {
+        queryParams: { q: event.target.value, per_page: 6 },
+      });
     },
     handleSend(e) {
-      
       if (e.code === "Enter" && !e.shiftKey) {
         router.push({ path: "/search", query: { query: this.userQuery } });
       }
@@ -142,3 +127,32 @@ export default {
   }
 }
 </style>
+
+<!-- 
+
+    //   value.trim()
+    //     ? (this.loadingSearchResultGroups = true)
+    //     : (this.loadingSearchResultGroups = false);
+
+    //   clearTimeout(this.debounceTimeout);
+    //   this.debounceTimeout = setTimeout(
+    //     async () => {
+    //       const users = (await searchUsers({ context: this, q: value, per_page: 6 }))
+
+    //       console.log(users)
+                    
+
+    //       return value.trim()
+    //         ? this.handleSearchResultGroupsChange(
+    //             chunk(
+    //               (await searchUsers({ context: this, q: value, per_page: 6 }))
+    //                 .items,
+    //               2
+    //             )
+    //           )
+    //         : this.handleSearchResultGroupsChange([])
+    //       },
+    //     350
+    //   );
+
+-->

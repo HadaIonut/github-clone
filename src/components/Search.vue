@@ -67,7 +67,6 @@ import chunk from "lodash/chunk";
 import router from "../router";
 import { searchUsers } from "../utils/github";
 import SearchResultsSkeletonCard from "./search/SearchResultsSkeletonCard.vue";
-
 export default {
   name: "Search",
   components: {

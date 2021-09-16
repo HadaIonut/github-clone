@@ -1,6 +1,7 @@
 <template>
-  <div class="modal">
+  <div class="modal vw-75 scrollable">
     <slot></slot>
+    <div class="modal-footer" style="display:none"></div>
   </div>
 </template>
 

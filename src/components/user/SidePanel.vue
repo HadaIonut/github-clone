@@ -29,7 +29,8 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, useStore } from 'vuex';
+import {useStore } from 'vuex';
+import {computed, onMounted, ref} from 'vue';
 import UserSkeleton from './UserSkeleton.vue';
 import OsCard from "../generics/Card/OsCard.vue"
 import OsContainer from '../generics/Layout/OsContainer.vue';
@@ -37,32 +38,28 @@ import OsCardText from '../generics/Card/OsCardText.vue';
 
 
 export default {
-  setup(){
-    const store = useStore()
-    console.log(store)
-  },
   name: 'SidePanel',
   props: ['username'],
   components: { UserSkeleton, OsCard, OsContainer, OsCardText},
-  data() {
-    return {
-      loading: false,
-    };
-  },
-  async created() {
-    this.loading = true;
-    await this.fetchUser({
-      username: this.username,
-      context: this,
-    });
-    this.loading = false;
-  },
-  methods: {
-    ...mapActions(['fetchUser']),
-  },
+  setup (props) {
+    const loading = ref(false);
+    const store = useStore();
 
-  computed: {
-    ...mapGetters({ user: 'getUser' }),
+    onMounted(async () => {
+      loading.value = true;
+      await store.dispatch('fetchUser', {
+        username: props.username,
+        context: this,
+      });
+      loading.value = false;
+    })
+
+    const user = computed(() => store.getters.getUser);
+
+    return {
+      user,
+      loading
+    }
   },
 };
 </script>

@@ -14,14 +14,6 @@ export default {
   name: 'Home',
   components: {
     Search,
-  },
-  created() {
-
-  },
-  data() {
-    return{
-       paths: ["Home", "User", "Repo"],
-    }
   }
 }
 </script>

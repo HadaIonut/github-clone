@@ -1,5 +1,7 @@
 <template>
-  <b-container class="pt-5 container">
+
+  <os-container class="pt-5 container">
+
     <div class="list-container">
       <h4 class="repo-title">{{ reponame }}</h4>
       <OsBreadcrumb>
@@ -12,51 +14,60 @@
         </OsBreadcrumbItem>
       </OsBreadcrumb>
       <LanguagesBar v-bind:username="username" v-bind:reponame="reponame" />
-      <b-container fluid class="p-0">
-        <b-list-group-item
+
+      <os-container-fluid class="p-0">
+
+        <OsListGroupItem
+
           class="font-weight-bold bg-secondary text-white d-flex rounded-top"
         >
-          {{ commitsInfo }} commits have been made in this repository.
-          {{ nrOfBranches }} active
-          <span v-if="nrOfBranches == 1">&nbsp;branch </span>
-          <span v-if="nrOfBranches > 1">&nbsp;branches</span>.
-        </b-list-group-item>
-        <b-list-group-item
+          {{ commitsInfo }} commits have been made in this repository. {{nrOfBranches }} active
+          <span v-if="nrOfBranches == 1 ">&nbsp;branch </span>
+          <span v-if="nrOfBranches >1">&nbsp;branches</span>.
+        </OsListGroupItem>
+        <OsListGroupItem
           class="clickable d-flex font-weight-bold"
           @click="goToParentDirectory"
           v-if="this.currentLocationString !== ''"
         >
           ..
-        </b-list-group-item>
-        <b-list-group class="list">
-          <b-list-group-item
+        </OsListGroupItem>
+        <OsListGroup class="list">
+          <OsListGroupItem
             v-for="doc in docs"
             :key="doc.sha"
             class="list-item-container clickable"
             @click="handleClick(doc)"
           >
             <div v-if="doc.type === 'dir'" class="list-item">
-              <b-icon-folder-fill class="list-icon"></b-icon-folder-fill>
+              <i class="bi bi-folder-fill list-icon"> </i>
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>
             <div v-if="doc.type === 'file'" class="list-item">
-              <b-icon-file-code class="list-icon"></b-icon-file-code>
+              <i class="bi bi-file-code list-icon"> </i>
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>
-          </b-list-group-item>
-        </b-list-group>
-      </b-container>
+
+          </OsListGroupItem>
+        </OsListGroup>
+       </os-container-fluid>
     </div>
-  </b-container>
+    <!-- <Modal /> -->
+  </os-container>
 </template>
 
 <script>
 import LanguagesBar from './repos/LanguagesBar.vue';
 import OsBreadcrumbItem from './generics/OsBreadcrumbItem.vue';
 import OsBreadcrumb from '../components/generics/OsBreadcrumb.vue';
+import OsContainer from './generics/Layout/OsContainer.vue'
+import OsContainerFluid from './generics/Layout/OsContainerFluid.vue'
+
+import OsListGroup from '../components/generics/OsListGroup.vue';
+import OsListGroupItem from '../components/generics/OsListGroupItem.vue';
 import { mapActions, mapGetters } from 'vuex';
 export default {
-  components: { LanguagesBar, OsBreadcrumb, OsBreadcrumbItem},
+  components: { LanguagesBar, OsBreadcrumb, OsBreadcrumbItem, OsContainer, OsContainerFluid,  OsListGroup, OsListGroupItem},
   name: 'RepoView',
   props: {
     reponame: String,

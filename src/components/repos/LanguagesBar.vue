@@ -1,52 +1,49 @@
 <template>
   <div>
-    <b-progress class="mt-2 mb-3" :max="total">
-      <b-progress-bar
+    <OsProgress class="mt-2 mb-3">
+        <OsProgressBar
+        :max="getTotalLanguages"
         :value="language"
         :style="getRandomColor()"
-        v-for="(language, name, index) in languages"
+        v-for="(language, name, index) in getLanguages"
         :key="index"
-        >{{ name }}</b-progress-bar
-      >
-    </b-progress>
+        >{{ name }}
+      </OsProgressBar>
+    </OsProgress>
   </div>
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex';
-export default {
-  name: 'LanguagesBar',
-  props: ['username', 'reponame'],
-  methods: {
-    ...mapActions(['fetchLanguages']),
-    calculateTotal(obj) {
-      for (let value in obj) {
-        this.total += obj[value];
-      }
-    },
-    getRandomColor() {
-      return {
-        'background-color':
-          '#' + Math.floor(Math.random() * 16777215).toString(16),
-      };
-    },
-  },
+import { computed, onBeforeMount } from "vue";
+import { useStore } from "vuex";
 
-  computed: {
-    ...mapGetters({ languages: 'getLanguages' }),
+import OsProgress from "../generics/OsProgress.vue";
+import OsProgressBar from "../generics/OsProgressBar.vue";
+
+export default {
+  name: "LanguagesBar",
+  props: ["username", "reponame"],
+  components: {
+    OsProgress,
+    OsProgressBar,
   },
-  data() {
-    return {
-      total: 0,
-    };
-  },
-  async created() {
-    await this.fetchLanguages({
-      userName: this.username,
-      repoName: this.reponame,
-      context: this,
+  setup(props) {
+    onBeforeMount(async () => {
+      await store.dispatch("fetchLanguages", {
+        userName: props.username,
+        repoName: props.reponame,
+      });
     });
-    this.calculateTotal(this.languages);
+
+    const store = useStore();
+
+    const getLanguages = computed(() => store.getters.getLanguages);
+    const getTotalLanguages = computed(() => store.getters.getTotalLanguages);
+
+    const getRandomColor = () =>
+      `background-color: #${Math.floor(Math.random() * 16777215).toString(16)}`;
+
+    return { getRandomColor, getLanguages, getTotalLanguages };
   },
 };
 </script>

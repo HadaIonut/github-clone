@@ -9,6 +9,7 @@ const state = {
   branches: [],
   collaboratos: [],
   languages: {},
+  totalLanguages: 0,
 };
 
 const actions = {
@@ -82,6 +83,7 @@ const getters = {
   getBranches: (state) => state.branches,
   getCollaborators: (state) => state.collaborators,
   getLanguages: (state) => state.languages,
+  getTotalLanguages: (state) => Object.values(state.languages).reduce((acc, cur) => acc + cur, 0),
 };
 
 const mutations = {

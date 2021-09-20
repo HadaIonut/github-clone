@@ -16,7 +16,7 @@ export default {
     Search,
   },
   created() {
-    
+
   },
   data() {
     return{

@@ -117,7 +117,6 @@ export default {
       'fetchBranches',
     ]),
     sortDocuments(docs) {
-      console.log(this.$refs);
       docs.sort((a, b) => (a.type < b.type ? -1 : 1));
     },
     async updateRepoContents(path) {

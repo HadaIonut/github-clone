@@ -5,7 +5,7 @@
       <OsNavbarBrand>
         <img
           src="https://cdn-icons-png.flaticon.com/512/1832/1832144.png"
-          alt="cacamaca"
+          alt="Navbar Image"
           style="max-width:30px"
         />
       </OsNavbarBrand>

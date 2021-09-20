@@ -1,6 +1,5 @@
 <template>
   <div class="modal fade">
-    cacamaca
   </div>
 </template>
 

@@ -38,7 +38,7 @@
         </os-col>
       </os-row>
     </os-container>
-    <div
+    <!-- <div
       class="pagination fixed-bottom myPagination"
       :total-rows="rows"
       :per-page="perPage * 6"
@@ -46,12 +46,33 @@
       align="center"
       pills
       size="lg"
-    ></div>
+    ></div> -->
+    <nav aria-label="my-pagination" class=" fixed-bottom myPagination">
+      <ul class="pagination justify-content-center ">
+        <li class="page-item">
+          <button class="page-link" @click="setPrev">Previous</button>
+        </li>
+        <li
+          class="page-item"
+          v-for="(index, i) in this.lastpage"
+          v-bind:key="index"
+          @click="this.currentPage = index"
+          :ref="(el) => (divs[i] = el)"
+        >
+          <button class="page-link">{{ index }}</button>
+        </li>
+        <li class="page-item">
+          <button class="page-link" @click="setNext">Next</button>
+        </li>
+      </ul>
+    </nav>
+
   </div>
 </template>
 
 <script>
-import { computed, onMounted, ref, watch } from "vue";
+/* eslint-disable */
+import { computed, onMounted, ref, watch, onBeforeUpdate } from "vue";
 import { useStore } from "vuex";
 import { useRoute } from "vue-router";
 import chunk from "lodash/chunk";
@@ -62,6 +83,7 @@ import OsCol from "../components/generics/Layout/OsCol";
 import OsCard from "../components/generics/Card/OsCard";
 import OsCardBody from "../components/generics/Card/OsCardBody";
 import OsCardTitle from "../components/generics/Card//OsCardTitle";
+// import SlidingPagination from 'vue-sliding-pagination'
 
 export default {
   name: "Search",
@@ -89,6 +111,9 @@ export default {
     const lastpage = ref(0);
     const perPage = ref(3);
 
+    const divs = ref([]);
+
+
     const getUsers = async () => {
       let params = {
         q: route.query.query,
@@ -103,15 +128,53 @@ export default {
 
       loading.value = false;
       users.value = users.value.concat(res.items);
-      rows.value = res.items.length;
+      rows.value = rows.value + res.items.length;
       totalUserCount.value = res.total_count;
       lastpage.value = Math.ceil(rows.value / 18);
       currentRequestPage.value++;
     };
+    const setPrev = () => {
+      if (currentPage.value >= 2) {
+        currentPage.value--;
+      }
+    };
+    const setNext = () => {
+      if (currentPage.value < lastpage.value) {
+        currentPage.value++;
+      }
+    };
 
-    onMounted(getUsers);
+    const setActive = () => {
+      for (let element of divs.value) {
+        element.classList.remove("active");
+      }
 
-    watch(currentPage, getUsers);
+      divs.value[currentPage.value - 1].classList.add("active");
+    };
+
+     onBeforeUpdate(() => {
+        divs.value = []
+      })
+
+    onMounted(() => {
+      getUsers();
+
+      setTimeout(() => {
+        //a dirty dirty trick to set the first pagination item to active after it's loaded
+        let firstLi = document.querySelector(".searchPage ul li:nth-child(2)");
+        firstLi.classList.add("active");
+      }, 300);
+    });
+
+    watch(currentPage, () => {
+      setActive();
+      if (
+        totalUserCount.value > rows.value &&
+        currentPage.value == lastpage.value
+      ) {
+        getUsers();
+      }
+    });
 
     const groupedUsers = computed(() => {
       return chunk(users.value, 6);
@@ -127,7 +190,11 @@ export default {
       currentRequestPage,
       currentPage,
       groupedUsers,
+      divs,
       getUsers,
+      setPrev,
+      setNext,
+      setActive,
     };
   },
 };
@@ -201,5 +268,9 @@ export default {
 
 .myBadge {
   background-color: #47a7f5;
+}
+
+.myVPagination ul li svg path{
+  color:black;
 }
 </style>

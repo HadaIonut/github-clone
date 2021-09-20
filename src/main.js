@@ -8,6 +8,7 @@ import "bootstrap/dist/css/bootstrap.min.css"
 import "bootstrap"
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import "bootstrap-icons/font/bootstrap-icons"
+// import "vue-sliding-pagination/dist/style/vue-sliding-pagination"
 // import {
   // BIconFileCode,
   // BIconFolderFill,
@@ -35,6 +36,8 @@ import "bootstrap-icons/font/bootstrap-icons"
 // }).$mount('#app');
 
 const app = createApp(App)
+
+
 
 app.use(store)
 app.use(router)

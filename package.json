@@ -12,6 +12,7 @@
     "@vue/compat": "^3.1.0-0",
     "axios": "^0.21.4",
     "bootstrap": "^5.1.1",
+    "bootstrap-icons": "^1.5.0",
     "core-js": "^3.6.5",
     "lodash.chunk": "^4.2.0",
     "sanitize-html": "^2.5.0",
@@ -24,11 +25,11 @@
     "@vue/cli-plugin-eslint": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "@vue/compiler-sfc": "^3.1.0-0",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
-    "vue-code-highlight": "^0.7.8",
-    "@vue/compiler-sfc": "^3.1.0-0"
+    "vue-code-highlight": "^0.7.8"
   },
   "eslintConfig": {
     "root": true,

@@ -1,5 +1,7 @@
 <template>
-  <b-container class="pt-5 container">
+
+  <os-container class="pt-5 container">
+
     <div class="list-container">
       <h4 class="repo-title">{{ reponame }}</h4>
       <b-breadcrumb class="bread">
@@ -20,8 +22,11 @@
         >
       </b-breadcrumb>
       <LanguagesBar v-bind:username="username" v-bind:reponame="reponame" />
-      <b-container fluid class="p-0">
+
+      <os-container-fluid class="p-0">
+
         <OsListGroupItem
+
           class="font-weight-bold bg-secondary text-white d-flex rounded-top"
         >
           {{ commitsInfo }} commits have been made in this repository. {{nrOfBranches }} active
@@ -43,31 +48,40 @@
             @click="handleClick(doc)"
           >
             <div v-if="doc.type === 'dir'" class="list-item">
-              <b-icon-folder-fill class="list-icon"></b-icon-folder-fill>
+              <i class="bi bi-folder-fill list-icon"> </i> 
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>
             <div v-if="doc.type === 'file'" class="list-item">
-              <b-icon-file-code class="list-icon"></b-icon-file-code>
+              <i class="bi bi-file-code list-icon"> </i> 
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>
+
           </OsListGroupItem>
         </OsListGroup>
-      </b-container>
+       </os-container-fluid>
     </div>
     <!-- <Modal /> -->
-  </b-container>
+  </os-container>
 </template>
 
 <script>
 // import Modal from '../components/Modal.vue';
 import LanguagesBar from './repos/LanguagesBar.vue';
+
+import OsContainer from './generics/Layout/OsContainer.vue'
+import OsContainerFluid from './generics/Layout/OsContainerFluid.vue'
+
 import OsListGroup from '../components/generics/OsListGroup.vue';
 import OsListGroupItem from '../components/generics/OsListGroupItem.vue';
+
 
 import { mapActions, mapGetters } from 'vuex';
 
 export default {
-  components: { LanguagesBar, OsListGroup, OsListGroupItem },
+
+  components: { OsContainer,LanguagesBar, OsContainerFluid,  OsListGroup, OsListGroupItem },
+
+
   name: 'RepoView',
   props: {
     reponame: String,

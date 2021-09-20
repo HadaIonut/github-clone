@@ -1,4 +1,4 @@
-/*eslint-disable*/
+
 import { makeErrorToast } from "../../utils/toast";
 
 const state = {

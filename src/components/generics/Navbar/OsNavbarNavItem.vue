@@ -6,7 +6,7 @@
 
 <script>
 export default {
-name: "OsNavbarNavItem",
+  name: "OsNavbarNavItem",
 }
 </script>
 

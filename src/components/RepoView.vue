@@ -47,19 +47,16 @@
         </b-list-group>
       </b-container>
     </div>
-    <!-- <Modal /> -->
   </b-container>
 </template>
 
 <script>
-// import Modal from '../components/Modal.vue';
 import LanguagesBar from './repos/LanguagesBar.vue';
 import OsBreadcrumbItem from './generics/OsBreadcrumbItem.vue';
 import OsBreadcrumb from '../components/generics/OsBreadcrumb.vue';
 import { mapActions, mapGetters } from 'vuex';
-
 export default {
-  components: { LanguagesBar, OsBreadcrumb, OsBreadcrumbItem },
+  components: { LanguagesBar, OsBreadcrumb, OsBreadcrumbItem},
   name: 'RepoView',
   props: {
     reponame: String,
@@ -120,6 +117,7 @@ export default {
       'fetchBranches',
     ]),
     sortDocuments(docs) {
+      console.log(this.$refs);
       docs.sort((a, b) => (a.type < b.type ? -1 : 1));
     },
     async updateRepoContents(path) {
@@ -150,17 +148,17 @@ export default {
       await this.updateDisplayAndSort(this.currentLocationString);
     },
     async openModal(downloadUrl, name) {
-      await this.$store.dispatch('getFileContentAction', {
-        routeParams: { url: downloadUrl },
-      });
+      const body = (await fetch(downloadUrl)).body;
+      const readable = await body.getReader().read();
+      const final = new TextDecoder('utf-8').decode(readable.value);
+      await this.updateFileContent(final);
       await this.updateFileName(name);
-
-      // this.$bvModal.show('bv-modal');
+      //this.$refs.myModal.show();*/
     },
     handleClick(doc) {
       setTimeout(() => {
         if (doc.type === 'dir') this.updateRepoContents(doc.path);
-        if (doc.type === 'file') this.openModal(doc.download_url, doc.name);
+        //if (doc.type === 'file') this.openModal(doc.download_url, doc.name);
       }, 300);
     },
   },

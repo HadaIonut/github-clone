@@ -6,6 +6,7 @@
 
 <script>
 export default {
+  name: "OsNavbarBrand",
   props: {
     href: String,
   }

@@ -27,13 +27,15 @@
           <span v-if="nrOfBranches == 1">&nbsp;branch </span>
           <span v-if="nrOfBranches > 1">&nbsp;branches</span>.
         </OsListGroupItem>
-        <OsListGroupItem
-          class="clickable d-flex font-weight-bold"
-          @click="goToParentDirectory"
-          v-if="this.currentLocationString !== ''"
-        >
-          ..
-        </OsListGroupItem>
+        <div @click="goToParentDirectory">
+          <OsListGroupItem
+              class="clickable d-flex font-weight-bold"
+              v-if="this.currentLocationString !== ''"
+          >
+            ..
+          </OsListGroupItem>
+        </div>
+
         <OsListGroup class="list">
           <div v-for="doc in docs" :key="doc.sha" v-on:click="handleClick(doc)">
             <OsListGroupItem class="list-item-container clickable">

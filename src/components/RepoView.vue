@@ -3,18 +3,16 @@
     <div class="list-container">
       <h4 class="repo-title">{{ reponame }}</h4>
       <OsBreadcrumb>
-        <div class="breadcrumb-item active" @click="goToLocation('')">
-          <!-- TODO: move to custom event -->
-          <div><i class="bi bi-house-fill"></i> Home</div>
-        </div>
-        <div
+        <OsBreadcrumbItem @click="goToLocation('')">
+          <i class="bi bi-house-fill"></i> Home
+        </OsBreadcrumbItem>
+        <OsBreadcrumbItem
           v-for="(path, index) in paths"
           :key="index"
           @click="goToLocation(paths[index + 1])"
-          class="breadcrumb-item active"
         >
           {{ path }}
-        </div>
+        </OsBreadcrumbItem>
       </OsBreadcrumb>
       <LanguagesBar v-bind:username="username" v-bind:reponame="reponame" />
 
@@ -35,18 +33,21 @@
           ..
         </OsListGroupItem>
         <OsListGroup class="list">
-          <div v-for="doc in docs" :key="doc.sha" v-on:click="handleClick(doc)">
-            <OsListGroupItem class="list-item-container clickable">
-              <div v-if="doc.type === 'dir'" class="list-item">
-                <i class="bi bi-folder-fill list-icon"> </i>
-                <div class="list-item-doc-title">{{ doc.name }}</div>
-              </div>
-              <div v-if="doc.type === 'file'" class="list-item">
-                <i class="bi bi-file-code list-icon"> </i>
-                <div class="list-item-doc-title">{{ doc.name }}</div>
-              </div>
-            </OsListGroupItem>
-          </div>
+          <OsListGroupItem
+            class="list-item-container clickable"
+            v-for="doc in docs"
+            :key="doc.sha"
+            @click="handleClick(doc)"
+          >
+            <div v-if="doc.type === 'dir'" class="list-item">
+              <i class="bi bi-folder-fill list-icon"> </i>
+              <div class="list-item-doc-title">{{ doc.name }}</div>
+            </div>
+            <div v-if="doc.type === 'file'" class="list-item">
+              <i class="bi bi-file-code list-icon"> </i>
+              <div class="list-item-doc-title">{{ doc.name }}</div>
+            </div>
+          </OsListGroupItem>
         </OsListGroup>
       </os-container-fluid>
     </div>
@@ -56,7 +57,7 @@
 
 <script>
 import LanguagesBar from './repos/LanguagesBar.vue';
-//import OsBreadcrumbItem from './generics/OsBreadcrumbItem.vue';
+import OsBreadcrumbItem from './generics/OsBreadcrumbItem.vue';
 import OsBreadcrumb from '../components/generics/OsBreadcrumb.vue';
 import OsContainer from './generics/Layout/OsContainer.vue';
 import OsContainerFluid from './generics/Layout/OsContainerFluid.vue';
@@ -68,7 +69,7 @@ export default {
   components: {
     LanguagesBar,
     OsBreadcrumb,
-    //OsBreadcrumbItem,
+    OsBreadcrumbItem,
     OsContainer,
     OsContainerFluid,
     OsListGroup,
@@ -137,8 +138,7 @@ export default {
       () => store.getters.getCurrentLocationAsString
     );
     const getPathFromLocation = store.getters.getPathFromLocation;
-       
-  
+
     const commits = computed(() => store.getters.getCommits);
     const branches = computed(() => store.getters.getBranches);
     const pathFromLocation = computed(() =>
@@ -151,7 +151,7 @@ export default {
         userName: props.username,
         repoName: props.reponame,
       });
-     //sortDocuments(docs);
+      //sortDocuments(docs);
       await store.dispatch('fetchCommits', {
         userName: props.username,
         repoName: props.reponame,

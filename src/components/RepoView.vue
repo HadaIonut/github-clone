@@ -45,7 +45,7 @@
               <i class="bi bi-folder-fill list-icon"> </i>
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>
-            <div v-if="doc.type === 'file'" class="list-item">
+            <div v-if="doc.type === 'file'" class="list-item" data-bs-toggle="modal" data-bs-target="#exampleModal">
               <i class="bi bi-file-code list-icon"> </i>
               <div class="list-item-doc-title">{{ doc.name }}</div>
             </div>

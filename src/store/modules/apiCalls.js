@@ -80,7 +80,7 @@ store.createGetEntry({
 
 store.createGetEntry({
   resourceName: 'fileContent',
-  initialValue: [],
+  initialValue: '',
   endpoint: ':url',
   serializer: (response) => response,
 });

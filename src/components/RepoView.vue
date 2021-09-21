@@ -43,7 +43,7 @@
                 <i class="bi bi-folder-fill list-icon"> </i>
                 <div class="list-item-doc-title">{{ doc.name }}</div>
               </div>
-              <div v-if="doc.type === 'file'" class="list-item">
+              <div v-if="doc.type === 'file'" class="list-item" data-bs-toggle="modal" data-bs-target="#exampleModal">
                 <i class="bi bi-file-code list-icon"> </i>
                 <div class="list-item-doc-title">{{ doc.name }}</div>
               </div>
@@ -52,7 +52,7 @@
         </OsListGroup>
       </os-container-fluid>
     </div>
-    <!-- <Modal /> -->
+    <Modal/>
   </os-container>
 </template>
 
@@ -66,8 +66,10 @@ import { computed, onMounted, ref } from 'vue';
 import OsListGroup from '../components/generics/OsListGroup.vue';
 import OsListGroupItem from '../components/generics/OsListGroupItem.vue';
 import { useStore } from 'vuex';
+import Modal from './Modal';
 export default {
   components: {
+    Modal,
     LanguagesBar,
     OsBreadcrumb,
     //OsBreadcrumbItem,
@@ -87,10 +89,8 @@ export default {
     const nrOfBranches = ref(null);
     const curState = ref('');
     const targetLocation = ref('');
-    /*const sortDocuments = (docs) => {
-      docs.value.sort((a, b) => (a.type < b.type ? -1 : 1));
-      store.commit('setRepoContents', docs.value);
-    };*/
+    // const isModalOpen = ref(false)
+
     const updateRepoContents = async (path) => {
       await store.dispatch('updateCurrentLocation', path);
       await updateDisplayAndSort(path);
@@ -117,17 +117,16 @@ export default {
       store.dispatch('updateCurrentLocation', pathFromLocation.value);
       updateDisplayAndSort(currentLocationString.value);
     };
-    /*const openModal = async (downloadUrl, name) => {
-      const body = (await fetch(downloadUrl)).body;
-      const readable = await body.getReader().read();
-      const final = new TextDecode('utf-8').decode(readable.value);
-      await store.dispatch('updateFileContent', final);
+
+    const openModal = async (downloadUrl, name) => {
+      await store.dispatch('getFileContentAction', {routeParams: {url: downloadUrl}})
       await store.dispatch('updateFileName', name);
-    }*/
+    }
+
     const handleClick = (doc) => {
       setTimeout(() => {
         if (doc.type === 'dir') updateRepoContents(doc.path);
-        //if(doc.type === 'file') openModal(doc.download_url, doc.name);
+        if(doc.type === 'file') openModal(doc.download_url, doc.name);
       }, 300);
     };
 
@@ -139,8 +138,8 @@ export default {
       () => store.getters.getCurrentLocationAsString
     );
     const getPathFromLocation = store.getters.getPathFromLocation;
-       
-  
+
+
     const commits = computed(() => store.getters.getCommits);
     const branches = computed(() => store.getters.getBranches);
     const pathFromLocation = computed(() =>

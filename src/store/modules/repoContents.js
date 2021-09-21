@@ -48,6 +48,7 @@ const actions = {
   async fetchRepoContentsAtLocation({ commit }, { userName, repoName, location, context }) {
     await this.dispatch('getLocationAction', {routeParams: {userName, repoName, location}})
     const dataAtLocation = this.state.apiCalls.getLocationEntry;
+    dataAtLocation.data.sort((a, b) => (a.type < b.type ? -1 : 1));
 
     if (dataAtLocation.error)
       makeErrorToast(context, dataAtLocation.error.message || `Unable to fetch ${repoName}'s contents`);

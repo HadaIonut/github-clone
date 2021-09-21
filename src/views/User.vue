@@ -4,9 +4,9 @@
       <os-col class="col-sm-4 col-xs-12 col-md-4 col-lg-2">
         <SidePanel v-bind:username="$route.params.username" />
       </os-col>
-      <os-col class="col-sm-8 col-xs-12 col-md-8 col-lg-10"
-        ><RepoPanel v-bind:username="$route.params.username"
-      /></os-col>
+      <os-col class="col-sm-8 col-xs-12 col-md-8 col-lg-10">
+        <RepoPanel v-bind:username="$route.params.username" />
+      </os-col>
     </os-row>
   </os-container>
 </template>

@@ -60,10 +60,10 @@ import LanguagesBar from './repos/LanguagesBar.vue';
 import OsBreadcrumb from '../components/generics/OsBreadcrumb.vue';
 import OsContainer from './generics/Layout/OsContainer.vue';
 import OsContainerFluid from './generics/Layout/OsContainerFluid.vue';
-
+import { computed, onMounted, ref } from 'vue';
 import OsListGroup from '../components/generics/OsListGroup.vue';
 import OsListGroupItem from '../components/generics/OsListGroupItem.vue';
-import { mapActions, mapGetters } from 'vuex';
+import { useStore } from 'vuex';
 export default {
   components: {
     LanguagesBar,
@@ -79,105 +79,100 @@ export default {
     reponame: String,
     username: String,
   },
-  data() {
-    return {
-      commitsInfo: null,
-      nrOfBranches: null,
-      curState: '',
-      targetLocation: '',
+  setup(props) {
+    const store = useStore();
+    const commitsInfo = ref(null);
+    const nrOfBranches = ref(null);
+    const curState = ref('');
+    const targetLocation = ref('');
+    /*const sortDocuments = (docs) => {
+      docs.value.sort((a, b) => (a.type < b.type ? -1 : 1));
+      store.commit('setRepoContents', docs.value);
+    };*/
+    const updateRepoContents = async (path) => {
+      await store.dispatch('updateCurrentLocation', path);
+      await updateDisplayAndSort(path);
     };
-  },
-  computed: {
-    ...mapGetters({
-      docs: 'allRepoContents',
-      paths: 'getCurrentLocationAsArray',
-      currentLocationString: 'getCurrentLocationAsString',
-      getPathFromLocation: 'getPathFromLocation',
-      commits: 'getCommits',
-      branches: 'getBranches',
-    }),
-    pathFromLocation() {
-      return this.getPathFromLocation(this.targetLocation);
-    },
-  },
-  async created() {
-    await this.fetchRepoContents({
-      userName: this.username,
-      repoName: this.reponame,
-      context: this,
-    });
-    this.sortDocuments(this.docs);
-
-    await this.fetchCommits({
-      userName: this.username,
-      repoName: this.reponame,
-      context: this,
-    });
-    this.commitsInfo = this.commits.length;
-
-    await this.fetchBranches({
-      userName: this.username,
-      repoName: this.reponame,
-      context: this,
-    });
-
-    this.nrOfBranches = this.branches.length;
-  },
-  methods: {
-    ...mapActions([
-      'fetchRepoContents',
-      'updateCurrentLocation',
-      'fetchRepoContentsAtLocation',
-      'updateFileContent',
-      'updateFileName',
-      'fetchCommits',
-      'fetchBranches',
-    ]),
-    sortDocuments(docs) {
-      docs.sort((a, b) => (a.type < b.type ? -1 : 1));
-    },
-    async updateRepoContents(path) {
-      await this.updateCurrentLocation(path);
-      await this.updateDisplayAndSort(path);
-    },
-    async goToParentDirectory() {
+    const goToParentDirectory = () => {
       setTimeout(async () => {
-        this.curState = this.currentLocationString;
-        this.targetLocation = this.curState.lastIndexOf('/');
-        await this.updateCurrentLocation(this.pathFromLocation);
-        await this.updateDisplayAndSort(this.currentLocationString);
+        curState.value = currentLocationString.value;
+        targetLocation.value = curState.value.lastIndexOf('/');
+        store.dispatch('updateCurrentLocation', pathFromLocation.value);
+        await updateDisplayAndSort(currentLocationString.value);
       }, 300);
-    },
-    async updateDisplayAndSort(path) {
-      await this.fetchRepoContentsAtLocation({
-        userName: this.username,
-        repoName: this.reponame,
+    };
+    const updateDisplayAndSort = async (path) => {
+      store.dispatch('fetchRepoContentsAtLocation', {
+        userName: props.username,
+        repoName: props.reponame,
         location: encodeURIComponent(path),
-        context: this,
       });
-      this.sortDocuments(this.docs);
-    },
-    async goToLocation(path) {
-      this.curState = this.currentLocationString;
-      this.targetLocation = this.curState.lastIndexOf(`/${path}`);
-      await this.updateCurrentLocation(this.pathFromLocation);
-      await this.updateDisplayAndSort(this.currentLocationString);
-    },
-    async openModal(downloadUrl, name) {
+      //sortDocuments(docs);
+    };
+    const goToLocation = (path) => {
+      curState.value = currentLocationString.value;
+      targetLocation.value = curState.value.lastIndexOf(`/${path}`);
+      store.dispatch('updateCurrentLocation', pathFromLocation.value);
+      updateDisplayAndSort(currentLocationString.value);
+    };
+    /*const openModal = async (downloadUrl, name) => {
       const body = (await fetch(downloadUrl)).body;
       const readable = await body.getReader().read();
-      const final = new TextDecoder('utf-8').decode(readable.value);
-      await this.updateFileContent(final);
-      await this.updateFileName(name);
-      //this.$refs.myModal.show();*/
-    },
-    handleClick(doc) {
-      console.log('here');
+      const final = new TextDecode('utf-8').decode(readable.value);
+      await store.dispatch('updateFileContent', final);
+      await store.dispatch('updateFileName', name);
+    }*/
+    const handleClick = (doc) => {
       setTimeout(() => {
-        if (doc.type === 'dir') this.updateRepoContents(doc.path);
-        if (doc.type === 'file') this.openModal(doc.download_url, doc.name);
+        if (doc.type === 'dir') updateRepoContents(doc.path);
+        //if(doc.type === 'file') openModal(doc.download_url, doc.name);
       }, 300);
-    },
+    };
+
+    // TODO: finish converting methods to composition API
+    //computed
+    const docs = computed(() => store.getters.allRepoContents);
+    const paths = computed(() => store.getters.getCurrentLocationAsArray);
+    const currentLocationString = computed(
+      () => store.getters.getCurrentLocationAsString
+    );
+    const getPathFromLocation = store.getters.getPathFromLocation;
+       
+  
+    const commits = computed(() => store.getters.getCommits);
+    const branches = computed(() => store.getters.getBranches);
+    const pathFromLocation = computed(() =>
+      getPathFromLocation(targetLocation.value)
+    );
+
+    //onMounted
+    onMounted(async () => {
+      await store.dispatch('fetchRepoContents', {
+        userName: props.username,
+        repoName: props.reponame,
+      });
+     //sortDocuments(docs);
+      await store.dispatch('fetchCommits', {
+        userName: props.username,
+        repoName: props.reponame,
+      });
+      commitsInfo.value = commits.value.length;
+      await store.dispatch('fetchBranches', {
+        userName: props.username,
+        repoName: props.reponame,
+      });
+      nrOfBranches.value = branches.value.length;
+    });
+    return {
+      paths,
+      nrOfBranches,
+      goToLocation,
+      commitsInfo,
+      goToParentDirectory,
+      currentLocationString,
+      handleClick,
+      docs,
+    };
   },
 };
 </script>

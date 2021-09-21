@@ -40,7 +40,7 @@ const actions = {
   async fetchRepoContents({ commit }, { userName, repoName, context }) {
     await this.dispatch('getContentsAction', {routeParams: {userName, repoName}})
     const contents = this.state.apiCalls.getContentsEntry;
-
+    contents.data.sort((a, b) => (a.type < b.type ? -1 : 1));
     if (contents.error)
       makeErrorToast(context, contents.error.message || `Unable to fetch ${repoName}'contents`);
     else commit("setRepoContents", contents.data);

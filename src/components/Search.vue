@@ -1,15 +1,14 @@
 <template>
   <div>
     <os-input-group class="input mx-auto">
-      <input
+      <OsInput
           @input="handleInput"
           @keypress="handleSend"
           placeholder="Enter username..."
-          class="form-control"
           type="text"
       />
       <template #append>
-        <span class="input-group-text" id="basic-addon2"><i class="bi bi-search"/></span>
+        <i class="bi bi-search"/>
       </template>
     </os-input-group>
     <os-container
@@ -80,10 +79,12 @@ import OsContainer from './generics/Layout/OsContainerFluid';
 import OsImgLazy from './generics/OsImgLazy';
 import {ref} from 'vue';
 import {useStore} from 'vuex';
+import OsInput from './generics/OsInput';
 
 export default {
   name: 'Search',
   components: {
+    OsInput,
     OsImgLazy,
     OsContainer,
     OsCol,

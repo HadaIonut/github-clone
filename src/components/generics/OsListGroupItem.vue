@@ -1,5 +1,5 @@
 <template>
-  <li class="list-group-item">
+  <li class="list-group-item" @click="$emit('click', $event)">
     <slot />
   </li>
 </template>

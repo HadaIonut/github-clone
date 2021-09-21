@@ -40,7 +40,7 @@ const actions = {
   async fetchRepoContents({ commit }, { userName, repoName, context }) {
     await this.dispatch('getContentsAction', {routeParams: {userName, repoName}})
     const contents = this.state.apiCalls.getContentsEntry;
-
+    contents.data.sort((a, b) => (a.type < b.type ? -1 : 1));
     if (contents.error)
       makeErrorToast(context, contents.error.message || `Unable to fetch ${repoName}'contents`);
     else commit("setRepoContents", contents.data);
@@ -48,6 +48,7 @@ const actions = {
   async fetchRepoContentsAtLocation({ commit }, { userName, repoName, location, context }) {
     await this.dispatch('getLocationAction', {routeParams: {userName, repoName, location}})
     const dataAtLocation = this.state.apiCalls.getLocationEntry;
+    dataAtLocation.data.sort((a, b) => (a.type < b.type ? -1 : 1));
 
     if (dataAtLocation.error)
       makeErrorToast(context, dataAtLocation.error.message || `Unable to fetch ${repoName}'s contents`);

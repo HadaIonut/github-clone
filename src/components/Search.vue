@@ -57,13 +57,13 @@
         </os-col>
       </os-row>
     </os-container>
-    <os-container fluid class="mt-3" v-if="loadingSearchResultGroups">
-      <os-row v-for="(z, i) in Array(1).fill(0)" :key="i">
-        <os-col md="12" lg="6" v-for="(z1, i1) in Array(2).fill(0)" :key="i1">
-          <SearchResultsSkeletonCard/>
-        </os-col>
-      </os-row>
-    </os-container>
+<!--    <os-container fluid class="mt-3" v-if="loadingSearchResultGroups">-->
+<!--      <os-row v-for="(z, i) in Array(1).fill(0)" :key="i">-->
+<!--        <os-col md="12" lg="6" v-for="(z1, i1) in Array(2).fill(0)" :key="i1">-->
+<!--          <SearchResultsSkeletonCard/>-->
+<!--        </os-col>-->
+<!--      </os-row>-->
+<!--    </os-container>-->
   </div>
 </template>
 
@@ -71,7 +71,7 @@
 import chunk from 'lodash/chunk';
 
 import router from '../router';
-import SearchResultsSkeletonCard from './search/SearchResultsSkeletonCard.vue';
+// import SearchResultsSkeletonCard from './search/SearchResultsSkeletonCard.vue';
 import OsInputGroup from './generics/OsInputGroup';
 import OsCol from './generics/Layout/OsCol';
 import OsRow from './generics/Layout/OsRow';
@@ -89,7 +89,7 @@ export default {
     OsContainer,
     OsCol,
     OsInputGroup,
-    SearchResultsSkeletonCard,
+    // SearchResultsSkeletonCard,
     OsRow
   },
   setup() {

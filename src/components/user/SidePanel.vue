@@ -1,8 +1,6 @@
 <template>
   <div>
-    <UserSkeleton v-if="loading" />
-
-    <os-card class="mb-3" v-else-if="user && !loading">
+    <os-card class="mb-3" v-if="user && !loading">
       <img class="card-img-top" v-bind:src="user.avatar_url" />
       <os-container class="py-3">
         <h5 class="font-weight-bold">
@@ -31,16 +29,15 @@
 <script>
 import {useStore } from 'vuex';
 import {computed, onMounted, ref} from 'vue';
-import UserSkeleton from './UserSkeleton.vue';
+// import UserSkeleton from './UserSkeleton.vue';
 import OsCard from "../generics/Card/OsCard.vue"
 import OsContainer from '../generics/Layout/OsContainer.vue';
 import OsCardText from '../generics/Card/OsCardText.vue';
 
-
 export default {
   name: 'SidePanel',
   props: ['username'],
-  components: { UserSkeleton, OsCard, OsContainer, OsCardText},
+  components: { OsCard, OsContainer, OsCardText},
   setup (props) {
     const loading = ref(false);
     const store = useStore();

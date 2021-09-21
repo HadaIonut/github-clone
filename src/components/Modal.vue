@@ -1,17 +1,17 @@
 <template>
   <OsModal size="xl" scrollable>
     <template #header>{{name}}</template>
-    <vue-code-highlight language="javascript"><pre>{{content}}</pre></vue-code-highlight>
+    <pre>{{content}}</pre>
   </OsModal>
 </template>
 
 <script>
-import 'vue-code-highlight/themes/prism.css';
-import { component as VueCodeHighlight } from 'vue-code-highlight';
+// import 'vue-code-highlight/themes/prism.css';
+// import { component as VueCodeHighlight } from 'vue-code-highlight';
 import OsModal from './generics/OsModal';
 export default {
   name: 'Modal',
-  components: {OsModal, VueCodeHighlight},
+  components: {OsModal},
   computed: {
     content() {
       return this.$store.state.apiCalls.getFileContentEntry.data;

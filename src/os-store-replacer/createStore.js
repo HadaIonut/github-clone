@@ -4,39 +4,25 @@ export let store = {}
 
 const initFields = ({mutations, actions, getters}) => {
   store['state'] = {}
-  store['actions'] = {}
-  store['mutations'] = {}
-  store['getters'] = {}
-  if (mutations)
-    store.mutations = {
-      ...store.mutations,
-      ...mutations
-    }
-  if (actions)
-    store.actions = {
-      ...store.actions,
-      ...actions
-    }
-  if (getters) {
-    store.getters = {
-      ...store.getters,
-      ...getters
-    }
+  store['actions'] = {
+    ...actions
+  }
+  store['mutations'] = {
+    ...mutations
+  }
+  store['getters'] = {
+    ...getters
   }
 }
 
-export const createStore = (customOperations) => {
-  initFields(customOperations);
-}
+export const createStore = (customOperations) => initFields(customOperations);
 
 const parseEndPoint = (rawURL, {routeParams, queryParams}) => {
   const parsedUrl = rawURL.replace(/:([\w]+)/g, (_, match) => routeParams[match]);
-  if (queryParams) {
-    const stringifiedQueryParams = Object.keys(queryParams).reduce(
-      (acc, current) => `${acc}&${current}=${queryParams[current]}`, '').substring(1);
-    return `${parsedUrl}?${stringifiedQueryParams}`
-  }
-  return `${parsedUrl}`
+  const stringifiedQueryParams = Object.keys(queryParams || {}).reduce(
+    (acc, current) => `${acc}&${current}=${queryParams[current]}`, '').substring(1);
+
+  return queryParams ? `${parsedUrl}?${stringifiedQueryParams}` : `${parsedUrl}`
 }
 
 const callCustomEvents = (customEvents, responseData, toCall) => {
@@ -45,21 +31,22 @@ const callCustomEvents = (customEvents, responseData, toCall) => {
   })
 }
 
-const getAction = (resourceName, rawUrl, serializer, customActions, customMutations) => ({commit, dispatch}, params) => {
-  axios({
-    method: 'get',
-    url: parseEndPoint(rawUrl, params),
-  }).then((response) => {
-    const responseData = typeof serializer === 'function' ? serializer(response.data) : response.data;
-    commit(`get${resourceName}commit`, responseData)
+const getAction = (resourceName, rawUrl, serializer, customActions, customMutations) =>
+  async ({commit, dispatch}, params) => {
+    try {
+      const response = await axios({
+        method: 'get',
+        url: parseEndPoint(rawUrl, params),
+      })
+      const responseData = typeof serializer === 'function' ? serializer(response.data) : response.data;
+      commit(`get${resourceName}commit`, responseData)
 
-    callCustomEvents(customActions, responseData, dispatch)
-    callCustomEvents(customMutations, responseData, commit)
-
-  }).catch(e => {
-    commit(`get${resourceName}ErrorCommit`, {...e}?.response?.data || {...e})
-  })
-}
+      callCustomEvents(customActions, responseData, dispatch)
+      callCustomEvents(customMutations, responseData, commit)
+    } catch (e) {
+      commit(`get${resourceName}ErrorCommit`, {...e}?.response?.data || {...e})
+    }
+  }
 
 const getMutation = (resourceName, type) => (state, payload) => {
   state[`get${resourceName}Entry`][type] = payload

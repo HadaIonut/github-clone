@@ -9,12 +9,20 @@
 
 <script>
 import Search from '../components/Search';
+import {useStore} from "vuex";
 
 export default {
   name: 'Home',
   components: {
     Search,
   },
+  async setup() {
+    const store = useStore();
+    await store.dispatch('getMagicCall', {routeParams: {userName: 'HadaIonut', repoName: 'CallbackDragons'}});
+    // setTimeout(() => console.log(store.getters.getMagicCallData), 1000)
+    console.log(store.getters.getMagicCallData)
+
+  }
 }
 </script>
 

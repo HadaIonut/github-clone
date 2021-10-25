@@ -1,4 +1,4 @@
-export const BASE = 'https://api.github.com'
+export const BASE = 'http://api.github.com'
 export const ENDPOINTS = {
   'userDetails': 'users/:userName',
   'repos': 'users/:userName/repos',

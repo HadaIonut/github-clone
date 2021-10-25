@@ -9,11 +9,16 @@
 
 <script>
 import Search from '../components/Search';
+import {useStore} from "vuex";
 
 export default {
   name: 'Home',
   components: {
     Search,
+  },
+  setup() {
+    const store = useStore();
+    store.dispatch('getMagicCall', {routeParams:{userName: 'HadaIonut',repoName: 'CallbackDragons'}})
   }
 }
 </script>

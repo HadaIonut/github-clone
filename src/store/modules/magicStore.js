@@ -2,15 +2,20 @@ import {addRoute, createStore, store} from '../../os-store-replacer/createStore'
 import {BASE, ENDPOINTS} from "../../../constants/routes";
 
 createStore({
-    mutations: {
-        wildMutate(state, items) {
-            console.log(state, items)
+    // mutations: {
+    //     wildMutate(state, items) {
+    //         console.log(state, items)
+    //     }
+    // },
+    // actions: {
+    //   wildAct({commit}, payload) {
+    //       console.log(commit, payload)
+    //   }
+    // },
+    getters: {
+        getMagicCallData(state) {
+            return state.getMagicCallEntry.data;
         }
-    },
-    actions: {
-      wildAct({commit}, payload) {
-          console.log(commit, payload)
-      }
     }
 });
 
@@ -22,8 +27,8 @@ addRoute({
         console.log('SERIALIZING');
         return {...response}
     },
-    customActions: ['wildAct'],
-    customMutations: ['wildMutate']
+    // customActions: ['wildAct'],
+    // customMutations: ['wildMutate']
 })
 
 export default store;

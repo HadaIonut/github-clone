@@ -2,15 +2,11 @@ import axios from "axios";
 
 export let store = {}
 
-const initFields = () => {
+const initFields = ({mutations, actions, getters}) => {
   store['state'] = {}
   store['actions'] = {}
   store['mutations'] = {}
   store['getters'] = {}
-}
-
-export const createStore = ({mutations, actions}) => {
-  initFields();
   if (mutations)
     store.mutations = {
       ...store.mutations,
@@ -21,6 +17,16 @@ export const createStore = ({mutations, actions}) => {
       ...store.actions,
       ...actions
     }
+  if (getters) {
+    store.getters = {
+      ...store.getters,
+      ...getters
+    }
+  }
+}
+
+export const createStore = (customOperations) => {
+  initFields(customOperations);
 }
 
 const parseEndPoint = (rawURL, {routeParams, queryParams}) => {
@@ -34,7 +40,7 @@ const parseEndPoint = (rawURL, {routeParams, queryParams}) => {
 }
 
 const callCustomEvents = (customEvents, responseData, toCall) => {
-  customEvents.forEach((customEvent) => {
+  customEvents?.forEach?.((customEvent) => {
     toCall(customEvent, responseData)
   })
 }
@@ -43,7 +49,6 @@ const getAction = (resourceName, rawUrl, serializer, customActions, customMutati
   axios({
     method: 'get',
     url: parseEndPoint(rawUrl, params),
-    responseType: 'stream'
   }).then((response) => {
     const responseData = typeof serializer === 'function' ? serializer(response.data) : response.data;
     commit(`get${resourceName}commit`, responseData)

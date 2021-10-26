@@ -124,7 +124,7 @@ export default {
       await store.dispatch("getUserListAction", {
         queryParams: { ...params },
       });
-      let res = store.state.apiCalls.getUserListEntry.data;
+      let res = store.state.magicStore.getUserListEntry.data;
 
       loading.value = false;
       users.value = users.value.concat(res.items);

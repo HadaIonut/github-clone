@@ -4,7 +4,6 @@ import { createStore } from 'vuex'
 import repos from "./modules/repos";
 import user from "./modules/user";
 import repoContents from './modules/repoContents';
-import apiCalls from './modules/apiCalls';
 import magicStore from "./modules/magicStore";
 
 // Vue.use(store);
@@ -14,7 +13,6 @@ export  const store = createStore({
     user,
     repos,
     repoContents,
-    apiCalls,
     magicStore
   },
 });

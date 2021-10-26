@@ -14,7 +14,7 @@ export default {
   components: {OsModal},
   computed: {
     content() {
-      return this.$store.state.apiCalls.getFileContentEntry.data;
+      return this.$store.state.magicStore.getFileContentEntry.data;
     },
     name() {
       return this.$store.getters.getFileName;

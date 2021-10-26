@@ -114,7 +114,7 @@ export default {
           queryParams: {q: event.target.value, per_page: 6},
         });
 
-        const items = store.state.apiCalls.getUserListEntry.data.items;
+        const items = store.state.magicStore.getUserListEntry.data.items;
 
         handleSearchResultGroupsChange(chunk(items, 2));
       }, 250);

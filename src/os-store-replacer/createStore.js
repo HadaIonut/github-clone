@@ -55,13 +55,13 @@ const getMutation = (resourceName, type, method) => (state, payload) => {
   state[`${method}${resourceName}Entry`][type] = payload
 }
 
-const addRoute = (type, {resourceName, initialValue, endPoint, serializer, customActions, customMutations}) => {
+const addRoute = (type, {resourceName, initialValue, endpoint, serializer, customActions, customMutations}) => {
   resourceName = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
   store.state[`${type}${resourceName}Entry`] = {
     data: initialValue,
     error: false
   };
-  store.actions[`${type}${resourceName}`] = getAction(type, resourceName, endPoint, serializer, customActions, customMutations);
+  store.actions[`${type}${resourceName}Action`] = getAction(type, resourceName, endpoint, serializer, customActions, customMutations);
   store.mutations[`${type}${resourceName}Commit`] = getMutation(resourceName, 'data', type);
   store.mutations[`${type}${resourceName}ErrorCommit`] = getMutation(resourceName, 'error', type);
 }

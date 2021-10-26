@@ -15,7 +15,7 @@ const state = {
 const actions = {
   async fetchCollaborators({commit}, {userName, repoName, context}){
     await this.dispatch('getCollaboratorsAction', {routeParams: {userName, repoName}})
-    const collaborators = this.state.apiCalls.getCollaboratorsEntry;
+    const collaborators = this.state.magicStore.getCollaboratorsEntry;
 
     if (collaborators.error)
       makeErrorToast(context, collaborators.error.message || `Unable to fetch ${repoName}'collaborators`);
@@ -23,7 +23,7 @@ const actions = {
   },
   async fetchBranches({commit}, {userName, repoName, context}){
     await this.dispatch('getBranchesAction', {routeParams: {userName, repoName}})
-    const branches = this.state.apiCalls.getBranchesEntry;
+    const branches = this.state.magicStore.getBranchesEntry;
 
     if (branches.error)
       makeErrorToast(context, branches.error.message || `Unable to fetch ${repoName}'branches`);
@@ -31,7 +31,7 @@ const actions = {
   },
   async fetchCommits({commit}, {userName, repoName, context}){
     await this.dispatch('getCommitsAction', {routeParams: {userName, repoName}})
-    const commits = this.state.apiCalls.getCommitsEntry;
+    const commits = this.state.magicStore.getCommitsEntry;
 
     if (commits.error)
       makeErrorToast(context, commits.error.message || `Unable to fetch ${repoName}'commits`);
@@ -39,7 +39,7 @@ const actions = {
   },
   async fetchRepoContents({ commit }, { userName, repoName, context }) {
     await this.dispatch('getContentsAction', {routeParams: {userName, repoName}})
-    const contents = this.state.apiCalls.getContentsEntry;
+    const contents = this.state.magicStore.getContentsEntry;
     contents.data.sort((a, b) => (a.type < b.type ? -1 : 1));
     if (contents.error)
       makeErrorToast(context, contents.error.message || `Unable to fetch ${repoName}'contents`);
@@ -47,7 +47,7 @@ const actions = {
   },
   async fetchRepoContentsAtLocation({ commit }, { userName, repoName, location, context }) {
     await this.dispatch('getLocationAction', {routeParams: {userName, repoName, location}})
-    const dataAtLocation = this.state.apiCalls.getLocationEntry;
+    const dataAtLocation = this.state.magicStore.getLocationEntry;
     dataAtLocation.data.sort((a, b) => (a.type < b.type ? -1 : 1));
 
     if (dataAtLocation.error)
@@ -65,7 +65,7 @@ const actions = {
   },
   async fetchLanguages({ commit }, { userName, repoName, context }) {
     await this.dispatch('getLanguagesAction', {routeParams: {userName, repoName}})
-    const languages = this.state.apiCalls.getLanguagesEntry;
+    const languages = this.state.magicStore.getLanguagesEntry;
 
     if (languages.error)
       makeErrorToast(context, languages.error.message || `Unable to fetch ${repoName}'s languages`);

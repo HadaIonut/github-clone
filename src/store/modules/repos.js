@@ -15,7 +15,7 @@ const getters = {
 const actions = {
   async fetchRepos({ commit }, { username, context }) {
     await this.dispatch('getReposAction', {routeParams: {userName: username}})
-    const repos = this.state.apiCalls.getReposEntry;
+    const repos = this.state.magicStore.getReposEntry;
 
     if (repos.error)
       makeErrorToast(context, repos.error.message || `Unable to fetch ${username}'s repositories`);

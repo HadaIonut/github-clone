@@ -11,7 +11,7 @@ const getters = {
 const actions = {
   async fetchUser({ commit }, {username, context}) {
     await this.dispatch('getUserDetailsAction', {routeParams: {userName: username}})
-    const userDetails = this.state.apiCalls.getUserDetailsEntry;
+    const userDetails = this.state.magicStore.getUserDetailsEntry;
 
     if (userDetails.error)
       makeErrorToast(context, userDetails.error.message || `Unable to fetch ${username}'s github profile`);

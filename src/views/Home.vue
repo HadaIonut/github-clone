@@ -19,9 +19,7 @@ export default {
   async setup() {
     const store = useStore();
     await store.dispatch('getMagicCall', {routeParams: {userName: 'HadaIonut', repoName: 'CallbackDragons'}});
-    // setTimeout(() => console.log(store.getters.getMagicCallData), 1000)
     console.log(store.getters.getMagicCallData)
-
   }
 }
 </script>

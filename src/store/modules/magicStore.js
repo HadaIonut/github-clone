@@ -1,4 +1,4 @@
-import {addRoute, createStore, store} from '../../os-store-replacer/createStore'
+import {addGetRoute, createStore, store} from '../../os-store-replacer/createStore'
 import {BASE, ENDPOINTS} from "../../../constants/routes";
 
 createStore({
@@ -19,7 +19,7 @@ createStore({
     }
 });
 
-addRoute({
+addGetRoute({
     resourceName: 'magicCall',
     initialValue: [],
     endPoint: `${BASE}/${ENDPOINTS['commits']}`,

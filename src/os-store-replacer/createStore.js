@@ -1,6 +1,8 @@
 import axios from "axios";
 
 export let store = {}
+// const noDataMethods = ['get', 'delete', 'head', 'options'];
+const dataMethods = ['post', 'put', 'patch']
 
 const initFields = ({mutations, actions, getters}) => {
   store['state'] = {}
@@ -25,40 +27,44 @@ const parseEndPoint = (rawURL, {routeParams, queryParams}) => {
   return queryParams ? `${parsedUrl}?${stringifiedQueryParams}` : `${parsedUrl}`
 }
 
-const callCustomEvents = (customEvents, responseData, toCall) => {
-  customEvents?.forEach?.((customEvent) => {
-    toCall(customEvent, responseData)
-  })
+const callCustomEvents = async (customEvents, responseData, toCall) => {
+  for (const customEvent of customEvents) {
+    await toCall(customEvent, responseData)
+  }
 }
 
-const getAction = (resourceName, rawUrl, serializer, customActions, customMutations) =>
-  async ({commit, dispatch}, params) => {
+const getAction = (type, resourceName, rawUrl, serializer, customActions, customMutations) =>
+  async ({commit, dispatch}, routeParams, dataParams) => {
     try {
       const response = await axios({
-        method: 'get',
-        url: parseEndPoint(rawUrl, params),
+        method: type,
+        url: parseEndPoint(rawUrl, routeParams),
+        ...(dataMethods.includes(type) && {data: dataParams})
       })
       const responseData = typeof serializer === 'function' ? serializer(response.data) : response.data;
-      commit(`get${resourceName}commit`, responseData)
+      commit(`${type}${resourceName}Commit`, responseData)
 
-      callCustomEvents(customActions, responseData, dispatch)
-      callCustomEvents(customMutations, responseData, commit)
+      await callCustomEvents(customActions, responseData, dispatch)
+      await callCustomEvents(customMutations, responseData, commit)
     } catch (e) {
-      commit(`get${resourceName}ErrorCommit`, {...e}?.response?.data || {...e})
+      commit(`${type}${resourceName}ErrorCommit`, {...e}?.response?.data || {...e})
     }
   }
 
-const getMutation = (resourceName, type) => (state, payload) => {
-  state[`get${resourceName}Entry`][type] = payload
+
+const getMutation = (resourceName, type, method) => (state, payload) => {
+  state[`${method}${resourceName}Entry`][type] = payload
 }
 
-export const addRoute = ({resourceName, initialValue, endPoint, serializer, customActions, customMutations}) => {
+const addRoute = (type, {resourceName, initialValue, endPoint, serializer, customActions, customMutations}) => {
   resourceName = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
-  store.state[`get${resourceName}Entry`] = {
+  store.state[`${type}${resourceName}Entry`] = {
     data: initialValue,
     error: false
   };
-  store.actions[`get${resourceName}`] = getAction(resourceName, endPoint, serializer, customActions, customMutations);
-  store.mutations[`get${resourceName}commit`] = getMutation(resourceName, 'data');
-  store.mutations[`get${resourceName}ErrorCommit`] = getMutation(resourceName, 'error');
+  store.actions[`${type}${resourceName}`] = getAction(type, resourceName, endPoint, serializer, customActions, customMutations);
+  store.mutations[`${type}${resourceName}Commit`] = getMutation(resourceName, 'data', type);
+  store.mutations[`${type}${resourceName}ErrorCommit`] = getMutation(resourceName, 'error', type);
 }
+
+export const addGetRoute = (data) => addRoute('get', data);

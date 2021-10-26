@@ -55,6 +55,8 @@ const getMutation = (resourceName, type, method) => (state, payload) => {
   state[`${method}${resourceName}Entry`][type] = payload
 }
 
+const getGetter = (method, resourceName, field) => (state) => state[`${method}${resourceName}Entry`][field];
+
 const addRoute = (type, {resourceName, initialValue, endpoint, serializer, customActions, customMutations}) => {
   resourceName = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
   store.state[`${type}${resourceName}Entry`] = {
@@ -62,6 +64,8 @@ const addRoute = (type, {resourceName, initialValue, endpoint, serializer, custo
     error: false
   };
   store.actions[`${type}${resourceName}Action`] = getAction(type, resourceName, endpoint, serializer, customActions, customMutations);
+  store.getters[`${resourceName}DataGetter`] = getGetter(type, resourceName, 'data');
+  store.getters[`${resourceName}ErrorGetter`] = getGetter(type, resourceName, 'error');
   store.mutations[`${type}${resourceName}Commit`] = getMutation(resourceName, 'data', type);
   store.mutations[`${type}${resourceName}ErrorCommit`] = getMutation(resourceName, 'error', type);
 }

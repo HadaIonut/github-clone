@@ -13,21 +13,21 @@ const state = {
 };
 
 const actions = {
-  async fetchCollaborators({commit}, {userName, repoName, context}){
+  async fetchCollaborators({commit, getters}, {userName, repoName, context}){
     await this.dispatch('getCollaboratorsAction', {routeParams: {userName, repoName}})
-    const collaborators = this.state.magicStore.getCollaboratorsEntry;
+    const collaborators = getters.CollaboratorsDataGetter;
 
-    if (collaborators.error)
-      makeErrorToast(context, collaborators.error.message || `Unable to fetch ${repoName}'collaborators`);
-    else commit("setCollaborators", collaborators.data);
+    if (getters.CollaboratorsErrorGetter)
+      makeErrorToast(context, getters.CollaboratorsErrorGetter.message || `Unable to fetch ${repoName}'collaborators`);
+    else commit("setCollaborators", collaborators);
   },
-  async fetchBranches({commit}, {userName, repoName, context}){
+  async fetchBranches({commit, getters}, {userName, repoName, context}){
     await this.dispatch('getBranchesAction', {routeParams: {userName, repoName}})
-    const branches = this.state.magicStore.getBranchesEntry;
+    const branches = getters.BranchesDataGetter;
 
-    if (branches.error)
+    if (getters.BranchesErrorGetter)
       makeErrorToast(context, branches.error.message || `Unable to fetch ${repoName}'branches`);
-    else commit("setBranches", branches.data);
+    else commit("setBranches", branches);
   },
   async fetchCommits({commit}, {userName, repoName, context}){
     await this.dispatch('getCommitsAction', {routeParams: {userName, repoName}})

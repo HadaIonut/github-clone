@@ -1,4 +1,4 @@
-import {addGetRoute, createStore, store} from '../../os-store-replacer/createStore'
+import {addGetRoute, addPostRoute, createStore, store} from '../../os-store-replacer/createStore'
 import {BASE, ENDPOINTS} from "../../../constants/routes";
 
 createStore({
@@ -23,6 +23,17 @@ addGetRoute({
     resourceName: 'magicCall',
     initialValue: [],
     endPoint: `${BASE}/${ENDPOINTS['commits']}`,
+    serializer: (response) => {
+        console.log('SERIALIZING');
+        return {...response}
+    },
+    // customActions: ['wildAct'],
+    // customMutations: ['wildMutate']
+})
+addPostRoute({
+    resourceName: 'postMagik',
+    initialValue: [],
+    endPoint: `https://reqres.in/api/users`,
     serializer: (response) => {
         console.log('SERIALIZING');
         return {...response}

@@ -34,11 +34,11 @@ const callCustomEvents = async (customEvents, responseData, toCall) => {
 }
 
 const getAction = (type, resourceName, rawUrl, serializer, customActions, customMutations) =>
-  async ({commit, dispatch}, routeParams, dataParams) => {
+  async ({commit, dispatch}, {routeParams, dataParams}) => {
     try {
       const response = await axios({
         method: type,
-        url: parseEndPoint(rawUrl, routeParams),
+        url: routeParams ? parseEndPoint(rawUrl, routeParams) : rawUrl,
         ...(dataMethods.includes(type) && {data: dataParams})
       })
       const responseData = typeof serializer === 'function' ? serializer(response.data) : response.data;
@@ -50,7 +50,6 @@ const getAction = (type, resourceName, rawUrl, serializer, customActions, custom
       commit(`${type}${resourceName}ErrorCommit`, {...e}?.response?.data || {...e})
     }
   }
-
 
 const getMutation = (resourceName, type, method) => (state, payload) => {
   state[`${method}${resourceName}Entry`][type] = payload
@@ -68,3 +67,9 @@ const addRoute = (type, {resourceName, initialValue, endPoint, serializer, custo
 }
 
 export const addGetRoute = (data) => addRoute('get', data);
+export const addDeleteRoute = (data) => addRoute('delete', data);
+export const addHeadRoute = (data) => addRoute('head', data);
+export const addOptionsRoute = (data) => addRoute('options', data);
+export const addPostRoute = (data) => addRoute('post', data);
+export const addPutRoute = (data) => addRoute('put', data);
+export const addPatchRoute = (data) => addRoute('patch', data);

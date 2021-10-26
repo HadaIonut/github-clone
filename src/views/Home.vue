@@ -18,7 +18,8 @@ export default {
   },
   async setup() {
     const store = useStore();
-    await store.dispatch('getMagicCall', {routeParams: {userName: 'HadaIonut', repoName: 'CallbackDragons'}});
+    // await store.dispatch('getMagicCall', {routeParams: {userName: 'HadaIonut', repoName: 'CallbackDragons'}});
+    await store.dispatch('postPostMagik', {dataParams: {"name": "morpheus", "job": "leader"}})
     console.log(store.getters.getMagicCallData)
   }
 }

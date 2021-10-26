@@ -2,7 +2,7 @@
   <div class="home">
     <div class="search">
       <p class="title-text text-center">Who do you want to find?</p>
-      <Search />
+      <Search/>
     </div>
   </div>
 </template>
@@ -18,7 +18,12 @@ export default {
   },
   async setup() {
     const store = useStore();
-    // await store.dispatch('getMagicCall', {routeParams: {userName: 'HadaIonut', repoName: 'CallbackDragons'}});
+    await store.dispatch('getMagicCall', {
+      routeParams: {
+        userName: 'HadaIonut',
+        repoName: 'CallbackDragons'
+      }
+    });
     await store.dispatch('postPostMagik', {dataParams: {"name": "morpheus", "job": "leader"}})
     console.log(store.getters.getMagicCallData)
   }

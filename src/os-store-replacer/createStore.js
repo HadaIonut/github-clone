@@ -1,7 +1,6 @@
 import axios from "axios";
 
 export let store = {}
-// const noDataMethods = ['get', 'delete', 'head', 'options'];
 const dataMethods = ['post', 'put', 'patch']
 
 const initFields = ({mutations, actions, getters}) => {
@@ -28,17 +27,18 @@ const parseEndPoint = (rawURL, {routeParams, queryParams}) => {
 }
 
 const callCustomEvents = async (customEvents, responseData, toCall) => {
+  if (!customEvents) return;
   for (const customEvent of customEvents) {
     await toCall(customEvent, responseData)
   }
 }
 
 const getAction = (type, resourceName, rawUrl, serializer, customActions, customMutations) =>
-  async ({commit, dispatch}, {routeParams, dataParams}) => {
+  async ({commit, dispatch}, {routeParams, queryParams, dataParams}) => {
     try {
       const response = await axios({
         method: type,
-        url: routeParams ? parseEndPoint(rawUrl, routeParams) : rawUrl,
+        url: (routeParams || queryParams) ? parseEndPoint(rawUrl, {routeParams, queryParams}) : rawUrl,
         ...(dataMethods.includes(type) && {data: dataParams})
       })
       const responseData = typeof serializer === 'function' ? serializer(response.data) : response.data;

@@ -1,5 +1,5 @@
 <template>
-  <li class="breadcrumb-item" @click="$emit('click', $event)">
+  <li class="breadcrumb-item">
     <slot></slot>
   </li>
 </template>

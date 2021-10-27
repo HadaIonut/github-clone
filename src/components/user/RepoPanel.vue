@@ -104,10 +104,7 @@ export default {
     const store = useStore();
 
     onBeforeMount(async () => {
-      await store.dispatch('fetchRepos', {
-        username: props.username,
-        context: this,
-      });
+      await store.dispatch('getReposAction', {routeParams: {userName: props.username}})
     })
 
     const handleFilter = (e) => {

@@ -35,6 +35,7 @@ const callCustomEvents = async (customEvents, responseData, toCall) => {
 
 const getAction = (type, resourceName, rawUrl, serializer, customActions, customMutations) =>
   async ({commit, dispatch}, {routeParams, queryParams, dataParams}) => {
+    console.log(rawUrl)
     try {
       const response = await axios({
         method: type,
@@ -58,16 +59,16 @@ const getMutation = (resourceName, type, method) => (state, payload) => {
 const getGetter = (method, resourceName, field) => (state) => state[`${method}${resourceName}Entry`][field];
 
 const addRoute = (type, {resourceName, initialValue, endpoint, serializer, customActions, customMutations}) => {
-  resourceName = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
-  store.state[`${type}${resourceName}Entry`] = {
+  const resourceNameModified = resourceName.charAt(0).toUpperCase() + resourceName.slice(1);
+  store.state[`${type}${resourceNameModified}Entry`] = {
     data: initialValue,
     error: false
   };
-  store.actions[`${type}${resourceName}Action`] = getAction(type, resourceName, endpoint, serializer, customActions, customMutations);
-  store.getters[`${resourceName}DataGetter`] = getGetter(type, resourceName, 'data');
-  store.getters[`${resourceName}ErrorGetter`] = getGetter(type, resourceName, 'error');
-  store.mutations[`${type}${resourceName}Commit`] = getMutation(resourceName, 'data', type);
-  store.mutations[`${type}${resourceName}ErrorCommit`] = getMutation(resourceName, 'error', type);
+  store.actions[`${type}${resourceNameModified}Action`] = getAction(type, resourceNameModified, endpoint, serializer, customActions, customMutations);
+  store.getters[`${resourceName}DataGetter`] = getGetter(type, resourceNameModified, 'data');
+  store.getters[`${resourceName}ErrorGetter`] = getGetter(type, resourceNameModified, 'error');
+  store.mutations[`${type}${resourceNameModified}Commit`] = getMutation(resourceNameModified, 'data', type);
+  store.mutations[`${type}${resourceNameModified}ErrorCommit`] = getMutation(resourceNameModified, 'error', type);
 }
 
 export const addGetRoute = (data) => addRoute('get', data);

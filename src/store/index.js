@@ -1,8 +1,6 @@
 // import Vuex from "vuex";
 // import Vue from "vue";
 import { createStore } from 'vuex'
-import repos from "./modules/repos";
-import user from "./modules/user";
 import repoContents from './modules/repoContents';
 import magicStore from "./modules/magicStore";
 
@@ -10,8 +8,6 @@ import magicStore from "./modules/magicStore";
 
 export  const store = createStore({
   modules: {
-    user,
-    repos,
     repoContents,
     magicStore
   },

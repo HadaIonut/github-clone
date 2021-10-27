@@ -105,13 +105,13 @@ export default {
       }, 300);
     };
     const updateDisplayAndSort = async (path) => {
-      store.dispatch('fetchRepoContentsAtLocation', {
-        userName: props.username,
-        repoName: props.reponame,
-        location: encodeURIComponent(path),
-      });
-      //sortDocuments(docs);
+      await store.dispatch('getLocationAction', {routeParams: {
+          userName: props.username,
+          repoName: props.reponame,
+          location: encodeURIComponent(path),
+        }})
     };
+
     const goToLocation = (path) => {
       curState.value = currentLocationString.value;
       targetLocation.value = curState.value.lastIndexOf(`/${path}`);
@@ -133,35 +133,35 @@ export default {
 
     // TODO: finish converting methods to composition API
     //computed
-    const docs = computed(() => store.getters.allRepoContents);
+    const docs = computed(() => store.getters.contentsDataGetter);
     const paths = computed(() => store.getters.getCurrentLocationAsArray);
     const currentLocationString = computed(
       () => store.getters.getCurrentLocationAsString
     );
     const getPathFromLocation = store.getters.getPathFromLocation;
 
-    const commits = computed(() => store.getters.getCommits);
-    const branches = computed(() => store.getters.getBranches);
+    const commits = computed(() => store.getters.commitsDataGetter);
+    const branches = computed(() => store.getters.branchesDataGetter);
     const pathFromLocation = computed(() =>
       getPathFromLocation(targetLocation.value)
     );
 
     //onMounted
     onMounted(async () => {
-      await store.dispatch('fetchRepoContents', {
-        userName: props.username,
-        repoName: props.reponame,
-      });
+      await store.dispatch('getContentsAction', {routeParams: {
+          userName: props.username,
+          repoName: props.reponame,
+        }})
       //sortDocuments(docs);
-      await store.dispatch('fetchCommits', {
-        userName: props.username,
-        repoName: props.reponame,
-      });
+      await store.dispatch('getCommitsAction', {routeParams: {
+          userName: props.username,
+          repoName: props.reponame,
+        }})
       commitsInfo.value = commits.value.length;
-      await store.dispatch('fetchBranches', {
-        userName: props.username,
-        repoName: props.reponame,
-      });
+      await store.dispatch('getBranchesAction', {routeParams: {
+          userName: props.username,
+          repoName: props.reponame,
+        }})
       nrOfBranches.value = branches.value.length;
     });
     return {

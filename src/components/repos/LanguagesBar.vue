@@ -29,15 +29,15 @@ export default {
   },
   setup(props) {
     onBeforeMount(async () => {
-      await store.dispatch("fetchLanguages", {
-        userName: props.username,
-        repoName: props.reponame,
-      });
+      await store.dispatch('getLanguagesAction', {routeParams: {
+          userName: props.username,
+          repoName: props.reponame,
+        }})
     });
 
     const store = useStore();
 
-    const getLanguages = computed(() => store.getters.getLanguages);
+    const getLanguages = computed(() => store.getters.languagesDataGetter);
     const getTotalLanguages = computed(() => store.getters.getTotalLanguages);
 
     const getRandomColor = () =>
